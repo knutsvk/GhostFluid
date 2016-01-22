@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>898</width>
+    <height>665</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QPushButton" name="runButton">
+    <property name="geometry">
+     <rect>
+      <x>767</x>
+      <y>546</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RUN</string>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="densityPlot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>411</width>
+      <height>211</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="velocityPlot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>20</y>
+      <width>411</width>
+      <height>211</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="pressurePlot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>250</y>
+      <width>411</width>
+      <height>211</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="energyPlot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>250</y>
+      <width>411</width>
+      <height>211</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="testCombo">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>490</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Test 1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Test 2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Test 3</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Test 4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Test 5</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="schemeCombo">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>470</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>FORCE</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>FLIC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>MUSCL</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Godunov</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>SLIC</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="limiterCombo">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>500</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Minbee</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Vanleer</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Superbee</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="RPCombo">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>470</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>HLLC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Exact</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QDoubleSpinBox" name="rhoL">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>490</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>5</number>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="uL">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>490</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>5</number>
+    </property>
+    <property name="minimum">
+     <double>-100.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>100.000000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.750000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="pL">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>490</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>5</number>
+    </property>
+    <property name="maximum">
+     <double>1000000.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>1.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="gammaL">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>490</y>
+      <width>62</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <double>5.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>1.400000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="rhoR">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>520</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>5</number>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.125000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="uR">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>520</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>5</number>
+    </property>
+    <property name="minimum">
+     <double>-100.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>100.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="pR">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>520</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>5</number>
+    </property>
+    <property name="maximum">
+     <double>1000000.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.100000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="gammaR">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>520</y>
+      <width>62</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <double>5.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>1.400000000000000</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>470</y>
+      <width>381</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string> Density              Velocity              Pressure            Gamma</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>490</y>
+      <width>31</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Left</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>520</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Right</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="Cells">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>570</y>
+      <width>60</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>999</number>
+    </property>
+    <property name="singleStep">
+     <number>10</number>
+    </property>
+    <property name="value">
+     <number>100</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>570</y>
+      <width>16</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>N</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>570</y>
+      <width>16</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>C</string>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="CFL">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>570</y>
+      <width>62</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <double>1.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.900000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="Time">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>570</y>
+      <width>62</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>3</number>
+    </property>
+    <property name="maximum">
+     <double>10.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.005000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.200000000000000</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>570</y>
+      <width>16</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>T</string>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="x0">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>570</y>
+      <width>62</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>2</number>
+    </property>
+    <property name="maximum">
+     <double>1.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.300000000000000</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>570</y>
+      <width>16</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>x0</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="saveResults">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>550</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save Results</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="fileName">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>570</y>
+      <width>251</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>test.out</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>898</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuEuler_equations_in_1D">
+    <property name="title">
+     <string>Euler equations in 1D</string>
+    </property>
+   </widget>
+   <addaction name="menuEuler_equations_in_1D"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
