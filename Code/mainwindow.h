@@ -18,7 +18,7 @@ public:
 private slots:
     void on_schemeCombo_currentIndexChanged();
     void on_testCombo_currentIndexChanged();
-    void on_saveResults_stateChanged();
+    void on_saveResults_stateChanged(int state);
     void on_runButton_clicked();
     
 private:

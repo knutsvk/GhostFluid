@@ -62,10 +62,9 @@ void MainWindow::on_testCombo_currentIndexChanged()
     ui->Cells->setValue(100);
 }
 
-void MainWindow::on_saveResults_stateChanged()
+void MainWindow::on_saveResults_stateChanged(int state)
 {
-    bool save = ui->saveResults->isTristate();
-    ui->fileName->setVisible(save);
+    ui->fileName->setVisible(state!=0);
 }
 
 void PlotGraph(QCustomPlot* plot, QVector<double> X, 
@@ -110,7 +109,7 @@ void MainWindow::on_runButton_clicked()
         limitChoice = ui->limiterCombo->currentIndex(),
         RPChoice = ui->RPCombo->currentIndex();
 
-    bool save = ui->saveResults->isTristate(); 
+    bool save = ui->saveResults->isChecked(); 
 
     double rho_L = ui->rhoL->value(),   // Left density
            u_L = ui->uL->value(),       // Left velocity
@@ -267,5 +266,6 @@ void MainWindow::on_runButton_clicked()
                 << QpExact[i] << "\t" << QeExact[i] << "\n";
         }
         fs.close();
+        ui->saveResults->setChecked(0);
     }
 }

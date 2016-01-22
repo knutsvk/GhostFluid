@@ -46,13 +46,10 @@ double svanleer(double r);
 double ssuperbee(double r);
 double slopeLimiter(double E_min, double E_0, 
         double E_plus, char *limitFunc);
-void muscl(Conserved *U, 
+void muscl(Primitive *W, Conserved *U, 
         double dt, double dx, double omega, 
         int N, char *limitFunc, char *RP, 
         Conserved *f);
-void slic(Conserved *U, 
-        double dt, double dx, double omega, 
-        int N, char *limitFunc, Conserved *f);
 void advance(Primitive *W, Conserved *U, Conserved *U_old, 
         double dt, double dx, int N, 
         char *scheme, char *limitFunc, char *RP);
