@@ -78,27 +78,32 @@
     </property>
     <item>
      <property name="text">
-      <string>Test 1</string>
+      <string>Toro 1</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Test 2</string>
+      <string>Toro 2</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Test 3</string>
+      <string>Toro 3</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Test 4</string>
+      <string>Toro 4</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Test 5</string>
+      <string>Toro 5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Miniproject 1</string>
      </property>
     </item>
    </widget>
@@ -220,7 +225,7 @@
      <double>100.000000000000000</double>
     </property>
     <property name="value">
-     <double>0.750000000000000</double>
+     <double>0.000000000000000</double>
     </property>
    </widget>
    <widget class="QDoubleSpinBox" name="pL">
@@ -465,7 +470,7 @@
      <double>0.005000000000000</double>
     </property>
     <property name="value">
-     <double>0.200000000000000</double>
+     <double>0.250000000000000</double>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
@@ -500,7 +505,7 @@
      <double>0.100000000000000</double>
     </property>
     <property name="value">
-     <double>0.300000000000000</double>
+     <double>0.500000000000000</double>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">

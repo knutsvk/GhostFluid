@@ -10,22 +10,28 @@
 
 const int NGC = 2;       // Number of ghost cells per side
 
-void updateGhostCells(Primitive *W_A, Conserved *U_A, 
-        Primitive *W_B, Conserved *U_B, double *phi, 
-        double gamma_L, double gamma_R);
+void updateGhostCells(Primitive *W_L, Conserved *U_L, 
+        Primitive *W_R, Conserved *U_R, int pos, 
+        double gamma_L, double gamma_R, int method);
+
+void hllcStarStates(Primitive W_L, Primitive W_R, 
+        Conserved U_L, Conserved U_R, 
+        double gamma_L, double gamma_R, 
+        Conserved &U_L_star, Conserved &U_R_star);
 
 void advanceLevelSet(double *phi, Primitive *W_A, Primitive *W_B, 
         double dt, double dx, int N);
 
-int interfacePosition(double *phi);
+int* interfacePosition(double *phi, int nMaterialInterfaces);
 
-void reinitialize(double *phi, int N, double dx);
+void reinitialize(double *phi, int N, double dx, 
+        int nMaterialInterfaces);
 
 void initialConditions(Primitive *W_A, Conserved *U_A, 
-        Primitive *W_B, Conserved *U_B, double *phi,
-        double x_0, int N, double dx,
-        double rho_L, double u_L, double p_L, double gamma_L,
-        double rho_R, double u_R, double p_R, double gamma_R);
+        Primitive *W_B, Conserved *U_B, double *phi, 
+        int N, double dx, int nInterfaces, double *x, 
+        int nMaterialInterfaces, double *x_M, double *rho, 
+        double *u, double *p, double *mat, double *gamma);
 
 double maxWaveSpeed(Primitive *W, double a, int N);
 
@@ -67,17 +73,17 @@ double ssuperbee(double r);
 double slopeLimiter(double E_min, double E_0, 
         double E_plus, char *limitFunc);
 
-void slic(Conserved *U, 
-        double dt, double dx, double omega, 
-        int N, char *limitFunc, double gamma, Conserved *f);
+void slic2(Conserved U_L, Conserved U_0, Conserved U_R, 
+        Conserved U_2R, double dt, double dx, 
+        char *limitFunc, double gamma, Conserved &f);
 
 void advance(Primitive *W, Conserved *U, Conserved *U_old, 
         double dt, double dx, int N, double gamma, 
         char *scheme, char *limitFunc);
 
-void initiateTestCase(int testCase, double &tStop, double &x_0,
-        double &rho_L, double &u_L, double &p_L, double &gamma_L,
-        double &rho_R, double &u_R, double &p_R, double &gamma_R);
+void initiateTestCase(int testCase, int &nInterfaces, 
+        double x[3], double rho[4], double u[4], double p[4], 
+        int mat[4], double gamma[2], double &tStop);
 
 void setScheme(char *scheme, char *limitFunc, 
         int schemeChoice, int limitChoice);

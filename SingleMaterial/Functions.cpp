@@ -388,13 +388,13 @@ void initiateTestCase(int testCase, double &tStop, double &x_0,
         double &rho_R, double &u_R, double &p_R){
     if(testCase==1){
         rho_L = 1.0;
-        u_L = 0.75;
+        u_L = 0.0;
         p_L = 1.0;
         rho_R = 0.125;
         u_R = 0.0;
         p_R = 0.1;
-        x_0 = 0.3;
-        tStop = 0.2; 
+        x_0 = 0.5;
+        tStop = 0.25; 
     }else if(testCase==2){
         rho_L = 1.0;
         u_L = -2.0;
@@ -414,23 +414,32 @@ void initiateTestCase(int testCase, double &tStop, double &x_0,
         x_0 = 0.5;
         tStop = 0.012; 
     }else if(testCase==4){
+        rho_L = 1.0;
+        u_L = 0.0;
+        p_L = 0.01;
+        rho_R = 1.0;
+        u_R = 0.0;
+        p_R = 100.0;
+        x_0 = 0.5;
+        tStop = 0.035; 
+    }else if(testCase==5){
         rho_L = 5.99924;
         u_L = 19.5975;
         p_L = 460.894;
         rho_R = 5.9942;
         u_R = -6.19633;
         p_R = 46.0950;
-        x_0 = 0.4;
+        x_0 = 0.5;
         tStop = 0.035; 
-    }else if(testCase==5){
+    }else if(testCase==6){
         rho_L = 1.0;
-        u_L = -19.59745;
-        p_L = 1000;
-        rho_R = 1.0;
-        u_R = -19.59745;
-        p_R = 0.01;
-        x_0 = 0.8;
-        tStop = 0.012; 
+        u_L = 0.5;
+        p_L = 1.0;
+        rho_R = 0.138;
+        u_R = 0.5;
+        p_R = 1.0;
+        x_0 = 0.25;
+        tStop = 1.0; 
     }
 }
 

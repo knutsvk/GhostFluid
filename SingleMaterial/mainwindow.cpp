@@ -59,7 +59,6 @@ void MainWindow::on_testCombo_currentIndexChanged()
     ui->Time->setValue(tStop);
     ui->x0->setValue(x_0);
     ui->CFL->setValue(0.9);
-    ui->Cells->setValue(100);
 }
 
 void MainWindow::on_saveResults_stateChanged(int state)
