@@ -5,6 +5,8 @@
 #include <cstring>
 #include <vector>
 
+#include <unistd.h>
+
 #include <QDebug>
 #include <QString>
 #include <QVector>
@@ -35,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mat1->setCurrentIndex(1);
     ui->mat2->setVisible(0);
     ui->mat3->setVisible(0);
+    ui->SleepTime->setVisible(0);
+    ui->SleepTimeLabel->setVisible(0);
 }
 
 MainWindow::~MainWindow()
@@ -116,6 +120,12 @@ void MainWindow::on_testCombo_currentIndexChanged()
     ui->CFL->setValue(0.9);
 }
 
+void MainWindow::on_Animate_stateChanged(int state)
+{
+    ui->SleepTime->setVisible(state!=0);
+    ui->SleepTimeLabel->setVisible(state!=0);
+}
+
 void MainWindow::on_saveResults_stateChanged(int state)
 {
     ui->fileName->setVisible(state!=0);
@@ -161,6 +171,7 @@ void MainWindow::on_runButton_clicked()
     bool save = ui->saveResults->isChecked(); 
     bool isobarix = ui->isobaricFix->isChecked();
     if(method==1 && isobarix) method++;
+    bool animate = ui->Animate->isChecked(); 
 
     double x[nInterfaces];
     double rho[nRegions];
@@ -178,6 +189,7 @@ void MainWindow::on_runButton_clicked()
     double c = ui->CFL->value();        // CFL number
     double S_max_A;                       // Maximum wave speed
     double S_max_B;                       // Maximum wave speed
+    double sleepTime = ui->SleepTime->value();
 
     double phi[N+2*NGC];
    
@@ -253,6 +265,30 @@ void MainWindow::on_runButton_clicked()
     // Loop from t=0 to tStop
     while(t < tStop){
 
+        if(animate){
+            for(int i=NGC; i<N+NGC; i++){
+                Qx[i-NGC] = (i-NGC+0.5)*dx;
+                Qphi[i-NGC] = phi[i];
+                if(phi[i]<0.0){
+                    Qrho[i-NGC] = W_A[i].rho;
+                    Qu[i-NGC] = W_A[i].u;
+                    Qp[i-NGC] = W_A[i].p;
+                    Qe[i-NGC] = W_A[i].p/(W_A[i].rho*(gamma[0]-1));
+                }else{
+                    Qrho[i-NGC] = W_B[i].rho;
+                    Qu[i-NGC] = W_B[i].u;
+                    Qp[i-NGC] = W_B[i].p;
+                    Qe[i-NGC] = W_B[i].p/(W_B[i].rho*(gamma[1]-1));
+                }
+            }
+            PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
+            PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
+            PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
+            PlotGraph(ui->energyPlot, Qx, Qe, "Internal energy");
+            PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
+            usleep(1000000*sleepTime);
+        }
+
         // Calculate ghost BCs for each material interface
         int *pos = interfacePosition(phi, nMaterialInterfaces);
         for(int i=0; i<nMaterialInterfaces; i++){
@@ -312,7 +348,7 @@ void MainWindow::on_runButton_clicked()
     PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
     PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
     PlotGraph(ui->energyPlot, Qx, Qe, "Internal energy");
-    PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set function");
+    PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
 
     if(save){
         std::fstream fs; 

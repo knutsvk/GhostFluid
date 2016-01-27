@@ -20,6 +20,7 @@ private slots:
     void on_GFMCombo_currentIndexChanged();
     void on_Interfaces_valueChanged(int i);
     void on_testCombo_currentIndexChanged();
+    void on_Animate_stateChanged(int state);
     void on_saveResults_stateChanged(int state);
     void on_runButton_clicked();
     
