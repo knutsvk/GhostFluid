@@ -203,7 +203,9 @@ void MainWindow::on_runButton_clicked()
     double p_Inf[2];
     p_Inf[0] = ui->pInfA->value();
     p_Inf[1] = ui->pInfB->value();
-    double a = 0.0;   // Maximum sound speed.
+    double a[2];   // Maximum sound speed.
+    a[0]=0.0; 
+    a[1]=0.0;
     double dx = 1.0/N;          // Width of cells
     double t = 0.0;               // Time
     double dt;      // Time step. 
@@ -221,6 +223,7 @@ void MainWindow::on_runButton_clicked()
     setScheme(scheme, limitFunc, 
             schemeChoice, limitChoice);
     
+
     // Vectors of primitive vars
     Primitive *W_A = new Primitive[N+2*NGC];
     Primitive *W_B = new Primitive[N+2*NGC];
@@ -243,25 +246,28 @@ void MainWindow::on_runButton_clicked()
     u[1] = ui->u1->value();
     p[1] = ui->p1->value();
     mat[1] = ui->mat1->currentIndex();
-    if(nInterfaces>1){
+    if(nInterfaces>1)
+    {
         x[1] = ui->x1->value();
         rho[2] = ui->rho2->value();
         u[2] = ui->u2->value();
         p[2] = ui->p2->value();
         mat[2] = ui->mat2->currentIndex();
-        if(nInterfaces>2){
+        if(nInterfaces>2)
+        {
             x[2] = ui->x2->value();
             rho[3] = ui->rho3->value();
             u[3] = ui->u3->value();
             p[3] = ui->p3->value();
             mat[3] = ui->mat3->currentIndex();
-        }
-        if(nInterfaces>3){
+            if(nInterfaces>3)
+            {
                 x[3] = ui->x3->value();
                 rho[4] = ui->rho4->value();
                 u[4] = ui->u4->value();
                 p[4] = ui->p4->value();
                 mat[4] = ui->mat4->currentIndex();
+            }
         }
     }
 
@@ -281,9 +287,10 @@ void MainWindow::on_runButton_clicked()
 
     // Calculate sound speeds 
     for(int i=0; i<nRegions; i++){
-        int mati = mat[i];
-        double a_i = sqrt(gamma[mati]*(p[i]+p_Inf[mati])/rho[i]);
-        if(fabs(a_i)>a) a = fabs(a_i);
+        for(int j=0; j<2; j++){
+            double a_ij = sqrt(gamma[j]*(p[i]+p_Inf[j])/rho[i]);
+            if(fabs(a_ij)>a[j]) a[j] = fabs(a_ij);
+        }
     }
 
     // APPROXIMATE SOLVER:
@@ -295,7 +302,6 @@ void MainWindow::on_runButton_clicked()
     // Loop from t=0 to tStop
     while(t < tStop)
     {
-
         if(animate)
         {
             for(int i=NGC; i<N+NGC; i++)
@@ -341,13 +347,13 @@ void MainWindow::on_runButton_clicked()
             else
                 updateGhostCells(W_B, U_B_old, W_A, U_A_old, 
                         pos[i], gamma[1], gamma[0], p_Inf[1], 
-                        phi[0],method);
+                        p_Inf[0],method);
         }
         delete[] pos;
 
         // Calculate maximum wave speed, update dt
-        S_max_A = maxWaveSpeed(W_A, a, N);
-        S_max_B = maxWaveSpeed(W_B, a, N);
+        S_max_A = maxWaveSpeed(W_A, a[0], N);
+        S_max_B = maxWaveSpeed(W_B, a[1], N);
         dt = c*dx/S_max_A; 
         if(c*dx/S_max_B < dt) dt = c*dx/S_max_B; 
 
@@ -363,9 +369,9 @@ void MainWindow::on_runButton_clicked()
         reinitialize(phi, N, dx, nMaterialInterfaces);
         
         // Advance system in time
-        advance(W_A, U_A, U_A_old, dt, dx, N, gamma[0], phi[0],
+        advance(W_A, U_A, U_A_old, dt, dx, N, gamma[0], p_Inf[0],
                 scheme, limitFunc);
-        advance(W_B, U_B, U_B_old, dt, dx, N, gamma[1], phi[1],
+        advance(W_B, U_B, U_B_old, dt, dx, N, gamma[1], p_Inf[1],
                 scheme, limitFunc);
         t += dt;
     }

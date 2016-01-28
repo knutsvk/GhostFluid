@@ -189,6 +189,9 @@
     <property name="decimals">
      <number>5</number>
     </property>
+    <property name="maximum">
+     <double>10000.000000000000000</double>
+    </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
     </property>
@@ -223,7 +226,7 @@
      <rect>
       <x>570</x>
       <y>490</y>
-      <width>81</width>
+      <width>101</width>
       <height>27</height>
      </rect>
     </property>
@@ -231,7 +234,7 @@
      <number>5</number>
     </property>
     <property name="maximum">
-     <double>1000000.000000000000000</double>
+     <double>1000000000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
@@ -271,6 +274,9 @@
     <property name="decimals">
      <number>5</number>
     </property>
+    <property name="maximum">
+     <double>10000.000000000000000</double>
+    </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
     </property>
@@ -305,7 +311,7 @@
      <rect>
       <x>570</x>
       <y>520</y>
-      <width>81</width>
+      <width>101</width>
       <height>27</height>
      </rect>
     </property>
@@ -313,7 +319,7 @@
      <number>5</number>
     </property>
     <property name="maximum">
-     <double>1000000.000000000000000</double>
+     <double>1000000000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
@@ -424,14 +430,14 @@
    <widget class="QDoubleSpinBox" name="Time">
     <property name="geometry">
      <rect>
-      <x>970</x>
+      <x>930</x>
       <y>500</y>
-      <width>71</width>
+      <width>111</width>
       <height>27</height>
      </rect>
     </property>
     <property name="decimals">
-     <number>4</number>
+     <number>8</number>
     </property>
     <property name="maximum">
      <double>10.000000000000000</double>
@@ -446,7 +452,7 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>950</x>
+      <x>910</x>
       <y>500</y>
       <width>16</width>
       <height>17</height>
@@ -532,7 +538,7 @@
      <rect>
       <x>570</x>
       <y>580</y>
-      <width>81</width>
+      <width>101</width>
       <height>27</height>
      </rect>
     </property>
@@ -540,7 +546,7 @@
      <number>5</number>
     </property>
     <property name="maximum">
-     <double>1000000.000000000000000</double>
+     <double>1000000000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
@@ -560,6 +566,9 @@
     </property>
     <property name="decimals">
      <number>5</number>
+    </property>
+    <property name="maximum">
+     <double>10000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
@@ -602,6 +611,9 @@
     <property name="decimals">
      <number>5</number>
     </property>
+    <property name="maximum">
+     <double>10000.000000000000000</double>
+    </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
     </property>
@@ -614,7 +626,7 @@
      <rect>
       <x>570</x>
       <y>550</y>
-      <width>81</width>
+      <width>101</width>
       <height>27</height>
      </rect>
     </property>
@@ -622,7 +634,7 @@
      <number>5</number>
     </property>
     <property name="maximum">
-     <double>1000000.000000000000000</double>
+     <double>1000000000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
@@ -656,7 +668,7 @@
    <widget class="QComboBox" name="mat0">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>680</x>
       <y>490</y>
       <width>41</width>
       <height>27</height>
@@ -676,7 +688,7 @@
    <widget class="QComboBox" name="mat1">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>680</x>
       <y>520</y>
       <width>41</width>
       <height>27</height>
@@ -696,7 +708,7 @@
    <widget class="QComboBox" name="mat3">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>680</x>
       <y>580</y>
       <width>41</width>
       <height>27</height>
@@ -716,7 +728,7 @@
    <widget class="QComboBox" name="mat2">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>680</x>
       <y>550</y>
       <width>41</width>
       <height>27</height>
@@ -1003,7 +1015,7 @@
      <rect>
       <x>570</x>
       <y>610</y>
-      <width>81</width>
+      <width>101</width>
       <height>27</height>
      </rect>
     </property>
@@ -1011,7 +1023,7 @@
      <number>5</number>
     </property>
     <property name="maximum">
-     <double>1000000.000000000000000</double>
+     <double>1000000000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
@@ -1031,6 +1043,9 @@
     </property>
     <property name="decimals">
      <number>5</number>
+    </property>
+    <property name="maximum">
+     <double>10000.000000000000000</double>
     </property>
     <property name="singleStep">
      <double>0.100000000000000</double>
@@ -1064,7 +1079,7 @@
    <widget class="QComboBox" name="mat4">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>680</x>
       <y>610</y>
       <width>41</width>
       <height>27</height>

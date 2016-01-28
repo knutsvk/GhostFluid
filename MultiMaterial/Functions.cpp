@@ -26,7 +26,7 @@ void updateGhostCells(Primitive *W_L, Conserved *U_L,
                     p_Inf_R);
         }
         // Ghost fluid update, constant entropy: 
-        for(int i=0; i<3; i++)
+        for(int i=0; i<2; i++)
         {
             W_L[pos+i].rho = 
                 pow(W_R[pos+i].p/W_L[pos-1].p, 1/gamma_L)
@@ -48,17 +48,17 @@ void updateGhostCells(Primitive *W_L, Conserved *U_L,
     {
         // Riemann ghost fluid method, HLLC
         Conserved U_L_star, U_R_star; 
-        hllcStarStates(W_L[pos-1], W_R[pos], U_L[pos-1], U_R[pos],
-                gamma_L, gamma_R, p_Inf_L, p_Inf_R,  
+        hllcStarStates(W_L[pos-2], W_R[pos+1], U_L[pos-2], 
+                U_R[pos+1], gamma_L, gamma_R, p_Inf_L, p_Inf_R,  
                 U_L_star, U_R_star);
         for(int i=0; i<3; i++)
         {
-            U_L[pos+i] = U_L_star; 
-            U_R[pos-1-i] = U_R_star; 
+            U_L[pos-1+i] = U_L_star; 
+            U_R[pos-i] = U_R_star; 
             ConservedToPrimitive(
-                    U_L[pos+i], W_L[pos+i], gamma_L, p_Inf_L);
+                    U_L[pos-1+i], W_L[pos-1+i], gamma_L, p_Inf_L);
             ConservedToPrimitive(
-                    U_R[pos-1-i], W_R[pos-1-i], gamma_R, p_Inf_R);
+                    U_R[pos-i], W_R[pos-i], gamma_R, p_Inf_R);
         }
     }
 }
@@ -67,7 +67,6 @@ void hllcStarStates(Primitive W_L, Primitive W_R, Conserved U_L,
         Conserved U_R, double gamma_L, double gamma_R, 
         double p_Inf_L, double p_Inf_R, Conserved &U_L_star, 
         Conserved &U_R_star)
-    // TODO: Include p_Inf
 {
     double S_L, S_R, S_plus, S_star; 
     S_L = fabs(W_L.u)+sqrt(gamma_L*(W_L.p+p_Inf_L)/W_L.rho);
@@ -206,7 +205,7 @@ void PrimitiveToConserved(Primitive W, Conserved &U, double gamma,
 {
     U.rho = W.rho;
     U.rho_u = W.rho*W.u; 
-    U.E = 0.5*W.rho*W.u*W.u+W.p/(gamma-1)-gamma*p_Inf/(gamma-1);
+    U.E = 0.5*W.rho*W.u*W.u+(W.p-gamma*p_Inf)/(gamma-1);
 }
 
 void ConservedToPrimitive(Conserved U, Primitive &W, double gamma,
@@ -464,8 +463,8 @@ void initiateTestCase(int testCase, int &nInterfaces,
     gamma[0]=1.4;
     mat[0]=0;
     mat[1]=1;
-    p_Inf[0]=0;
-    p_Inf[1]=0;
+    p_Inf[0]=0.0;
+    p_Inf[1]=0.0;
 
     if(testCase<8){
         nInterfaces=1;
