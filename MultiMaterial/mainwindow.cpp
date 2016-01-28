@@ -28,15 +28,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->isobaricFix->setVisible(0);
     ui->x1->setVisible(0);
     ui->x2->setVisible(0);
+    ui->x3->setVisible(0);
     ui->rho2->setVisible(0);
     ui->rho3->setVisible(0);
+    ui->rho4->setVisible(0);
     ui->u2->setVisible(0);
     ui->u3->setVisible(0);
+    ui->u4->setVisible(0);
     ui->p2->setVisible(0);
     ui->p3->setVisible(0);
+    ui->p4->setVisible(0);
     ui->mat1->setCurrentIndex(1);
     ui->mat2->setVisible(0);
     ui->mat3->setVisible(0);
+    ui->mat4->setVisible(0);
     ui->SleepTime->setVisible(0);
     ui->SleepTimeLabel->setVisible(0);
 }
@@ -70,51 +75,65 @@ void MainWindow::on_Interfaces_valueChanged(int i)
     ui->u3->setVisible(i>2);
     ui->p3->setVisible(i>2);
     ui->mat3->setVisible(i>2);
+    ui->x3->setVisible(i>3);
+    ui->rho4->setVisible(i>3);
+    ui->u4->setVisible(i>3);
+    ui->p4->setVisible(i>3);
+    ui->mat4->setVisible(i>3);
 }
 
 void MainWindow::on_testCombo_currentIndexChanged()
 {
     int n = ui->testCombo->currentIndex();
     int nInterfaces; 
-    double x[3];          
-    double rho[4];       // Left density
-    double u[4];         // Left velocity
-    double p[4];         // Left pressure
-    int mat[4]; 
+    double x[4];          
+    double rho[5];       // Left density
+    double u[5];         // Left velocity
+    double p[5];         // Left pressure
+    int mat[5]; 
     double gamma[2];     // Left gamma
+    double p_Inf[2]; 
     double tStop;       // Final time
 
     initiateTestCase(n+1, nInterfaces, x, rho, u, p, mat, gamma, 
-            tStop);
+            p_Inf, tStop);
 
     ui->Interfaces->setValue(nInterfaces);
     
     ui->x0->setValue(x[0]);
     ui->x1->setValue(x[1]);
     ui->x2->setValue(x[2]);
+    ui->x3->setValue(x[3]);
 
     ui->rho0->setValue(rho[0]);
     ui->rho1->setValue(rho[1]);
     ui->rho2->setValue(rho[2]);
     ui->rho3->setValue(rho[3]);
+    ui->rho4->setValue(rho[4]);
 
     ui->u0->setValue(u[0]);
     ui->u1->setValue(u[1]);
     ui->u2->setValue(u[2]);
     ui->u3->setValue(u[3]);
+    ui->u4->setValue(u[4]);
     
     ui->p0->setValue(p[0]);
     ui->p1->setValue(p[1]);
     ui->p2->setValue(p[2]);
     ui->p3->setValue(p[3]);
+    ui->p4->setValue(p[4]);
 
     ui->mat0->setCurrentIndex(mat[0]);
     ui->mat1->setCurrentIndex(mat[1]);
     ui->mat2->setCurrentIndex(mat[2]);
     ui->mat3->setCurrentIndex(mat[3]);
+    ui->mat4->setCurrentIndex(mat[4]);
 
     ui->gammaA->setValue(gamma[0]);
     ui->gammaB->setValue(gamma[1]);
+
+    ui->pInfA->setValue(p_Inf[0]);
+    ui->pInfB->setValue(p_Inf[1]);
 
     ui->Time->setValue(tStop);
     ui->CFL->setValue(0.9);
@@ -181,6 +200,9 @@ void MainWindow::on_runButton_clicked()
     double gamma[2];
     gamma[0] = ui->gammaA->value();
     gamma[1] = ui->gammaB->value();
+    double p_Inf[2];
+    p_Inf[0] = ui->pInfA->value();
+    p_Inf[1] = ui->pInfB->value();
     double a = 0.0;   // Maximum sound speed.
     double dx = 1.0/N;          // Width of cells
     double t = 0.0;               // Time
@@ -208,7 +230,8 @@ void MainWindow::on_runButton_clicked()
     Conserved *U_B = new Conserved[N+2*NGC];
     Conserved *U_B_old = new Conserved[N+2*NGC];
 
-    QVector<double> Qx(N), Qrho(N), Qu(N), Qp(N), Qe(N), Qphi(N);
+    QVector<double> Qx(N), Qrho(N), Qu(N), Qp(N), Qe(N), 
+        Qphi(N), Qgamma(N);
 
     // Read info from ui 
     x[0] = ui->x0->value();
@@ -233,6 +256,13 @@ void MainWindow::on_runButton_clicked()
             p[3] = ui->p3->value();
             mat[3] = ui->mat3->currentIndex();
         }
+        if(nInterfaces>3){
+                x[3] = ui->x3->value();
+                rho[4] = ui->rho4->value();
+                u[4] = ui->u4->value();
+                p[4] = ui->p4->value();
+                mat[4] = ui->mat4->currentIndex();
+        }
     }
 
     // Find which interfaces are material interfaces
@@ -252,7 +282,7 @@ void MainWindow::on_runButton_clicked()
     // Calculate sound speeds 
     for(int i=0; i<nRegions; i++){
         int mati = mat[i];
-        double a_i = sqrt(gamma[mati]*p[i]/rho[i]);
+        double a_i = sqrt(gamma[mati]*(p[i]+p_Inf[mati])/rho[i]);
         if(fabs(a_i)>a) a = fabs(a_i);
     }
 
@@ -260,25 +290,35 @@ void MainWindow::on_runButton_clicked()
     // Initiate solution vector
     initialConditions(W_A, U_A_old, W_B, U_B_old, phi, N, dx,
             nInterfaces, x, nMaterialInterfaces, x_M, 
-            rho, u, p, mat, gamma);
+            rho, u, p, gamma, p_Inf);
 
     // Loop from t=0 to tStop
-    while(t < tStop){
+    while(t < tStop)
+    {
 
-        if(animate){
-            for(int i=NGC; i<N+NGC; i++){
+        if(animate)
+        {
+            for(int i=NGC; i<N+NGC; i++)
+            {
                 Qx[i-NGC] = (i-NGC+0.5)*dx;
                 Qphi[i-NGC] = phi[i];
-                if(phi[i]<0.0){
+                if(phi[i]<0.0)
+                {
                     Qrho[i-NGC] = W_A[i].rho;
                     Qu[i-NGC] = W_A[i].u;
                     Qp[i-NGC] = W_A[i].p;
-                    Qe[i-NGC] = W_A[i].p/(W_A[i].rho*(gamma[0]-1));
-                }else{
+                    Qe[i-NGC] = (W_A[i].p-gamma[0]*p_Inf[0])
+                                /(W_A[i].rho*(gamma[0]-1));
+                    Qgamma[i-NGC] = gamma[0]; 
+                }
+                else
+                {
                     Qrho[i-NGC] = W_B[i].rho;
                     Qu[i-NGC] = W_B[i].u;
                     Qp[i-NGC] = W_B[i].p;
-                    Qe[i-NGC] = W_B[i].p/(W_B[i].rho*(gamma[1]-1));
+                    Qe[i-NGC] = (W_B[i].p-gamma[1]*p_Inf[1])
+                                /(W_B[i].rho*(gamma[1]-1));
+                    Qgamma[i-NGC] = gamma[1];
                 }
             }
             PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
@@ -286,19 +326,22 @@ void MainWindow::on_runButton_clicked()
             PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
             PlotGraph(ui->energyPlot, Qx, Qe, "Internal energy");
             PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
-            usleep(1000000*sleepTime);
+            PlotGraph(ui->gammaPlot, Qx, Qgamma, "Gamma");
+            usleep(1e6*sleepTime);
         }
 
         // Calculate ghost BCs for each material interface
         int *pos = interfacePosition(phi, nMaterialInterfaces);
-        for(int i=0; i<nMaterialInterfaces; i++){
-            if(phi[pos[i]-1]<0){
+        for(int i=0; i<nMaterialInterfaces; i++)
+        {
+            if(phi[pos[i]-1]<0)
                 updateGhostCells(W_A, U_A_old, W_B, U_B_old, 
-                        pos[i], gamma[0], gamma[1], method);
-            }else{
+                        pos[i], gamma[0], gamma[1], p_Inf[0], 
+                        p_Inf[1], method);
+            else
                 updateGhostCells(W_B, U_B_old, W_A, U_A_old, 
-                        pos[i], gamma[1], gamma[0], method);
-            }
+                        pos[i], gamma[1], gamma[0], p_Inf[1], 
+                        phi[0],method);
         }
         delete[] pos;
 
@@ -312,51 +355,62 @@ void MainWindow::on_runButton_clicked()
         if(t+dt > tStop) dt = tStop-t;
 
         // Apply boundary conditionsn for domain
-        boundaryConditions(W_A, U_A_old, gamma[0], N); 
-        boundaryConditions(W_B, U_B_old, gamma[1], N); 
+        boundaryConditions(W_A, U_A_old, gamma[0], p_Inf[0], N); 
+        boundaryConditions(W_B, U_B_old, gamma[1], p_Inf[1], N); 
 
         // Advance level set function in time
         advanceLevelSet(phi, W_A, W_B, dt, dx, N);
         reinitialize(phi, N, dx, nMaterialInterfaces);
         
         // Advance system in time
-        advance(W_A, U_A, U_A_old, dt, dx, N, gamma[0],
+        advance(W_A, U_A, U_A_old, dt, dx, N, gamma[0], phi[0],
                 scheme, limitFunc);
-        advance(W_B, U_B, U_B_old, dt, dx, N, gamma[1],
+        advance(W_B, U_B, U_B_old, dt, dx, N, gamma[1], phi[1],
                 scheme, limitFunc);
         t += dt;
     }
 
-    for(int i=NGC; i<N+NGC; i++){
+    // Generate final plot
+    for(int i=NGC; i<N+NGC; i++)
+    {
         Qx[i-NGC] = (i-NGC+0.5)*dx;
         Qphi[i-NGC] = phi[i];
-        if(phi[i]<0.0){
+        if(phi[i]<0.0)
+        {
             Qrho[i-NGC] = W_A[i].rho;
             Qu[i-NGC] = W_A[i].u;
             Qp[i-NGC] = W_A[i].p;
-            Qe[i-NGC] = W_A[i].p/(W_A[i].rho*(gamma[0]-1));
-        }else{
+            Qe[i-NGC] = (W_A[i].p-gamma[0]*p_Inf[0])
+                        /(W_A[i].rho*(gamma[0]-1));
+            Qgamma[i-NGC] = gamma[0]; 
+        }
+        else
+        {
             Qrho[i-NGC] = W_B[i].rho;
             Qu[i-NGC] = W_B[i].u;
             Qp[i-NGC] = W_B[i].p;
-            Qe[i-NGC] = W_B[i].p/(W_B[i].rho*(gamma[1]-1));
+            Qe[i-NGC] = (W_B[i].p-gamma[1]*p_Inf[1])
+                        /(W_B[i].rho*(gamma[1]-1));
+            Qgamma[i-NGC] = gamma[1]; 
         }
     }
-
     // TODO: Include exact when possible
     PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
     PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
     PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
     PlotGraph(ui->energyPlot, Qx, Qe, "Internal energy");
     PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
+    PlotGraph(ui->gammaPlot, Qx, Qgamma, "Gamma");
 
-    if(save){
+    if(save)
+    {
         std::fstream fs; 
         QString filename = ui->fileName->text(); 
         filename.prepend("../Results/");
         fs.open(filename.toAscii(), std::fstream::out);
         fs << "x\trho\tu\tp\te\n"; 
-        for(int i=0; i<N; i++){
+        for(int i=0; i<N; i++)
+        {
             fs << Qx[i] << "\t" << Qrho[i] << "\t" << Qu[i] 
                 << "\t" << Qp[i] << "\t" << Qe[i] << "\n";
         }
