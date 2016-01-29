@@ -177,6 +177,41 @@ void PlotGraph(QCustomPlot* plot, QVector<double> X,
     plot->replot();
 }
 
+void PlotGraph2(QCustomPlot* plot, QVector<double> X, 
+        QVector<double> Y, QVector<double> Z, QString label)
+{
+    plot->addGraph();
+    plot->graph(0)->setPen(QPen(Qt::blue));
+    plot->graph(0)->setData(X,Z);
+    double min0 = *std::min_element(Z.begin(),Z.end());
+    double max0 = *std::max_element(Z.begin(),Z.end());
+
+    plot->addGraph();
+    plot->graph(1)->setScatterStyle(QCPScatterStyle(
+                QCPScatterStyle::ssCircle, QPen(Qt::red,0.5), 
+                QBrush(Qt::red), 3));
+    plot->graph(1)->setLineStyle(QCPGraph::lsNone);
+    plot->graph(1)->setData(X,Y);
+    double min1 = *std::min_element(Y.begin(),Y.end());
+    double max1 = *std::max_element(Y.begin(),Y.end());
+
+    double MIN = std::min(min0,min1);
+    double MAX = std::max(max0,max1);
+    double ymin = MIN - 0.05*(MAX-MIN);
+    double ymax = MAX + 0.05*(MAX-MIN);
+    if (ymax-ymin < 1)
+    {
+        ymin = (ymax+ymin)/2 - 0.5;
+        ymax = (ymax+ymin)/2 + 0.5;
+    }
+
+    plot->xAxis->setRange(0,1);
+    plot->yAxis->setRange(ymin, ymax);
+    plot->xAxis->setLabel("x");
+    plot->yAxis->setLabel(label);
+    plot->replot();
+}
+
 void MainWindow::on_runButton_clicked()
 {
     int N = ui->Cells->value();
@@ -235,6 +270,8 @@ void MainWindow::on_runButton_clicked()
 
     QVector<double> Qx(N), Qrho(N), Qu(N), Qp(N), Qe(N), 
         Qphi(N), Qgamma(N);
+    QVector<double> QrhoExact(N), QuExact(N), QpExact(N), 
+        QeExact(N);
 
     // Read info from ui 
     x[0] = ui->x0->value();
@@ -303,6 +340,8 @@ void MainWindow::on_runButton_clicked()
     while(t < tStop)
     {
         if(animate)
+            //TODO: GUI gets confused when changing nInterfaces
+            //  Fi.x 
         {
             for(int i=NGC; i<N+NGC; i++)
             {
@@ -327,10 +366,51 @@ void MainWindow::on_runButton_clicked()
                     Qgamma[i-NGC] = gamma[1];
                 }
             }
-            PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
-            PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
-            PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
-            PlotGraph(ui->energyPlot, Qx, Qe, "Internal energy");
+            if(nInterfaces==1)
+            {
+                // EXACT SOLVER:
+                // Compute pressure and velocity in star region
+                int mat0=mat[0];
+                int mat1=mat[1];
+                double a0, a1; 
+                a0 = sqrt(gamma[mat0]*(p[0]+p_Inf[mat0])/rho[0]);
+                a1 = sqrt(gamma[mat1]*(p[1]+p_Inf[mat1])/rho[1]);
+                double p_S, u_S;
+                starRegionPressureVelocity(p_S, u_S, 
+                        rho[0], u[0], p[0], a0, gamma[mat0],p_Inf[mat0],
+                        rho[1], u[1], p[1], a1, gamma[mat1],p_Inf[mat1]);
+
+                // Calculate solution for each cell
+                double RHO, U, P, E, S; 
+                for(int i=0; i<N; i++)
+                {
+                    S = ((i+0.5)*dx-x[0])/t;
+                    sample(RHO, U, P, E, p_S, u_S, S, 
+                        rho[0], u[0], p[0], a0, gamma[mat0], p_Inf[mat0],
+                        rho[1], u[1], p[1], a1, gamma[mat1], p_Inf[mat1]);
+                    E = (P-p_Inf[0])/(RHO*(gamma[0]-1));
+                    QrhoExact[i] = RHO; 
+                    QuExact[i] = U; 
+                    QpExact[i] = P; 
+                    QeExact[i] = E; 
+                }
+                PlotGraph2(ui->densityPlot, Qx, Qrho, QrhoExact, 
+                        "Density");
+                PlotGraph2(ui->velocityPlot, Qx, Qu, QuExact, 
+                        "Velocity");
+                PlotGraph2(ui->pressurePlot, Qx, Qp, QpExact, 
+                        "Pressure");
+                PlotGraph2(ui->energyPlot, Qx, Qe, QeExact, 
+                        "Internal energy");
+            }
+            else
+            {
+                PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
+                PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
+                PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
+                PlotGraph(ui->energyPlot, Qx, Qe, 
+                        "Internal energy");
+            }
             PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
             PlotGraph(ui->gammaPlot, Qx, Qgamma, "Gamma");
             usleep(1e6*sleepTime);
@@ -400,11 +480,50 @@ void MainWindow::on_runButton_clicked()
             Qgamma[i-NGC] = gamma[1]; 
         }
     }
-    // TODO: Include exact when possible
-    PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
-    PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
-    PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
-    PlotGraph(ui->energyPlot, Qx, Qe, "Internal energy");
+    if(nInterfaces==1)
+    {
+        // EXACT SOLVER:
+        // Compute pressure and velocity in star region
+        int mat0=mat[0];
+        int mat1=mat[1];
+        double a0, a1; 
+        a0 = sqrt(gamma[mat0]*(p[0]+p_Inf[mat0])/rho[0]);
+        a1 = sqrt(gamma[mat1]*(p[1]+p_Inf[mat1])/rho[1]);
+        double p_S, u_S;
+        starRegionPressureVelocity(p_S, u_S, 
+                rho[0], u[0], p[0], a0, gamma[mat0],p_Inf[mat0],
+                rho[1], u[1], p[1], a1, gamma[mat1],p_Inf[mat1]);
+
+        // Calculate solution for each cell
+        double RHO, U, P, E, S; 
+        for(int i=0; i<N; i++)
+        {
+            S = ((i+0.5)*dx-x[0])/tStop;
+        sample(RHO, U, P, E, p_S, u_S, S, 
+            rho[0], u[0], p[0], a0, gamma[mat0], p_Inf[mat0],
+            rho[1], u[1], p[1], a1, gamma[mat1], p_Inf[mat1]);
+        QrhoExact[i] = RHO; 
+            QuExact[i] = U; 
+            QpExact[i] = P; 
+            QeExact[i] = E; 
+        }
+        PlotGraph2(ui->densityPlot, Qx, Qrho, QrhoExact, 
+                "Density");
+        PlotGraph2(ui->velocityPlot, Qx, Qu, QuExact, 
+                "Velocity");
+        PlotGraph2(ui->pressurePlot, Qx, Qp, QpExact, 
+                "Pressure");
+        PlotGraph2(ui->energyPlot, Qx, Qe, QeExact, 
+                "Internal energy");
+    }
+    else
+    {
+        PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
+        PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
+        PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
+        PlotGraph(ui->energyPlot, Qx, Qe, 
+                "Internal energy");
+    }
     PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
     PlotGraph(ui->gammaPlot, Qx, Qgamma, "Gamma");
 

@@ -46,6 +46,37 @@ void updateGhostCells(Primitive *W_L, Conserved *U_L,
     }
     else
     {
+        // Riemann ghost fluid method, Exact solver
+        // TODO: Make work for water. 
+        double a_L = 
+            sqrt(gamma_L*(W_L[pos-2].p+p_Inf_L)/W_L[pos-2].rho);
+        double a_R = 
+            sqrt(gamma_R*(W_R[pos+1].p+p_Inf_R)/W_R[pos+1].rho);
+
+        double p_Star, u_Star; 
+        starRegionPressureVelocity(p_Star, u_Star, 
+              W_L[pos-2].rho, W_L[pos-2].u, W_L[pos-2].p, a_L, 
+              gamma_L, p_Inf_L, W_R[pos+1].rho, W_R[pos+1].u, 
+              W_R[pos+1].p, a_R, gamma_R, p_Inf_R);
+
+        double rho_L_Star, rho_R_Star;
+        starRegionRho(rho_L_Star, rho_R_Star, p_Star, 
+                W_L[pos-2].rho, W_L[pos-2].p, gamma_L, p_Inf_L,
+                W_R[pos+1].rho, W_R[pos+1].p, gamma_R, p_Inf_R); 
+
+        Primitive W_L_star(rho_L_Star, u_Star, p_Star);
+        Primitive W_R_star(rho_R_Star, u_Star, p_Star);
+
+        for(int i=0; i<3; i++)
+        {
+            W_L[pos-1+i] = W_L_star; 
+            W_R[pos-i] = W_R_star; 
+            PrimitiveToConserved(
+                    W_L[pos-1+i], U_L[pos-1+i], gamma_L, p_Inf_L);
+            PrimitiveToConserved(
+                    W_R[pos-i], U_R[pos-i], gamma_R, p_Inf_R);
+        }
+ /*       
         // Riemann ghost fluid method, HLLC
         Conserved U_L_star, U_R_star; 
         hllcStarStates(W_L[pos-2], W_R[pos+1], U_L[pos-2], 
@@ -59,7 +90,7 @@ void updateGhostCells(Primitive *W_L, Conserved *U_L,
                     U_L[pos-1+i], W_L[pos-1+i], gamma_L, p_Inf_L);
             ConservedToPrimitive(
                     U_R[pos-i], W_R[pos-i], gamma_R, p_Inf_R);
-        }
+        }*/
     }
 }
 
@@ -134,6 +165,8 @@ void reinitialize(double *phi, int N, double dx,
         int nMaterialInterfaces)
 {
     int *pos = interfacePosition(phi, nMaterialInterfaces);
+    //TODO: MAKE SURE phi does not become zero. 
+
     for(int i=0; i<pos[0]-1; i++)
         phi[i] = phi[pos[0]-1]-(pos[0]-1-i)*dx;
 
@@ -608,5 +641,244 @@ void setScheme(char *scheme, char *limitFunc,
             strcpy(limitFunc, "superbee");
     }
 }
+
+void starRegionPressureVelocity(double &p, double &u,
+        double rho_L, double u_L, double p_L, double a_L, 
+        double gamma_L, double p_Inf_L, double rho_R, double u_R, 
+        double p_R, double a_R, double gamma_R, double p_Inf_R)
+{
+    // Compute the pressure and velocity in the star region.
+    // 
+    // First, the pressure in the star region is computed to 
+    // an accuracy of tol by Newton-Raphson root finding, 
+    // with initial guess p_init = 0.5(p_left+p_right). 
+    // The procedure cancels if the amount of iterations 
+    // exceeds maxIter. 
+    // 
+    // Afterwards, the velocity u is computed. 
+    int iter = 0, maxIter = 20;
+    double p_Old =0.5*(p_L+p_R),
+           change = 1, 
+           tol = 1e-6,
+           f_L, f_L_Diff, f_R, f_R_Diff;
+
+    // Calculation of pressure in star region
+    while(change > tol)
+    {
+        pressureFunctions(f_L, f_L_Diff, p_Old, 
+                rho_L, p_L, a_L, gamma_L, p_Inf_L);
+        pressureFunctions(f_R, f_R_Diff, p_Old, 
+                rho_R, p_R, a_R, gamma_R, p_Inf_R);
+        p = p_Old-(f_L+f_R+u_R-u_L)/(f_L_Diff+f_R_Diff);
+        if(p < 0) p = tol;
+        change = 2*fabs((p-p_Old)/(p+p_Old));
+        p_Old = p;
+        iter++;
+        if(iter > maxIter)
+        {
+            qDebug() << "Pressure in star region N/A, iter > " 
+                << maxIter;
+            return;
+        }
+    }
+    u = 0.5*(u_L+u_R+f_R-f_L);
+}
+
+void pressureFunctions(double &f, double &f_Diff, double p_Old, 
+        double rho, double p, double a, double g, 
+        double p_Inf)
+{
+    // Calculate the pressure functions f_L and f_R as given in 
+    // Toro, and their first derivatives wrt pressure. 
+    if(p_Old <= p) 
+    { 
+        // Rarefaction
+        f = 2*a/(g-1)
+            *(pow((p_Old+p_Inf)/(p+p_Inf), 0.5*(g-1)/g)-1);
+        f_Diff = 1/(rho*a)
+            *pow((p_Old+p_Inf)/(p+p_Inf), -0.5*(g+1)/g);
+    }
+    else 
+    {
+        // Shock
+        double A = 2/(rho*(g+1));
+        double B = (g-1)/(g+1)*p+2*g*p_Inf/(g+1);
+        f = (p_Old-p)*sqrt(A/(B+p_Old));
+        f_Diff = sqrt(A/(p_Old+B))*(1-0.5*(p_Old-p)/(p_Old+B));
+    }
+}
+
+void starRegionRho(double &rho_L_S, double &rho_R_S, double p_S, 
+        double rho_L, double p_L, double g_L, double p_Inf_L,
+        double rho_R, double p_R, double g_R, double p_Inf_R)
+{
+    // Find density in star region
+    if(p_S <= p_L)   
+    { 
+        // Left rarefaction
+        rho_L_S = rho_L*pow((p_S+p_Inf_L)/(p_L+p_Inf_L), 1.0/g_L);
+    }
+    else 
+    { 
+        // Left shock
+        rho_L_S = rho_L*((p_S+p_Inf_L)/(p_L+p_Inf_L)
+                +(g_L-1)/(g_L+1))
+            /((p_S+p_Inf_L)/(p_L+p_Inf_L)*(g_L-1)/(g_L+1)+1);
+    }
+    if(p_S > p_R)
+    { 
+        // Right shock
+       rho_R_S = rho_R*((p_S+p_Inf_R)/(p_R+p_Inf_R)
+               +(g_R-1)/(g_R+1))
+            /((p_S+p_Inf_R)/(p_R+p_Inf_R)*(g_R-1)/(g_R+1)+1);
+    }
+    else
+    { 
+        // Right rarefaction 
+        rho_R_S = rho_R*pow((p_S+p_Inf_R)/(p_R+p_Inf_R), 1.0/g_R);
+    }
+}
+
+void sample(double &rho, double &u, double &p, double &e,
+        double p_S, double u_S, double S,
+        double rho_L, double u_L, double p_L, double a_L, 
+        double g_L, double p_Inf_L, double rho_R, double u_R, 
+        double p_R, double a_R, double g_R, double p_Inf_R)
+{
+    // Sample the solution of the Riemann problem. See Toro. 
+    double S_H_L, a_S_L, S_T_L, S_H_R, a_S_R, S_T_R, a; 
+    if(S <= u_S)
+    { 
+        // Sampling point to left of contact discontinuity
+        if(p_S <= p_L)   
+        { 
+            // Left rarefaction
+            // Speed of head:
+            S_H_L = u_L - a_L; 
+            if(S <= S_H_L) 
+            { 
+                // Sampling point is left data state
+                rho = rho_L;
+                u = u_L; 
+                p = p_L;
+            }
+            else
+            {   
+                // Sound speed behind rarefaction:
+                a_S_L = a_L*pow((p_S+p_Inf_L)/(p_L+p_Inf_L), 
+                        0.5*(g_L-1)/g_L); 
+                // Speed of tail:
+                S_T_L = u_S - a_S_L; 
+                if(S > S_T_L) 
+                { 
+                    // Sampling point is left star state
+                    rho = rho_L*pow((p_S+p_Inf_L)/(p_L+p_Inf_L), 
+                            1.0/g_L);
+                    u = u_S;
+                    p = p_S;
+                }
+                else 
+                { 
+                    // Sampling point is inside left fan
+                    u = 2/(g_L+1)*(a_L+0.5*(g_L-1)*u_L+S);
+                    a = 2/(g_L+1)*(a_L+0.5*(g_L-1)*(u_L-S));
+                    rho = rho_L*pow(a/a_L, 2/(g_L-1));
+                    p = (p_L+p_Inf_L)*(pow(a/a_L, 
+                                2*g_L/(g_L-1)))-p_Inf_L;
+                }
+            }
+        }
+        else 
+        { 
+            // Left shock
+            if(S <= u_L-a_L*sqrt(0.5*(g_L+1)/g_L
+                        *(p_S+p_Inf_L)/(p_L+p_Inf_L)
+                        +0.5*(g_L-1)/g_L))
+            {
+                // Left data state
+                rho = rho_L;
+                u = u_L;
+                p = p_L;
+            }
+            else
+            { 
+                // Sampling point is left star state
+                rho = rho_L*((p_S+p_Inf_L)/(p_L+p_Inf_L)
+                        +(g_L-1)/(g_L+1))/((p_S+p_Inf_L)
+                        /(p_L+p_Inf_L)*(g_L-1)/(g_L+1)+1);
+                u = u_S;
+                p = p_S;
+            }
+        }
+        e = (p-g_L*p_Inf_L)/(rho*(g_L-1));
+    }
+    else
+    { 
+        // Sampling point is to the right of contact discontinuity
+        if(p_S > p_R)
+        { 
+            // Right shock
+            if(S > u_R+a_R*sqrt(0.5*(g_R+1)/g_R
+                        *(p_S+p_Inf_R)/(p_R+p_Inf_R)
+                        +0.5*(g_R-1)/g_R)) 
+            {
+                //Right data state
+                rho = rho_R;
+                u = u_R;
+                p = p_R;
+            }
+            else
+            { 
+                // Sampled point is right star state
+                rho = rho_R*((p_S+p_Inf_R)/(p_R+p_Inf_R)
+                        +(g_R-1)/(g_R+1))
+                    /((p_S+p_Inf_R)/(p_R+p_Inf_R)
+                            *(g_R-1)/(g_R+1)+1);
+                u = u_S;
+                p = p_S;
+            }
+        }
+        else
+        { 
+            // Right rarefaction 
+            S_H_R = u_R + a_R; 
+            // Speed of head
+            if(S >= S_H_R)
+            {
+                // Sampling point is right data state
+                rho = rho_R;
+                u = u_R;
+                p = p_R;
+            }
+            else
+            {  
+                // Sound speed behind rarefaction:
+                a_S_R = a_R*pow((p_S+p_Inf_R)/(p_R+p_Inf_R), 
+                        0.5*(g_R-1)/g_R); 
+                // Speed of tail:
+                S_T_R = u_S + a_S_R; 
+                if(S <= S_T_R)
+                { 
+                    // Sampling point is right star state
+                    rho = rho_R*pow((p_S+p_Inf_R)/(p_R+p_Inf_R), 
+                            1.0/g_R);
+                    u = u_S;
+                    p = p_S;
+                }
+                else
+                { 
+                    // Sampling point is inside right fan
+                    u = 2/(g_R+1)*(-a_R+0.5*(g_R-1)*u_R+S);
+                    a = 2/(g_R+1)*(a_R-0.5*(g_R-1)*(u_R-S));
+                    rho = rho_R*pow(a/a_R, 2/(g_R-1));
+                    p = (p_R+p_Inf_R)*(pow(a/a_R, 2*g_R/(g_R-1)))
+                        -p_Inf_R;
+                }
+            }
+        }
+        e = (p-g_R*p_Inf_R)/(rho*(g_R-1));
+    }
+}
+
 
 #endif

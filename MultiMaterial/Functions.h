@@ -85,11 +85,30 @@ void advance(Primitive *W, Conserved *U, Conserved *U_old,
         char *scheme, char *limitFunc);
 
 void initiateTestCase(int testCase, int &nInterfaces, 
-        double x[3], double rho[4], double u[4], double p[4], 
-        int mat[4], double gamma[2], double p_Inf[2], 
+        double x[4], double rho[5], double u[5], double p[5], 
+        int mat[5], double gamma[2], double p_Inf[2], 
         double &tStop);
 
 void setScheme(char *scheme, char *limitFunc, 
         int schemeChoice, int limitChoice);
+
+void starRegionPressureVelocity(double &p, double &u,
+        double rho_L, double u_L, double p_L, double a_L, 
+        double gamma_L, double p_Inf_L, double rho_R, double u_R, 
+        double p_R, double a_R, double gamma_R, double p_Inf_R);
+
+void pressureFunctions(double &f, double &f_Diff, double p_Old, 
+        double rho, double p, double a, double g, 
+        double p_Inf);
+
+void starRegionRho(double &rho_L_S, double &rho_R_S, double p_S, 
+        double rho_L, double p_L, double g_L, double p_Inf_L,
+        double rho_R, double p_R, double g_R, double p_Inf_R);
+
+void sample(double &rho, double &u, double &p, double &e,
+        double p_S, double u_S, double S,
+        double rho_L, double u_L, double p_L, double a_L, 
+        double g_L, double p_Inf_L, double rho_R, double u_R, 
+        double p_R, double a_R, double g_R, double p_Inf_R);
 
 #endif
