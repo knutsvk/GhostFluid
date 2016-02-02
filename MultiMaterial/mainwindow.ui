@@ -363,9 +363,9 @@
    <widget class="QSpinBox" name="Cells">
     <property name="geometry">
      <rect>
-      <x>980</x>
+      <x>969</x>
       <y>560</y>
-      <width>60</width>
+      <width>71</width>
       <height>27</height>
      </rect>
     </property>
@@ -373,7 +373,7 @@
      <number>2</number>
     </property>
     <property name="maximum">
-     <number>2000</number>
+     <number>99999</number>
     </property>
     <property name="singleStep">
      <number>100</number>
@@ -385,7 +385,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>960</x>
+      <x>950</x>
       <y>560</y>
       <width>16</width>
       <height>17</height>

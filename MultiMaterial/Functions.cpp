@@ -75,50 +75,7 @@ void updateGhostCells(Primitive *W_L, Conserved *U_L,
             PrimitiveToConserved(
                     W_R[pos-i], U_R[pos-i], gamma_R, p_Inf_R);
         }
- /*       
-        // Riemann ghost fluid method, HLLC
-        Conserved U_L_star, U_R_star; 
-        hllcStarStates(W_L[pos-2], W_R[pos+1], U_L[pos-2], 
-                U_R[pos+1], gamma_L, gamma_R, p_Inf_L, p_Inf_R,  
-                U_L_star, U_R_star);
-        for(int i=0; i<3; i++)
-        {
-            U_L[pos-1+i] = U_L_star; 
-            U_R[pos-i] = U_R_star; 
-            ConservedToPrimitive(
-                    U_L[pos-1+i], W_L[pos-1+i], gamma_L, p_Inf_L);
-            ConservedToPrimitive(
-                    U_R[pos-i], W_R[pos-i], gamma_R, p_Inf_R);
-        }*/
     }
-}
-
-void hllcStarStates(Primitive W_L, Primitive W_R, Conserved U_L, 
-        Conserved U_R, double gamma_L, double gamma_R, 
-        double p_Inf_L, double p_Inf_R, Conserved &U_L_star, 
-        Conserved &U_R_star)
-{
-    double S_L, S_R, S_plus, S_star; 
-    S_L = fabs(W_L.u)+sqrt(gamma_L*(W_L.p+p_Inf_L)/W_L.rho);
-    S_R = fabs(W_R.u)+sqrt(gamma_R*(W_R.p+p_Inf_R)/W_R.rho);
-    S_plus = S_L > S_R ? S_L : S_R;
-    S_L = -S_plus;
-    S_R = S_plus;
-    S_star = (W_R.p-W_L.p+W_L.rho*W_L.u*(S_L-W_L.u)
-            -W_R.rho*W_R.u*(S_R-W_R.u))/(W_L.rho*(S_L-W_L.u)
-            -W_R.rho*(S_R-W_R.u));
-
-    U_L_star.rho = 1; 
-    U_L_star.rho_u = S_star; 
-    U_L_star.E = U_L.E/U_L.rho+(S_star-W_L.u)
-            *(S_star+W_L.p/(W_L.rho*(S_L-W_L.u)));
-    U_L_star = U_L_star*W_L.rho*(S_L-W_L.u)/(S_L-S_star);
-
-    U_R_star.rho = 1; 
-    U_R_star.rho_u = S_star; 
-    U_R_star.E = U_R.E/U_R.rho+(S_star-W_R.u)
-            *(S_star+W_R.p/(W_R.rho*(S_R-W_R.u)));
-    U_R_star = U_R_star*W_R.rho*(S_R-W_R.u)/(S_R-S_star);
 }
 
 void advanceLevelSet(double *phi, Primitive *W_A, Primitive *W_B, 
