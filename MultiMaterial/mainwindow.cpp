@@ -506,7 +506,7 @@ void MainWindow::on_runButton_clicked()
 
         fs << "x\trho\tu\tp\te"; 
         if(nInterfaces==1)
-            fs << "\trho_Ex\tu_Ex\tp_Ex\te_Ex";
+            fs << "\trhoEx\tuEx\tpEx\teEx";
         fs << "\n";
 
         for(int i=0; i<N; i++)
@@ -514,8 +514,8 @@ void MainWindow::on_runButton_clicked()
             fs << Qx[i] << "\t" << Qrho[i] << "\t" << Qu[i] 
                 << "\t" << Qp[i] << "\t" << Qe[i];
             if(nInterfaces==1)
-                fs << QrhoExact[i] << "\t" << QuExact[i] << "\t"
-                    << QpExact[i] << "\t" << QeExact[i];
+                fs << "\t" << QrhoExact[i] << "\t" << QuExact[i] 
+                    << "\t" << QpExact[i] << "\t" << QeExact[i];
             fs << "\n"; 
         }
         fs.close();
