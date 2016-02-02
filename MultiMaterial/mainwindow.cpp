@@ -151,62 +151,38 @@ void MainWindow::on_saveResults_stateChanged(int state)
 }
 
 void PlotGraph(QCustomPlot* plot, QVector<double> X, 
-        QVector<double> Y, QString label)
+        QVector<double> Y, QVector<double> Z, QString label, 
+        bool plotZ)
 {
+    plot->clearGraphs();
+
     plot->addGraph();
     plot->graph(0)->setScatterStyle(QCPScatterStyle(
                 QCPScatterStyle::ssCircle, QPen(Qt::red,0.5), 
                 QBrush(Qt::red), 3));
     plot->graph(0)->setLineStyle(QCPGraph::lsNone);
     plot->graph(0)->setData(X,Y);
-    double min = *std::min_element(Y.begin(),Y.end());
-    double max = *std::max_element(Y.begin(),Y.end());
+    double min0 = *std::min_element(Y.begin(),Y.end());
+    double max0 = *std::max_element(Y.begin(),Y.end());
 
-    double ymin = min - 0.05*(max-min);
-    double ymax = max + 0.05*(max-min);
-    if (ymax-ymin < 1)
-    {
-        ymin = (ymax+ymin)/2 - 0.5;
-        ymax = (ymax+ymin)/2 + 0.5;
+    if(plotZ){
+        plot->addGraph();
+        plot->graph(1)->setPen(QPen(Qt::blue));
+        plot->graph(1)->setData(X,Z);
     }
-
-    plot->xAxis->setRange(0,1);
-    plot->yAxis->setRange(ymin, ymax);
-    plot->xAxis->setLabel("x");
-    plot->yAxis->setLabel(label);
-    plot->replot();
-}
-
-void PlotGraph2(QCustomPlot* plot, QVector<double> X, 
-        QVector<double> Y, QVector<double> Z, QString label)
-{
-    plot->addGraph();
-    plot->graph(0)->setPen(QPen(Qt::blue));
-    plot->graph(0)->setData(X,Z);
-    double min0 = *std::min_element(Z.begin(),Z.end());
-    double max0 = *std::max_element(Z.begin(),Z.end());
-
-    plot->addGraph();
-    plot->graph(1)->setScatterStyle(QCPScatterStyle(
-                QCPScatterStyle::ssCircle, QPen(Qt::red,0.5), 
-                QBrush(Qt::red), 3));
-    plot->graph(1)->setLineStyle(QCPGraph::lsNone);
-    plot->graph(1)->setData(X,Y);
-    double min1 = *std::min_element(Y.begin(),Y.end());
-    double max1 = *std::max_element(Y.begin(),Y.end());
+    double min1 = *std::min_element(Z.begin(),Z.end());
+    double max1 = *std::max_element(Z.begin(),Z.end());
 
     double MIN = std::min(min0,min1);
     double MAX = std::max(max0,max1);
-    double ymin = MIN - 0.05*(MAX-MIN);
-    double ymax = MAX + 0.05*(MAX-MIN);
-    if (ymax-ymin < 1)
+    if(MAX-MIN < 0.1)
     {
-        ymin = (ymax+ymin)/2 - 0.5;
-        ymax = (ymax+ymin)/2 + 0.5;
+        MIN-=0.05;
+        MAX+=0.05;
     }
 
     plot->xAxis->setRange(0,1);
-    plot->yAxis->setRange(ymin, ymax);
+    plot->yAxis->setRange(MIN-(MAX-MIN)/20, MAX+(MAX-MIN)/20);
     plot->xAxis->setLabel("x");
     plot->yAxis->setLabel(label);
     plot->replot();
@@ -340,8 +316,6 @@ void MainWindow::on_runButton_clicked()
     while(t < tStop)
     {
         if(animate)
-            //TODO: GUI gets confused when changing nInterfaces
-            //  Fi.x 
         {
             for(int i=NGC; i<N+NGC; i++)
             {
@@ -352,7 +326,7 @@ void MainWindow::on_runButton_clicked()
                     Qrho[i-NGC] = W_A[i].rho;
                     Qu[i-NGC] = W_A[i].u;
                     Qp[i-NGC] = W_A[i].p;
-                    Qe[i-NGC] = (W_A[i].p-gamma[0]*p_Inf[0])
+                    Qe[i-NGC] = (W_A[i].p+gamma[0]*p_Inf[0])
                                 /(W_A[i].rho*(gamma[0]-1));
                     Qgamma[i-NGC] = gamma[0]; 
                 }
@@ -361,7 +335,7 @@ void MainWindow::on_runButton_clicked()
                     Qrho[i-NGC] = W_B[i].rho;
                     Qu[i-NGC] = W_B[i].u;
                     Qp[i-NGC] = W_B[i].p;
-                    Qe[i-NGC] = (W_B[i].p-gamma[1]*p_Inf[1])
+                    Qe[i-NGC] = (W_B[i].p+gamma[1]*p_Inf[1])
                                 /(W_B[i].rho*(gamma[1]-1));
                     Qgamma[i-NGC] = gamma[1];
                 }
@@ -377,8 +351,10 @@ void MainWindow::on_runButton_clicked()
                 a1 = sqrt(gamma[mat1]*(p[1]+p_Inf[mat1])/rho[1]);
                 double p_S, u_S;
                 starRegionPressureVelocity(p_S, u_S, 
-                        rho[0], u[0], p[0], a0, gamma[mat0],p_Inf[mat0],
-                        rho[1], u[1], p[1], a1, gamma[mat1],p_Inf[mat1]);
+                        rho[0], u[0], p[0], a0, 
+                        gamma[mat0],p_Inf[mat0],
+                        rho[1], u[1], p[1], a1, 
+                        gamma[mat1],p_Inf[mat1]);
 
                 // Calculate solution for each cell
                 double RHO, U, P, E, S; 
@@ -386,33 +362,35 @@ void MainWindow::on_runButton_clicked()
                 {
                     S = ((i+0.5)*dx-x[0])/t;
                     sample(RHO, U, P, E, p_S, u_S, S, 
-                        rho[0], u[0], p[0], a0, gamma[mat0], p_Inf[mat0],
-                        rho[1], u[1], p[1], a1, gamma[mat1], p_Inf[mat1]);
-                    E = (P-p_Inf[0])/(RHO*(gamma[0]-1));
+                        rho[0], u[0], p[0], a0, 
+                        gamma[mat0], p_Inf[mat0],
+                        rho[1], u[1], p[1], a1, 
+                        gamma[mat1], p_Inf[mat1]);
                     QrhoExact[i] = RHO; 
                     QuExact[i] = U; 
                     QpExact[i] = P; 
                     QeExact[i] = E; 
                 }
-                PlotGraph2(ui->densityPlot, Qx, Qrho, QrhoExact, 
-                        "Density");
-                PlotGraph2(ui->velocityPlot, Qx, Qu, QuExact, 
-                        "Velocity");
-                PlotGraph2(ui->pressurePlot, Qx, Qp, QpExact, 
-                        "Pressure");
-                PlotGraph2(ui->energyPlot, Qx, Qe, QeExact, 
-                        "Internal energy");
             }
             else
             {
-                PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
-                PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
-                PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
-                PlotGraph(ui->energyPlot, Qx, Qe, 
-                        "Internal energy");
+                QrhoExact = Qrho; 
+                QuExact = Qu; 
+                QpExact = Qp; 
+                QeExact = Qe; 
             }
-            PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
-            PlotGraph(ui->gammaPlot, Qx, Qgamma, "Gamma");
+            PlotGraph(ui->densityPlot, Qx, Qrho, QrhoExact, 
+                    "Density", nInterfaces==1);
+            PlotGraph(ui->velocityPlot, Qx, Qu, QuExact, 
+                    "Velocity", nInterfaces==1);
+            PlotGraph(ui->pressurePlot, Qx, Qp, QpExact, 
+                    "Pressure", nInterfaces==1);
+            PlotGraph(ui->energyPlot, Qx, Qe, QeExact, 
+                    "Internal energy", nInterfaces==1);
+            PlotGraph(ui->levelsetPlot, Qx, Qphi, Qphi,
+                    "Level set", 0);
+            PlotGraph(ui->gammaPlot, Qx, Qgamma, Qgamma, 
+                    "Gamma", 0);
             usleep(1e6*sleepTime);
         }
 
@@ -466,7 +444,7 @@ void MainWindow::on_runButton_clicked()
             Qrho[i-NGC] = W_A[i].rho;
             Qu[i-NGC] = W_A[i].u;
             Qp[i-NGC] = W_A[i].p;
-            Qe[i-NGC] = (W_A[i].p-gamma[0]*p_Inf[0])
+            Qe[i-NGC] = (W_A[i].p+gamma[0]*p_Inf[0])
                         /(W_A[i].rho*(gamma[0]-1));
             Qgamma[i-NGC] = gamma[0]; 
         }
@@ -475,7 +453,7 @@ void MainWindow::on_runButton_clicked()
             Qrho[i-NGC] = W_B[i].rho;
             Qu[i-NGC] = W_B[i].u;
             Qp[i-NGC] = W_B[i].p;
-            Qe[i-NGC] = (W_B[i].p-gamma[1]*p_Inf[1])
+            Qe[i-NGC] = (W_B[i].p+gamma[1]*p_Inf[1])
                         /(W_B[i].rho*(gamma[1]-1));
             Qgamma[i-NGC] = gamma[1]; 
         }
@@ -499,33 +477,25 @@ void MainWindow::on_runButton_clicked()
         for(int i=0; i<N; i++)
         {
             S = ((i+0.5)*dx-x[0])/tStop;
-        sample(RHO, U, P, E, p_S, u_S, S, 
-            rho[0], u[0], p[0], a0, gamma[mat0], p_Inf[mat0],
-            rho[1], u[1], p[1], a1, gamma[mat1], p_Inf[mat1]);
-        QrhoExact[i] = RHO; 
+            sample(RHO, U, P, E, p_S, u_S, S, 
+                rho[0], u[0], p[0], a0, gamma[mat0], p_Inf[mat0],
+                rho[1], u[1], p[1], a1, gamma[mat1], p_Inf[mat1]);
+            QrhoExact[i] = RHO; 
             QuExact[i] = U; 
             QpExact[i] = P; 
             QeExact[i] = E; 
         }
-        PlotGraph2(ui->densityPlot, Qx, Qrho, QrhoExact, 
-                "Density");
-        PlotGraph2(ui->velocityPlot, Qx, Qu, QuExact, 
-                "Velocity");
-        PlotGraph2(ui->pressurePlot, Qx, Qp, QpExact, 
-                "Pressure");
-        PlotGraph2(ui->energyPlot, Qx, Qe, QeExact, 
-                "Internal energy");
     }
-    else
-    {
-        PlotGraph(ui->densityPlot, Qx, Qrho, "Density");
-        PlotGraph(ui->velocityPlot, Qx, Qu, "Velocity");
-        PlotGraph(ui->pressurePlot, Qx, Qp, "Pressure");
-        PlotGraph(ui->energyPlot, Qx, Qe, 
-                "Internal energy");
-    }
-    PlotGraph(ui->levelsetPlot, Qx, Qphi, "Level set");
-    PlotGraph(ui->gammaPlot, Qx, Qgamma, "Gamma");
+    PlotGraph(ui->densityPlot, Qx, Qrho, QrhoExact, 
+            "Density", nInterfaces==1);
+    PlotGraph(ui->velocityPlot, Qx, Qu, QuExact, 
+            "Velocity", nInterfaces==1);
+    PlotGraph(ui->pressurePlot, Qx, Qp, QpExact, 
+            "Pressure", nInterfaces==1);
+    PlotGraph(ui->energyPlot, Qx, Qe, QeExact, 
+            "Internal energy", nInterfaces==1);
+    PlotGraph(ui->levelsetPlot, Qx, Qphi, Qphi, "Level set", 0);
+    PlotGraph(ui->gammaPlot, Qx, Qgamma, Qgamma,  "Gamma", 0);
 
     if(save)
     {
@@ -533,11 +503,20 @@ void MainWindow::on_runButton_clicked()
         QString filename = ui->fileName->text(); 
         filename.prepend("../Results/");
         fs.open(filename.toAscii(), std::fstream::out);
-        fs << "x\trho\tu\tp\te\n"; 
+
+        fs << "x\trho\tu\tp\te"; 
+        if(nInterfaces==1)
+            fs << "\trho_Ex\tu_Ex\tp_Ex\te_Ex";
+        fs << "\n";
+
         for(int i=0; i<N; i++)
         {
             fs << Qx[i] << "\t" << Qrho[i] << "\t" << Qu[i] 
-                << "\t" << Qp[i] << "\t" << Qe[i] << "\n";
+                << "\t" << Qp[i] << "\t" << Qe[i];
+            if(nInterfaces==1)
+                fs << QrhoExact[i] << "\t" << QuExact[i] << "\t"
+                    << QpExact[i] << "\t" << QeExact[i];
+            fs << "\n"; 
         }
         fs.close();
         ui->saveResults->setChecked(0);

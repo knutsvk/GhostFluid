@@ -47,7 +47,6 @@ void updateGhostCells(Primitive *W_L, Conserved *U_L,
     else
     {
         // Riemann ghost fluid method, Exact solver
-        // TODO: Make work for water. 
         double a_L = 
             sqrt(gamma_L*(W_L[pos-2].p+p_Inf_L)/W_L[pos-2].rho);
         double a_R = 
@@ -238,7 +237,7 @@ void PrimitiveToConserved(Primitive W, Conserved &U, double gamma,
 {
     U.rho = W.rho;
     U.rho_u = W.rho*W.u; 
-    U.E = 0.5*W.rho*W.u*W.u+(W.p-gamma*p_Inf)/(gamma-1);
+    U.E = 0.5*W.rho*W.u*W.u+(W.p+gamma*p_Inf)/(gamma-1);
 }
 
 void ConservedToPrimitive(Conserved U, Primitive &W, double gamma,
@@ -246,7 +245,7 @@ void ConservedToPrimitive(Conserved U, Primitive &W, double gamma,
 {
     W.rho = U.rho;
     W.u = U.rho_u/U.rho; 
-    W.p = (U.E-0.5*U.rho_u*U.rho_u/U.rho)*(gamma-1)+gamma*p_Inf;
+    W.p = (U.E-0.5*U.rho_u*U.rho_u/U.rho)*(gamma-1)-gamma*p_Inf;
 }
 
 void boundaryConditions(Primitive *W, Conserved *U, double gamma, 
@@ -810,7 +809,7 @@ void sample(double &rho, double &u, double &p, double &e,
                 p = p_S;
             }
         }
-        e = (p-g_L*p_Inf_L)/(rho*(g_L-1));
+        e = (p+g_L*p_Inf_L)/(rho*(g_L-1));
     }
     else
     { 
@@ -876,7 +875,7 @@ void sample(double &rho, double &u, double &p, double &e,
                 }
             }
         }
-        e = (p-g_R*p_Inf_R)/(rho*(g_R-1));
+        e = (p+g_R*p_Inf_R)/(rho*(g_R-1));
     }
 }
 
