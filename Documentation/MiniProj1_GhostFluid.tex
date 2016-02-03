@@ -2,33 +2,12 @@
 
 \usepackage{amssymb}
 \usepackage{mathtools}
-\usepackage{lipsum}
-
-%% natbib.sty is loaded by default. However, natbib options can be
-%% provided with \biboptions{...} command. Following options are
-%% valid:
-
-%%   round  -  round parentheses are used (default)
-%%   square -  square brackets are used   [option]
-%%   curly  -  curly braces are used      {option}
-%%   angle  -  angle brackets are used    <option>
-%%   semicolon  -  multiple citations separated by semi-colon
-%%   colon  - same as semicolon, an earlier confusion
-%%   comma  -  separated by comma
-%%   numbers-  selects numerical citations
-%%   super  -  numerical citations as superscripts
-%%   sort   -  sorts multiple citations according to order in ref. list
-%%   sort&compress   -  like sort, but also compresses numerical citations
-%%   compress - compresses without sorting
-%%
-%% \biboptions{comma,round}
-
-\biboptions{super, square}
-
 \usepackage{tikz}
 \usepackage{pgfplots}
 
-\pgfplotsset{width=0.8\columnwidth, compat=1.8}
+\biboptions{super, square, sort&compress}
+
+\pgfplotsset{width=\columnwidth, height=0.6\columnwidth, compat=1.8}
 \usepgfplotslibrary{groupplots, external}
 \tikzexternalize
 
@@ -53,63 +32,161 @@
 
 \end{frontmatter}
 
-%% main text
 \section{Introduction}
 \label{sec:introduction}
 
-\subsection{Euler equations}
-\label{subsec:euler}
+\emph{Literature review. Write about the usefulness of solving Euler eqs and
+    CFD in general.  What has happened historiccaly in the understanding of
+    these? Different solvers, especially considerations of multi-material cases
+    and use of level set methods. }
 
-The Euler equations govern adiabatic and inviscid flow of a fluid. In one dimension, with density $\rho$, velocity $u$, total energy $E$ and pressure $p$, they are given by 
+The Euler equations govern adiabatic and inviscid flow of a fluid. In one
+dimension, with density $\rho$, velocity $u$, total energy $E$ and pressure
+$p$, they are given by 
 
 \begin{equation}
     \frac{\partial {\bf U}}{\partial t} 
     + \frac{\partial {\bf F(U)}}{\partial x} = 0\,,
+    \label{eq:euler}
 \end{equation}
 %
 where the vectors of conserved quantities ${\bf U}$ and their fluxes ${\bf F(U)}$ are given by
 
-\begin{equation}
+\begin{equation*}
     {\bf U} = 
-    \begin{pmatrix} 
+    \begin{bmatrix} 
         \rho \\ 
         \rho u \\ 
         E 
-    \end{pmatrix}
+    \end{bmatrix}
     \,,\quad
     {\bf F} = 
-    \begin{pmatrix}
+    \begin{bmatrix}
         \rho u \\ 
         \rho u^2 + p \\
         u(E+p) 
-    \end{pmatrix}
+    \end{bmatrix}
     \,.
-\end{equation}
+\end{equation*}
 %
-It is sometimes convenient to work in terms of the primary variables ${\bf W} = \begin{pmatrix} \rho, & u, & p \end{pmatrix}^T$. The total energy is the sum of the kinetic and potential energy of the system, i.e.~ 
+It is sometimes convenient to work in terms of the primitive variables ${\bf W} =
+\begin{pmatrix} \rho, & u, & p \end{pmatrix}^T$. The total energy is the sum of
+the kinetic and potential energy of the system, i.e.~ 
 
 \begin{equation}
     E = \frac{1}{2} \rho u^2 + \rho e \,,
+    \label{eq:energy}
 \end{equation}
 %
-where $e$ is the internal energy, related to the other variables through the equation of state. For an ideal gas, the equation of state is 
+where $e$ is the internal energy, related to the other variables through the
+equation of state. For an ideal gas, the equation of state is 
 
 \begin{equation}
-     e = \frac{p}{(\gamma-1)p} \,,
+     e = \frac{p}{(\gamma-1)\rho} \,,
+     \label{eq:EoS}
  \end{equation}
 %
-where $\gamma$ denotes the ratio of specific heats for the gas. 
-\subsection{Riemann problem}
-\label{subsec:riemann}
+where $\gamma$ denotes the ratio of specific heats for the gas. Several other
+fluids can be approximated by a so-called stiffened ideal gas equation of
+state, 
 
-\subsection{Multimaterial flow}
-\label{subsec:multimaterial}
+\begin{equation}
+    e = \frac{p+\gamma p_{\infty}}{(\gamma-1)\rho} \,.
+    \label{eq:stiffEoS}
+\end{equation}
+%
+Here, a material-dependent stiffening parameter $p_{\infty}$ has been
+introduced. Note that Eq. \eqref{eq:stiffEoS} reduces to Eq. \eqref{eq:EoS} for
+materials with $p_{\infty}=0$. 
+
+\emph{Which special considerations need to be taken into account for
+multimaterial flow? Differences in EoS means we need to think carefully about
+material interfaces.}
+
+The numerical methods which have been employed are explained in section
+\ref{sec:numerical}, before several test cases and their results are discussed
+in section \ref{sec:results}. Section \ref{sec:conclusion} concludes the
+report.
 
 \section{Numerical methods}
 \label{sec:numerical}
 
-\subsection{Slope-Limiting Centered scheme (SLIC)}
-\label{subsec:slic}
+\subsection{Numerical solutions for the Riemann Problem}
+\label{subsec:riemann}
+
+Given a conservation equation and two sets of piecewise constant states
+separated by a single discontinuity, the initial value problem of evolving this
+system in time is called a Riemann problem. It is very useful in the study of
+the Euler equations for two reasons. Firstly, it allows for exact (up to an
+arbitrary accuracy) solutions for systems obeying Eq.  \eqref{eq:euler} which
+have a single contact discontinuity. Secondly, the discretization of space
+which is inevitable in computational schemes for solving differential
+equations, allows for precise solvers of conservation equations based on the
+solutions of many local Riemann problems. 
+
+For the Euler equations and initial conditions 
+
+\begin{equation*}
+    {\bf W}(x,t=0) = 
+    \begin{cases}
+        {\bf W}_L, \,&x \leq 0 \\ 
+        {\bf W}_R, \,&x > 0 \\ 
+    \end{cases} \,,
+\end{equation*}
+%
+Figure \ref{fig:riemann} shows typical states the system can have, in addition
+to characteristics for waves propagating in space-time. There are two types of
+resultant waves that propagate through space, in addition to the contact wave
+(dashed). The first is a shock wave, depicted as a thick line on the left,
+while the second is a rarefaction wave, shown as several gradually decaying (in
+strength) lines on the left. Any combination of shock and rarefaction waves can
+occur on the left and right sides of the contact discontinuity, and the result
+is only dependent on ${\bf W}(x,0)$. 
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}[scale=2.5]
+        \coordinate (origin) at (0,0);
+        \coordinate (left) at (-1,0);
+        \coordinate (right) at (1,0);
+        \coordinate (top) at (0,1.1);
+        \draw[->] (left) -- (right) node[right]{$x$};
+        \draw[->] (origin) -- (top) node[above]{$t$};
+        \draw[thick] (origin) -- (-0.5,1) {};
+        \draw[dashed] (origin) -- (0.2,1) {};
+        \draw[black!75] (origin) -- (0.9,0.72) {};
+        \draw[black!50] (origin) -- (1,0.7) {};
+        \draw[black!25] (origin) -- (1,0.6) {};
+        \node () at (-0.5,0.2) {${\bf W}_L$};
+        \node[fill=white] () at (-0.1,0.8) {${\bf W}_{*L}$};
+        \node () at (0.5,0.7) {${\bf W}_{*R}$};
+        \node () at (0.7,0.2) {${\bf W}_R$};
+    \end{tikzpicture}
+    \caption{Possible wave configurations for the Riemann problem for Euler's
+    equations in one dimension.}
+    \label{fig:riemann}
+\end{figure}
+
+\emph{History of solving Riemann problems. Mention different approximate
+solvers.}
+
+\emph{For this project, the exact solver has been implemented.}
+
+\emph{Each of the four states separated by the waves are constant.
+Additionally, pressure and velocity is constant for the star states. How much
+more should be said about this? }
+
+\subsection{Schemes for the Euler equations}
+\label{subsec:eulerschemes}
+
+Explain the order of schemes and the difference between centered and RP-based
+schemes. 
+
+\subsubsection{Slope-Limiting Centered (SLIC)}
+\label{subsubsec:slic}
+
+\subsubsection{Weighted-Average Flux (WAF)}
+\label{subsubsec:waf}
 
 \subsection{Level-set method}
 \label{subsec:levelset}
@@ -143,7 +220,6 @@ where $\gamma$ denotes the ratio of specific heats for the gas.
     \centering
     \begin{tikzpicture}
         \begin{groupplot}[
-            width=1.1*\columnwidth, height=0.7\columnwidth,
             group style={group size=2 by 2}, 
             xlabel=$x$, xmin=0, xmax=1, 
             ylabel style={rotate=-90}]
@@ -197,7 +273,6 @@ where $\gamma$ denotes the ratio of specific heats for the gas.
     \centering
     \begin{tikzpicture}
         \begin{groupplot}[
-            width=1.1*\columnwidth, height=0.7\columnwidth,
             group style={group size=2 by 2}, 
             xlabel=$x$, xmin=0, xmax=1, 
             ylabel style={rotate=-90}]
@@ -251,7 +326,6 @@ where $\gamma$ denotes the ratio of specific heats for the gas.
     \centering
     \begin{tikzpicture}
         \begin{groupplot}[
-            width=1.1*\columnwidth, height=0.7\columnwidth,
             group style={group size=2 by 2}, 
             xlabel=$x$, xmin=0, xmax=1, 
             ylabel style={rotate=-90}]
@@ -305,7 +379,6 @@ where $\gamma$ denotes the ratio of specific heats for the gas.
     \centering
     \begin{tikzpicture}
         \begin{groupplot}[
-            width=1.1*\columnwidth, height=0.7\columnwidth,
             group style={group size=2 by 2}, 
             xlabel=$x$, xmin=0, xmax=1, 
             ylabel style={rotate=-90}]
@@ -362,7 +435,6 @@ where $\gamma$ denotes the ratio of specific heats for the gas.
     \centering
     \begin{tikzpicture}
         \begin{groupplot}[
-            width=1.1*\columnwidth, height=0.7\columnwidth,
             group style={group size=2 by 2}, 
             xlabel=$x$, xmin=0, xmax=1, 
             ylabel style={rotate=-90}]
@@ -420,7 +492,6 @@ where $\gamma$ denotes the ratio of specific heats for the gas.
     \centering
     \begin{tikzpicture}
         \begin{groupplot}[
-            width=1.1*\columnwidth, height=0.7\columnwidth,
             group style={group size=2 by 2}, 
             xlabel=$x$, xmin=0, xmax=1, 
             ylabel style={rotate=-90}]
@@ -455,9 +526,14 @@ where $\gamma$ denotes the ratio of specific heats for the gas.
 \label{fig:testE_RGFM_N1000}
 \end{figure*}
 \section{Conclusions}
-\label{sec:conclucion}
+\label{sec:conclusion}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{references.bib}
+
+
+\section*{Acknowledgements}
+\label{sec:acknowledgements}
+Thanks Steve. 
 
 \end{document}
