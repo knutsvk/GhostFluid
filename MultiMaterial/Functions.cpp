@@ -428,7 +428,7 @@ void advance(Primitive *W, Conserved *U, Conserved *U_old,
             flic(W[L], W[R], U_old[L], U_old[R], U_old[L-1], 
                     U_old[R+1], dt, dx, limitFunc, gamma, p_Inf, 
                     f[i]);
-        else 
+        else if(!strcmp(scheme, "SLIC"))
             slic2(U_old[L-1], U_old[L], U_old[R], U_old[R+1],
                     dt, dx, limitFunc, gamma, p_Inf, f[i]);
     }
