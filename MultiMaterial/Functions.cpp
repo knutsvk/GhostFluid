@@ -440,8 +440,8 @@ void limitedSlopes(Conserved U_L, Conserved U_0, Conserved U_R,
         char *limitFunc, Conserved &Delta)
 {
     double b;
-    if(!strcmp(limitFunc, "minbee")) b=1; 
-    else b=2;
+    if(!strcmp(limitFunc, "superbee")) b=2; 
+    else b=1;
 
     Conserved Delta_L = U_0-U_L; 
     Conserved Delta_R = U_R-U_0;
@@ -519,11 +519,9 @@ void muscl(Conserved *U, double dt, double dx,
               *F_R = new Conserved[N+2*NGC],
               *U_L_bar = new Conserved[N+2*NGC],
               *U_R_bar = new Conserved[N+2*NGC];
-    int L, R;
-    //double xi; 
     for(int i=NGC-1; i<N+NGC+1; i++)
     {
-        /* xi = slopeLimiter(U[i-1].rho, U[i].rho, 
+/*        double  xi = slopeLimiter(U[i-1].rho, U[i].rho, 
                 U[i+1].rho, limitFunc);
         Delta[i] = xi*0.5*(U[i+1]-U[i-1]);*/
         limitedSlopes(U[i-1], U[i], U[i+1], limitFunc, Delta[i]);
@@ -538,6 +536,7 @@ void muscl(Conserved *U, double dt, double dx,
         ConservedToPrimitive(U_L_bar[i], W_L_bar[i], gamma,p_Inf);
         ConservedToPrimitive(U_R_bar[i], W_R_bar[i], gamma,p_Inf);
     }
+    int L, R;
     for(int i=0; i<N+1; i++)
     {
         L = i+NGC-1; R = i+NGC;

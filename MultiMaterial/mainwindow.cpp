@@ -416,8 +416,8 @@ void MainWindow::on_runButton_clicked()
         dt = c*dx/S_max_A; 
         if(c*dx/S_max_B < dt) dt = c*dx/S_max_B; 
 
-        if(iter<5)
-            dt*=0.2/c;
+        if(iter<10)
+            dt*=0.1/c;
 
         // Make sure we don't go past tStop
         if(t+dt > tStop) dt = tStop-t;
