@@ -35,7 +35,8 @@ void initialConditions(Primitive *W_A, Conserved *U_A,
         double *u, double *p, double *gamma, 
         double *p_Inf);
 
-double maxWaveSpeed(Primitive *W, double a, int N);
+double maxWaveSpeed(Primitive *W, double gamma, double p_Inf, 
+        int N);
 
 void PrimitiveToConserved(Primitive W, Conserved &U,double gamma,
         double p_Inf);
@@ -79,6 +80,16 @@ double slopeLimiter(double E_min, double E_0, double E_plus,
 void slic2(Conserved U_L, Conserved U_0, Conserved U_R, 
         Conserved U_2R, double dt, double dx, char *limitFunc, 
         double gamma, double p_Inf, Conserved &f);
+
+void godunov(Primitive W_L, Primitive W_R, double gamma, 
+        double p_Inf, Conserved &f);
+
+void limitedSlopes(Conserved U_L, Conserved U_0, Conserved U_R, 
+        char *limitFunc, Conserved &Delta);
+
+void muscl(Conserved *U, double dt, double dx, 
+    int N, char *limitFunc, double gamma, 
+    double p_Inf, Conserved *f);
 
 void advance(Primitive *W, Conserved *U, Conserved *U_old, 
         double dt, double dx, int N, double gamma, double p_Inf, 

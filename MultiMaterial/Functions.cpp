@@ -179,14 +179,19 @@ void initialConditions(Primitive *W_A, Conserved *U_A,
     reinitialize(phi, N, dx, nMaterialInterfaces);
 }
 
-double maxWaveSpeed(Primitive *W, double a, int N)
+double maxWaveSpeed(Primitive *W, double gamma, double p_Inf, 
+        int N)
 {
-    // Smax = max_i {abs(S_L_i+0.5), abs(S_R_i+0.5)}
-    double u_max = 0;
+    // Smax = max_i {abs(u_i^n)+a_i^n}
+    double a; 
+    double S_max = 0;
     for(int i=0; i<N+2*NGC; i++)
-        if(u_max < fabs(W[i].u)) 
-            u_max = fabs(W[i].u);
-    return u_max+a; 
+    {
+        a = sqrt(gamma*(W[i].p+p_Inf)/W[i].rho); 
+        if(abs(W[i].u)+a > S_max)
+                S_max = abs(W[i].u)+a;
+    }
+    return S_max;
 }
 
 void PrimitiveToConserved(Primitive W, Conserved &U, double gamma,
@@ -412,25 +417,170 @@ void slic2(Conserved U_L, Conserved U_0, Conserved U_R,
             p_Inf, f);
 }
 
+void godunov(Primitive W_L, Primitive W_R, double gamma, 
+        double p_Inf, Conserved &f)
+{
+    Primitive W_RP;
+    Conserved U_RP;
+    double a_L = sqrt(gamma*(W_L.p+p_Inf)/W_L.rho);
+    double a_R = sqrt(gamma*(W_R.p+p_Inf)/W_R.rho);
+    double p_S, u_S;
+    starRegionPressureVelocity(p_S, u_S, 
+        W_L.rho, W_L.u, W_L.p, a_L, gamma, p_Inf, 
+        W_R.rho, W_R.u, W_R.p, a_R, gamma, p_Inf);
+    double e; 
+    sample(W_RP.rho, W_RP.u, W_RP.p, e, p_S, u_S, 0, 
+        W_L.rho, W_L.u, W_L.p, a_L, gamma, p_Inf, 
+        W_R.rho, W_R.u, W_R.p, a_R, gamma, p_Inf);
+    PrimitiveToConserved(W_RP, U_RP, gamma, p_Inf);
+    flux(W_RP, U_RP, f);
+}
+
+void limitedSlopes(Conserved U_L, Conserved U_0, Conserved U_R, 
+        char *limitFunc, Conserved &Delta)
+{
+    double b;
+    if(!strcmp(limitFunc, "minbee")) b=1; 
+    else b=2;
+
+    Conserved Delta_L = U_0-U_L; 
+    Conserved Delta_R = U_R-U_0;
+
+    if(Delta_R.rho > 0)
+    {
+       double min1 = b*Delta_L.rho < Delta_R.rho ? 
+           b*Delta_L.rho : Delta_R.rho;  
+       double min2 = Delta_L.rho < b*Delta_R.rho ? 
+           Delta_L.rho : b*Delta_R.rho;
+       double max = min1 > min2 ? min1 : min2; 
+       Delta.rho = max > 0 ? max : 0;
+    }
+    else
+    {
+       double max1 = b*Delta_L.rho > Delta_R.rho ? 
+           b*Delta_L.rho : Delta_R.rho;  
+       double max2 = Delta_L.rho > b*Delta_R.rho ? 
+           Delta_L.rho : b*Delta_R.rho;
+       double min = max1 < max2 ? max1 : max2; 
+       Delta.rho = min < 0 ? min : 0;
+    }
+
+    if(Delta_R.rho_u > 0)
+    {
+       double min1 = b*Delta_L.rho_u < Delta_R.rho_u ? 
+           b*Delta_L.rho_u : Delta_R.rho_u;  
+       double min2 = Delta_L.rho_u < b*Delta_R.rho_u ? 
+           Delta_L.rho_u : b*Delta_R.rho_u;
+       double max = min1 > min2 ? min1 : min2; 
+       Delta.rho_u = max > 0 ? max : 0;
+    }
+    else
+    {
+       double max1 = b*Delta_L.rho_u > Delta_R.rho_u ? 
+           b*Delta_L.rho_u : Delta_R.rho_u;  
+       double max2 = Delta_L.rho_u > b*Delta_R.rho_u ? 
+           Delta_L.rho_u : b*Delta_R.rho_u;
+       double min = max1 < max2 ? max1 : max2; 
+       Delta.rho_u = min < 0 ? min : 0;
+    }
+
+    if(Delta_R.E > 0)
+    {
+       double min1 = b*Delta_L.E < Delta_R.E ? 
+           b*Delta_L.E : Delta_R.E;  
+       double min2 = Delta_L.E < b*Delta_R.E ? 
+           Delta_L.E : b*Delta_R.E;
+       double max = min1 > min2 ? min1 : min2; 
+       Delta.E = max > 0 ? max : 0;
+    }
+    else
+    {
+       double max1 = b*Delta_L.E > Delta_R.E ? 
+           b*Delta_L.E : Delta_R.E;  
+       double max2 = Delta_L.E > b*Delta_R.E ? 
+           Delta_L.E : b*Delta_R.E;
+       double min = max1 < max2 ? max1 : max2; 
+       Delta.E = min < 0 ? min : 0;
+    }
+}
+
+void muscl(Conserved *U, double dt, double dx, 
+    int N, char *limitFunc, double gamma, 
+    double p_Inf, Conserved *f)
+{
+    Primitive *W_L = new Primitive[N+2*NGC],
+              *W_R = new Primitive[N+2*NGC],
+              *W_L_bar = new Primitive[N+2*NGC],
+              *W_R_bar = new Primitive[N+2*NGC];
+    Conserved *Delta = new Conserved[N+2*NGC],
+              *U_L = new Conserved[N+2*NGC],
+              *U_R = new Conserved[N+2*NGC],
+              *F_L = new Conserved[N+2*NGC],
+              *F_R = new Conserved[N+2*NGC],
+              *U_L_bar = new Conserved[N+2*NGC],
+              *U_R_bar = new Conserved[N+2*NGC];
+    int L, R;
+    //double xi; 
+    for(int i=NGC-1; i<N+NGC+1; i++)
+    {
+        /* xi = slopeLimiter(U[i-1].rho, U[i].rho, 
+                U[i+1].rho, limitFunc);
+        Delta[i] = xi*0.5*(U[i+1]-U[i-1]);*/
+        limitedSlopes(U[i-1], U[i], U[i+1], limitFunc, Delta[i]);
+        U_L[i] = U[i]-0.5*Delta[i];
+        U_R[i] = U[i]+0.5*Delta[i]; 
+        ConservedToPrimitive(U_L[i], W_L[i], gamma, p_Inf);
+        ConservedToPrimitive(U_R[i], W_R[i], gamma, p_Inf);
+        flux(W_L[i], U_L[i], F_L[i]);
+        flux(W_R[i], U_R[i], F_R[i]);
+        U_L_bar[i] = U_L[i]+0.5*dt/dx*(F_L[i]-F_R[i]);
+        U_R_bar[i] = U_R[i]+0.5*dt/dx*(F_L[i]-F_R[i]);
+        ConservedToPrimitive(U_L_bar[i], W_L_bar[i], gamma,p_Inf);
+        ConservedToPrimitive(U_R_bar[i], W_R_bar[i], gamma,p_Inf);
+    }
+    for(int i=0; i<N+1; i++)
+    {
+        L = i+NGC-1; R = i+NGC;
+        godunov(W_R_bar[L], W_L_bar[R], gamma, p_Inf, f[i]);
+    }
+    delete []W_L; W_L=NULL;
+    delete []W_R; W_R=NULL;
+    delete []W_L_bar; W_L_bar=NULL;
+    delete []W_R_bar; W_R_bar=NULL;
+    delete []U_L; U_L=NULL;
+    delete []U_R; U_R=NULL;
+    delete []F_L; F_L=NULL;
+    delete []F_R; F_R=NULL;
+    delete []U_L_bar; U_L_bar=NULL;
+    delete []U_R_bar; U_R_bar=NULL;
+}
+
 void advance(Primitive *W, Conserved *U, Conserved *U_old, 
         double dt, double dx, int N, double gamma, double p_Inf, 
         char *scheme, char *limitFunc)
 {
     Conserved *f = new Conserved[N+1];
     int L, R;
-    for(int i=0; i<N+1; i++)
+
+    if(!strcmp(scheme, "MUSCL"))
+        muscl(U_old, dt, dx, N, limitFunc, gamma, p_Inf, 
+                f);
+    else
     {
-        L = i+NGC-1; R = i+NGC;
-        if(!strcmp(scheme, "FORCE"))
-            force(W[L], W[R], U_old[L], U_old[R], dt, dx, gamma, 
-                    p_Inf, f[i]);
-        else if(!strcmp(scheme, "FLIC"))
-            flic(W[L], W[R], U_old[L], U_old[R], U_old[L-1], 
-                    U_old[R+1], dt, dx, limitFunc, gamma, p_Inf, 
-                    f[i]);
-        else if(!strcmp(scheme, "SLIC"))
-            slic2(U_old[L-1], U_old[L], U_old[R], U_old[R+1],
-                    dt, dx, limitFunc, gamma, p_Inf, f[i]);
+        for(int i=0; i<N+1; i++)
+        {
+            L = i+NGC-1; R = i+NGC;
+            if(!strcmp(scheme, "FORCE"))
+                force(W[L], W[R], U_old[L], U_old[R], dt, dx, 
+                        gamma, p_Inf, f[i]);
+            else if(!strcmp(scheme, "FLIC"))
+                flic(W[L], W[R], U_old[L], U_old[R], U_old[L-1], 
+                        U_old[R+1], dt, dx, limitFunc, gamma, 
+                        p_Inf, f[i]);
+            else if(!strcmp(scheme, "SLIC"))
+                slic2(U_old[L-1], U_old[L], U_old[R], U_old[R+1],
+                        dt, dx, limitFunc, gamma, p_Inf, f[i]);
+        }
     }
     for(int i=NGC; i<N+NGC; i++)
     {
@@ -577,25 +727,17 @@ void setScheme(char *scheme, char *limitFunc,
     if(schemeChoice == 0)
         strcpy(scheme, "FORCE");
     else if(schemeChoice == 1)
-    {
         strcpy(scheme, "FLIC");
-        if(limitChoice == 0)
-            strcpy(limitFunc, "minbee");
-        else if(limitChoice == 1)
-            strcpy(limitFunc, "vanleer");
-        else
-            strcpy(limitFunc, "superbee");
-    }
-    else
-    {
+    else if(schemeChoice == 2)
         strcpy(scheme, "SLIC"); 
-        if(limitChoice == 0)
-            strcpy(limitFunc, "minbee");
-        else if(limitChoice == 1)
-            strcpy(limitFunc, "vanleer");
-        else
-            strcpy(limitFunc, "superbee");
-    }
+    else if(schemeChoice == 3)
+        strcpy(scheme, "MUSCL");
+    if(limitChoice == 0)
+        strcpy(limitFunc, "minbee");
+    else if(limitChoice == 1)
+        strcpy(limitFunc, "vanleer");
+    else if(limitChoice == 2)
+        strcpy(limitFunc, "superbee");
 }
 
 void starRegionPressureVelocity(double &p, double &u,

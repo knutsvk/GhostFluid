@@ -151,6 +151,11 @@
       <string>SLIC</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>MUSCL</string>
+     </property>
+    </item>
    </widget>
    <widget class="QComboBox" name="limiterCombo">
     <property name="geometry">

@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->fileName->setVisible(0);
-    ui->schemeCombo->setCurrentIndex(2);
+    ui->schemeCombo->setCurrentIndex(3);
     ui->limiterCombo->setCurrentIndex(2);
     ui->isobaricFix->setVisible(0);
     ui->x1->setVisible(0);
@@ -197,6 +197,7 @@ void MainWindow::on_runButton_clicked()
     int nInterfaces = ui->Interfaces->value();
     int nRegions = nInterfaces+1;
     int nMaterialInterfaces=0;
+    int iter = 0;
 
     bool save = ui->saveResults->isChecked(); 
     bool isobarix = ui->isobaricFix->isChecked();
@@ -295,14 +296,6 @@ void MainWindow::on_runButton_clicked()
         if(mat[i]!=mat[i+1]){
             x_M[count]=x[i];
             count++;
-        }
-    }
-
-    // Calculate sound speeds 
-    for(int i=0; i<nRegions; i++){
-        for(int j=0; j<2; j++){
-            double a_ij = sqrt(gamma[j]*(p[i]+p_Inf[j])/rho[i]);
-            if(fabs(a_ij)>a[j]) a[j] = fabs(a_ij);
         }
     }
 
@@ -409,11 +402,22 @@ void MainWindow::on_runButton_clicked()
         }
         delete[] pos;
 
+    // Calculate sound speeds 
+    for(int i=0; i<nRegions; i++){
+        for(int j=0; j<2; j++){
+            double a_ij = sqrt(gamma[j]*(p[i]+p_Inf[j])/rho[i]);
+            if(fabs(a_ij)>a[j]) a[j] = fabs(a_ij);
+        }
+    }
+
         // Calculate maximum wave speed, update dt
-        S_max_A = maxWaveSpeed(W_A, a[0], N);
-        S_max_B = maxWaveSpeed(W_B, a[1], N);
+        S_max_A = maxWaveSpeed(W_A, gamma[0], p_Inf[0], N);
+        S_max_B = maxWaveSpeed(W_B, gamma[1], p_Inf[1], N);
         dt = c*dx/S_max_A; 
         if(c*dx/S_max_B < dt) dt = c*dx/S_max_B; 
+
+        if(iter<5)
+            dt*=0.2/c;
 
         // Make sure we don't go past tStop
         if(t+dt > tStop) dt = tStop-t;
@@ -432,6 +436,7 @@ void MainWindow::on_runButton_clicked()
         advance(W_B, U_B, U_B_old, dt, dx, N, gamma[1], p_Inf[1],
                 scheme, limitFunc);
         t += dt;
+        iter++;
     }
 
     // Generate final plot
