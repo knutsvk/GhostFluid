@@ -215,9 +215,6 @@ void MainWindow::on_runButton_clicked()
     double p_Inf[2];
     p_Inf[0] = ui->pInfA->value();
     p_Inf[1] = ui->pInfB->value();
-    double a[2];   // Maximum sound speed.
-    a[0]=0.0; 
-    a[1]=0.0;
     double dx = 1.0/N;          // Width of cells
     double t = 0.0;               // Time
     double dt;      // Time step. 
@@ -402,17 +399,10 @@ void MainWindow::on_runButton_clicked()
         }
         delete[] pos;
 
-    // Calculate sound speeds 
-    for(int i=0; i<nRegions; i++){
-        for(int j=0; j<2; j++){
-            double a_ij = sqrt(gamma[j]*(p[i]+p_Inf[j])/rho[i]);
-            if(fabs(a_ij)>a[j]) a[j] = fabs(a_ij);
-        }
-    }
-
         // Calculate maximum wave speed, update dt
         S_max_A = maxWaveSpeed(W_A, gamma[0], p_Inf[0], N);
         S_max_B = maxWaveSpeed(W_B, gamma[1], p_Inf[1], N);
+
         dt = c*dx/S_max_A; 
         if(c*dx/S_max_B < dt) dt = c*dx/S_max_B; 
 

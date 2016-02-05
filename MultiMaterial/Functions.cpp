@@ -188,8 +188,8 @@ double maxWaveSpeed(Primitive *W, double gamma, double p_Inf,
     for(int i=0; i<N+2*NGC; i++)
     {
         a = sqrt(gamma*(W[i].p+p_Inf)/W[i].rho); 
-        if(abs(W[i].u)+a > S_max)
-                S_max = abs(W[i].u)+a;
+        if(fabs(W[i].u)+a > S_max)
+                S_max = fabs(W[i].u)+a;
     }
     return S_max;
 }
@@ -553,13 +553,15 @@ void hllc(Primitive W_L, Primitive W_R, Conserved U_L,
         }
         else
         { // Left star state
-/*            Conserved U_star_L(1, S_S, U_L.E/U_L.rho+(S_S-W_L.u)
+            Conserved U_star_L(1, S_S, U_L.E/U_L.rho+(S_S-W_L.u)
                   *(S_S+W_L.p/(W_L.rho*(S_L-W_L.u))));
             U_star_L = W_L.rho*(S_L-W_L.u)/(S_L-S_S)*U_star_L; 
-            f = F_L + S_L*(U_star_L-U_L);*/
-            Conserved D_S(0,1,S_S);
+            f = F_L + S_L*(U_star_L-U_L);
+/*          Second version:   
+ *            
+ *          Conserved D_S(0,1,S_S);
             f = (S_S*(S_L*U_L-F_L)+S_L*(W_L.p+W_L.rho*(S_L-W_L.u)
-                        *(S_S-W_L.u))*D_S)/(S_L-S_S);
+                        *(S_S-W_L.u))*D_S)/(S_L-S_S);*/
         }
     }
     else
@@ -572,13 +574,15 @@ void hllc(Primitive W_L, Primitive W_R, Conserved U_L,
         }
         else
         { // Right star state
-/*            Conserved U_star_R(1, S_S, U_R.E/U_R.rho+(S_S-W_R.u)
+            Conserved U_star_R(1, S_S, U_R.E/U_R.rho+(S_S-W_R.u)
                   *(S_S+W_R.p/(W_R.rho*(S_R-W_R.u))));
             U_star_R = W_R.rho*(S_R-W_R.u)/(S_R-S_S)*U_star_R; 
-            f = F_R + S_R*(U_star_R-U_R);*/
+            f = F_R + S_R*(U_star_R-U_R);
+/*          Second version: 
+ *
             Conserved D_S(0,1,S_S);
             f = (S_S*(S_R*U_R-F_R)+S_R*(W_R.p+W_R.rho*(S_R-W_R.u)
-                        *(S_S-W_R.u))*D_S)/(S_R-S_S);
+                        *(S_S-W_R.u))*D_S)/(S_R-S_S);*/
         }
     }
 }
@@ -590,6 +594,15 @@ void muscl2(Conserved U_L, Conserved U_0, Conserved U_R,
     Conserved Delta_i, Delta_i_plus; 
     limitedSlopes(U_L, U_0, U_R, limitFunc, Delta_i);
     limitedSlopes(U_0, U_R, U_2R, limitFunc, Delta_i_plus);
+/*  Slope limiters instead of limited slopes:
+ *
+    double xi_i = slopeLimiter(U_L.rho, U_0.rho, U_R.rho, 
+            limitFunc);
+    double xi_i_plus = slopeLimiter(U_0.rho, U_R.rho, U_2R.rho, 
+            limitFunc);
+    Delta_i = xi_i*0.5*(U_R-U_L);
+    Delta_i_plus = xi_i_plus*0.5*(U_2R-U_0);
+    */
 
     Conserved U_L_i, U_R_i, U_L_i_plus, U_R_i_plus;
     U_L_i = U_0-0.5*Delta_i;
@@ -620,43 +633,6 @@ void muscl2(Conserved U_L, Conserved U_0, Conserved U_R,
     hllc(W_bar_R, W_bar_L, U_bar_R, U_bar_L, gamma, p_Inf, f);
 }
 
-void muscl3(Conserved U_L, Conserved U_0, Conserved U_R, 
-        Conserved U_2R, double dt, double dx, char *limitFunc, 
-        double gamma, double p_Inf, Conserved &f)
-{
-    // Quicker version of SLIC. Omega is always equal to zero. 
-    double xi_plus = 
-        slopeLimiter(U_0.rho, U_R.rho, U_2R.rho, limitFunc);
-    double xi_0 = 
-        slopeLimiter(U_L.rho, U_0.rho, U_R.rho, limitFunc);
-
-    Conserved U_L_plus = U_R-0.25*xi_plus*(U_2R-U_0);
-    Conserved U_R_plus = U_R+0.25*xi_plus*(U_2R-U_0);
-    Conserved U_L_0 = U_0-0.25*xi_0*(U_R-U_L);
-    Conserved U_R_0 = U_0+0.25*xi_0*(U_R-U_L);
-
-    Primitive W_L_plus, W_R_plus, W_L_0, W_R_0; 
-    ConservedToPrimitive(U_L_plus, W_L_plus, gamma, p_Inf);
-    ConservedToPrimitive(U_R_plus, W_R_plus, gamma, p_Inf);
-    ConservedToPrimitive(U_L_0, W_L_0, gamma, p_Inf);
-    ConservedToPrimitive(U_R_0, W_R_0, gamma, p_Inf);
-
-    Conserved F_L_plus, F_R_plus, F_L_0, F_R_0;
-    flux(W_L_plus, U_L_plus, F_L_plus);
-    flux(W_R_plus, U_R_plus, F_R_plus);
-    flux(W_L_0, U_L_0, F_L_0);
-    flux(W_R_0, U_R_0, F_R_0);
-
-    Conserved U_L_bar = U_L_plus+0.5*dt/dx*(F_L_plus-F_R_plus);
-    Conserved U_R_bar = U_R_0+0.5*dt/dx*(F_L_0-F_R_0);
-
-    Primitive W_L_bar, W_R_bar; 
-    ConservedToPrimitive(U_L_bar, W_L_bar, gamma, p_Inf);
-    ConservedToPrimitive(U_R_bar, W_R_bar, gamma, p_Inf);
-
-    hllc(W_R_bar, W_L_bar, U_R_bar, U_L_bar, gamma, p_Inf, f);
-}
-
 void advance(Primitive *W, Conserved *U, Conserved *U_old, 
         double dt, double dx, int N, double gamma, double p_Inf, 
         char *scheme, char *limitFunc)
@@ -678,7 +654,7 @@ void advance(Primitive *W, Conserved *U, Conserved *U_old,
             slic2(U_old[L-1], U_old[L], U_old[R], U_old[R+1],
                     dt, dx, limitFunc, gamma, p_Inf, f[i]);
         else if(!strcmp(scheme, "MUSCL"))
-            muscl3(U_old[L-1], U_old[L], U_old[R], 
+            muscl2(U_old[L-1], U_old[L], U_old[R], 
                     U_old[R+1], dt, dx, limitFunc, gamma, 
                     p_Inf, f[i]);
     }

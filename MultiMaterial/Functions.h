@@ -33,6 +33,8 @@ void initialConditions(Primitive *W_A, Conserved *U_A,
 double maxWaveSpeed(Primitive *W, double gamma, double p_Inf, 
         int N);
 
+double maxWaveSpeed2(Primitive *W, double a, int N);
+
 void PrimitiveToConserved(Primitive W, Conserved &U,double gamma,
         double p_Inf);
 
@@ -86,10 +88,6 @@ void hllc(Primitive W_L, Primitive W_R, Conserved U_L,
         Conserved U_R, double gamma, double p_Inf, Conserved &f);
 
 void muscl2(Conserved U_L, Conserved U_0, Conserved U_R, 
-        Conserved U_2R, double dt, double dx, char *limitFunc, 
-        double gamma, double p_Inf, Conserved &f);
-
-void muscl3(Conserved U_L, Conserved U_0, Conserved U_R, 
         Conserved U_2R, double dt, double dx, char *limitFunc, 
         double gamma, double p_Inf, Conserved &f);
 
