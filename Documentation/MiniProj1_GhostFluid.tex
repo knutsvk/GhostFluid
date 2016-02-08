@@ -1,4 +1,4 @@
-\documentclass[final,3p,twocolumn]{elsarticle}
+\documentclass[final,3p,twocolumn,times]{elsarticle}
 
 \usepackage{amssymb}
 \usepackage{mathtools}
@@ -35,22 +35,36 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\emph{Literature review. Write about the usefulness of solving Euler eqs and
-    CFD in general.  What has happened historiccaly in the understanding of
-    these? Different solvers, especially considerations of multi-material cases
-    and use of level set methods. }
+Leonhard Euler first presented the momentum and continuity equations in 1757
+\cite{euler1757principes}, which were completed by the adiabatic condition
+presented by Laplace in 1816 \cite{laplace1816vitesse}. The energy balance
+equation, which is the last of what is now called the Euler equations,  was not
+properly incorporated until the late nineteenth century
+\cite{christodoulou2007euler}, and although the much more general Navier-Stokes
+equations have been developed \cite{navier1822memoire, stokes1845theories}, the
+continued interest for and usefulness of the Euler equations is undisputable.
+They provide a robust framework for analyzing ideal fluids when viscuous
+effects are negligible, but cannot generally be solved analytically.
+Applications of the Euler equations include aerodynamics
+\cite{drela1985twodimensional, anderson1986comparison, guruswamy1990unsteady},
+atmospheric modelling and weather forecasts \cite{laprise1992euler,
+skamarock2008time}, astrophysics \cite{trac2003primer} and detonations and
+explosives \cite{nikiforakis1996numerical, williams1996detailed,
+saurel2001multiphase}, to name a few.  Accordingly, precise and efficient
+methods for solving these non-linear, hyperbolic partial differential equations
+on arbitrary domains has been, and still is, a major field in modern
+computational fluid dynamics. 
 
-The Euler equations govern adiabatic and inviscid flow of a fluid. In one
-dimension, with density $\rho$, velocity $u$, total energy $E$ and pressure
-$p$, they are given by 
+The Euler equations govern adiabatic and inviscid flow of a fluid. In the
+Froude limit (no external body forces) in one dimension, with density $\rho$,
+velocity $u$, total energy $E$ and pressure $p$, they are given by 
 
 \begin{equation}
-    \frac{\partial {\bf U}}{\partial t} 
-    + \frac{\partial {\bf F(U)}}{\partial x} = 0\,,
+    \partial_t {\bf U} + \partial_x {\bf F(U)} = 0\,,
     \label{eq:euler}
 \end{equation}
 %
-where the vectors of conserved quantities ${\bf U}$ and their fluxes ${\bf F(U)}$ are given by
+where the vector of conserved quantities ${\bf U}$ and their fluxes ${\bf F(U)}$ are given by
 
 \begin{equation*}
     {\bf U} = 
@@ -86,21 +100,33 @@ equation of state. For an ideal gas, the equation of state is
      \label{eq:EoS}
  \end{equation}
 %
-where $\gamma$ denotes the ratio of specific heats for the gas. Several other
-fluids can be approximated by a so-called stiffened ideal gas equation of
-state, 
+where $\gamma$ denotes the ratio of specific heats for the gas. 
 
-\begin{equation}
-    e = \frac{p+\gamma p_{\infty}}{(\gamma-1)\rho} \,.
-    \label{eq:stiffEoS}
-\end{equation}
-%
-Here, a material-dependent stiffening parameter $p_{\infty}$ has been
-introduced. Note that Eq. \eqref{eq:stiffEoS} reduces to Eq. \eqref{eq:EoS} for
-materials with $p_{\infty}=0$. 
+Many important milestones have led us to the current state of the art of
+solving the Euler equations numerically. Riemann identified and worked on the
+initial value problem for Eq.\ \eqref{eq:euler} with discontinuous initial
+conditions as early as 1860 \cite{riemann1860fortpflanzung}, but the first
+exact solution did not arrive until Godunov proposed an iterative scheme a
+century later \cite{godunov1959difference}. Today, efficient approximate
+solvers such as HLLC (Harten-Lax-van Leer-Contact) \cite{toro1994restoration}
+and Rotated-hybrid Riemann solvers \cite{nishikawa2008very} are readily
+available. The development of numerical analysis methods for partial
+differential equations got its first proper boost after the famous paper by
+Courant, Friedrichs and Lewis \cite{courant1928partiellen}, but local Riemann
+problems \cite{godunov1959difference}, conservative methods
+\cite{lax1960systems} and finite volume formulations \cite{leveque2002finite}
+were necessary before the first proper, three-dimensional simulations of the
+Euler equations could be performed in the 1980s \cite{jameson1981numerical}.
+After the Monotonic Upstream-centered Scheme for Conservation Laws (MUSCL)
+\cite{van1979towards} was introduced by van Leer as the first higher-order
+Total Variation Diminishing (TVD) scheme in 1979, several others have been
+developed, notably Toro's Weighted Average Flux (WAF) \cite{toro1989weighted} and
+Flux/Slope LImiter Centred (SLIC/FLIC) \cite{toro2000centred} schemes. 
 
-\emph{Which special considerations need to be taken into account for
-multimaterial flow? Differences in EoS means we need to think carefully about
+\emph{considerations of multi-material cases
+    and use of level set methods. }
+
+\emph{multimaterial flow: Differences in EoS means we need to think carefully about
 material interfaces.}
 
 The numerical methods which have been employed are explained in section
@@ -118,7 +144,7 @@ Given a conservation equation and two sets of piecewise constant states
 separated by a single discontinuity, the initial value problem of evolving this
 system in time is called a Riemann problem. It is very useful in the study of
 the Euler equations for two reasons. Firstly, it allows for exact (up to an
-arbitrary accuracy) solutions for systems obeying Eq.  \eqref{eq:euler} which
+arbitrary accuracy) solutions for systems obeying Eq.\  \eqref{eq:euler} which
 have a single contact discontinuity. Secondly, the discretization of space
 which is inevitable in computational schemes for solving differential
 equations, allows for precise solvers of conservation equations based on the
@@ -425,6 +451,18 @@ schemes.
 \end{figure*}
 \subsection{Water-gas shock tube test}
 \label{subsec:water}
+
+Several other fluids can be approximated by a so-called stiffened ideal gas
+equation of state, 
+
+\begin{equation}
+    e = \frac{p+\gamma p_{\infty}}{(\gamma-1)\rho} \,.
+    \label{eq:stiffEoS}
+\end{equation}
+%
+Here, a material-dependent stiffening parameter $p_{\infty}$ has been
+introduced. Note that Eq.\ \eqref{eq:stiffEoS} reduces to Eq. \eqref{eq:EoS} for
+materials with $p_{\infty}=0$. 
 
 \pgfplotstableread{../Results/testE_RGFM_N100.out}{\one}
 \pgfplotstableread{../Results/testE_RGFM_N200.out}{\two}
