@@ -123,11 +123,40 @@ Total Variation Diminishing (TVD) scheme in 1979, several others have been
 developed, notably Toro's Weighted Average Flux (WAF) \cite{toro1989weighted} and
 Flux/Slope LImiter Centred (SLIC/FLIC) \cite{toro2000centred} schemes. 
 
-\emph{considerations of multi-material cases
-    and use of level set methods. }
+Considerations of multimaterial interactions and flow are among the more recent
+(less than twenty year old) developments within numerical solutions for the
+Euler equations. It is the goal of this report to demonstrate some techniques
+available for multimaterial simulations of the Euler equations in one
+dimension. Different fluids are characterized by their material properties,
+such as $\gamma$, and thus special care must be taken in the treatment of
+boundaries separating different fluids. 
 
-\emph{multimaterial flow: Differences in EoS means we need to think carefully about
-material interfaces.}
+Firstly, the location of the boundary must be tracked as time evolves. The most
+common way of doing this is by the use of level set methods, as proposed by
+Osher and Sethian \cite{osher1988fronts}. The level set function for a region
+is initiated such that it is negative inside the region, positive outside it
+and zero on the boundary. By taking into consideration the convection of the
+fluids under consideration, the level set function is then evolved so that its
+zeros move with the domain boundary. Osher and Fedkiw \cite{osher2001level}
+provide an excellent overview of level set methods and their applications. 
+
+Secondly, the interaction between different fluids across the material
+interfaces must be modelled accurately. In order to do so, Fedkiw \emph{ et
+al.\ } developed the Original Ghost Fluid Method (OGFM)
+\cite{fedkiw1999nonoscillatory}. In ghost fluid methods, each material has
+ghost cells on the side of the boundary where the other material exists. In the
+OGFM, the pressures and velocities at these ghost cells are similar to that of
+the other material, and the densities are calculated by enforcing constant
+entropy across the interface. This worked well for cases except when there were
+strong shock waves, since the entropy condition does not apply. As a response,
+the Modified Ghost Fluid Method (MGFM) was developed \cite{liu2003ghost,
+sambasivan2009ghost}. It is based on the realization that Riemann problems do
+not in general require the states on each side of the discontinuity to
+correspond to the same material. The cells in the ghost fluid are therefore
+updated by solving a local Riemann problem. A further development is the real
+Ghost Fluid Method (rGFM) \cite{wang2006real}, in which a more accurate
+interfacial boundary condition is applied. The implementation of the rGFM is
+outside the scope of this report. 
 
 The numerical methods which have been employed are explained in section
 \ref{sec:numerical}, before several test cases and their results are discussed
@@ -137,7 +166,7 @@ report.
 \section{Numerical methods}
 \label{sec:numerical}
 
-\subsection{Numerical solutions for the Riemann Problem}
+\subsection{Riemann Solvers}
 \label{subsec:riemann}
 
 Given a conservation equation and two sets of piecewise constant states
@@ -145,10 +174,10 @@ separated by a single discontinuity, the initial value problem of evolving this
 system in time is called a Riemann problem. It is very useful in the study of
 the Euler equations for two reasons. Firstly, it allows for exact (up to an
 arbitrary accuracy) solutions for systems obeying Eq.\  \eqref{eq:euler} which
-have a single contact discontinuity. Secondly, the discretization of space
-which is inevitable in computational schemes for solving differential
-equations, allows for precise solvers of conservation equations based on the
-solutions of many local Riemann problems. 
+have a single contact discontinuity. The other benefit of Riemann solvers is
+that the discretization of space which is inevitable in computational schemes
+for solving differential equations, allows for precise solvers of conservation
+equations based on the solutions of many local Riemann problems. 
 
 For the Euler equations and initial conditions 
 
@@ -164,10 +193,10 @@ Figure \ref{fig:riemann} shows typical states the system can have, in addition
 to characteristics for waves propagating in space-time. There are two types of
 resultant waves that propagate through space, in addition to the contact wave
 (dashed). The first is a shock wave, depicted as a thick line on the left,
-while the second is a rarefaction wave, shown as several gradually decaying (in
-strength) lines on the left. Any combination of shock and rarefaction waves can
-occur on the left and right sides of the contact discontinuity, and the result
-is only dependent on ${\bf W}(x,0)$. 
+while the second is a rarefaction wave, shown as several gradually decaying
+lines on the left. Any combination of shock and rarefaction waves can occur on
+the left and right sides of the contact discontinuity, and the result is only
+dependent on ${\bf W}(x,0)$. 
 
 \begin{figure}[htb]
     \centering
@@ -193,26 +222,23 @@ is only dependent on ${\bf W}(x,0)$.
     \label{fig:riemann}
 \end{figure}
 
-\emph{History of solving Riemann problems. Mention different approximate
-solvers.}
+\subsubsection{Exact solver}
+\label{subsubsec:exact}
 
-\emph{For this project, the exact solver has been implemented.}
-
-\emph{Each of the four states separated by the waves are constant.
-Additionally, pressure and velocity is constant for the star states. How much
-more should be said about this? }
+\subsubsection{HLLC}
+\label{subsubsec:hllc}
 
 \subsection{Schemes for the Euler equations}
 \label{subsec:eulerschemes}
 
-Explain the order of schemes and the difference between centered and RP-based
-schemes. 
+Explain fintite volume, conservative schemes and the difference between
+centered and RP-based schemes. 
 
-\subsubsection{Slope-Limiting Centered (SLIC)}
+\subsubsection{MUSCL-Hancock}
+\label{subsubsec:muscl}
+
+\subsubsection{SLIC}
 \label{subsubsec:slic}
-
-\subsubsection{Weighted-Average Flux (WAF)}
-\label{subsubsec:waf}
 
 \subsection{Level-set method}
 \label{subsec:levelset}
@@ -223,8 +249,8 @@ schemes.
 \subsubsection{Original Ghost Fluid Method}
 \label{subsubsec:ogfm}
 
-\subsubsection{Riemann Ghost Fluid Method}
-\label{subsubsec:rgfm}
+\subsubsection{Modified Ghost Fluid Method}
+\label{subsubsec:mgfm}
 
 \section{Results}
 \label{sec:results}
@@ -565,6 +591,8 @@ materials with $p_{\infty}=0$.
 \end{figure*}
 \section{Conclusions}
 \label{sec:conclusion}
+
+Everythings went better as expectance!
 
 \bibliographystyle{elsarticle-num}
 \bibliography{references.bib}
