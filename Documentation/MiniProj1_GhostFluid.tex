@@ -248,10 +248,10 @@ of them is the correct one based on the speeds of the waves.
 \label{subsubsec:exact}
 
 The exact solver, as first introduced by Godunov \cite{godunov1959difference},
-has been implemented following Toro's comprehensive overview of Riemann solvers
-and their uses \cite{toro2013riemann}, but extended to take into consideration
-that different (stiffened) ideal gases may be present on each side of the
-discontinuity. 
+has been implemented following Chapter 4 of Toro's comprehensive overview of
+Riemann solvers and their uses \cite{toro2013riemann}, but extended to take
+into consideration that different (stiffened) ideal gases may be present on
+each side of the discontinuity. 
 
 It can be proven that the pressure in the star states $p_{*}$ is given by
 the root of the nonlinear function
@@ -289,7 +289,7 @@ Newton-Raphson iterations were implemented, taking the initial guess as
 $\frac{1}{2}(p_L+p_R)$. After finding $p_*$, the velocity in the star region is computed as
 
 \begin{equation}
-    u_{*} = \frac{1}{2} (u_L+u_R)-\frac{1}{2}\left[ f_L(p_*)-f_R(p_*) \right] \,.
+    u_{*} = \frac{u_L+u_R-[f_L(p_*)-f_R(p_*)]}{2} \,.
     \label{eq:ustar}
 \end{equation}
 
@@ -347,13 +347,61 @@ properties}
 
 By far the most computationally expensive part of the exact solver is the
 iterative root finding procedure for finding $p_*$. Since most modern schemes
-require the solution of local Riemann problems at all points in the
+require the solutions of local Riemann problems between all points in the
 computational domain, high gains in terms of computational efficiency can be
-achieved by 
+achieved by employing exact solvers instead. One such solver is the
+Harten-Lax-van Leer-Contact (HLLC) solver, which has been implemented for this
+project. 
+
+When compared to the exact solver, the main simplifications in HLLC are that
+the pressure in the star region is approximated instead of found by iterative
+schemes; that states inside rarefactions are not taken into consideration, and 
+that wave speeds are estimations, either direct or pressure-based. In this
+contribution, the pressure is estimated as 
+
+\begin{equation}
+    p_* \approx \frac{1}{2}(p_L+p_R) 
+    +\frac{1}{8}(u_L-u_R)(\rho_L+\rho_R)(a_L+a_R) \,,
+    \label{eq:pressureHLLC}
+\end{equation}
+%
+and set equal to zero if the approximation is negative. Based on the
+approximation for $p_*$, the wave speeds $S_K$ of the left and right travelling
+waves are computed, with the type of wave taken into consideration. The speed
+of the contact discontinuity is then approximated as
+
+\begin{equation}
+    S_* \approx \frac{\rho_L u_L(S_L-u_L)-\rho_R
+    u_R(S_R-u_R)-(p_L-p_R)}{\rho_L(S_L-u_L)-\rho_R(S_R-u_R)} \,.
+    \label{eq:speedHLLC}
+\end{equation}
+
+There are four possible states, separated by the three (approximated) wave
+speeds.  Contrary to the exact solver, where the output is the state ${\bf
+W}(S)$, the HLLC solver outputs a flux ${\bf F}^{\rm HLLC}$ based on the state
+corresponding to $S=0$. This is because the flux at the intermediate point
+between cells is the quantity employed in the update formula as introduced in
+Subsection \ref{subsec:eulerschemes}. For an overview of the approximate states
+and the flux calculation employed in the HLLC solver, see Chapter 9 of Toro's
+book \cite{toro2013riemann}. 
 
 \subsection{Schemes for the Euler equations}
 \label{subsec:eulerschemes}
 
+When the Euler equations are given as in Eq.\ \eqref{eq:euler}, they are said
+to be a system of conservation equations in differential form. In integral
+form, on a spatial domain $[x_L, x_R]$, the same system of equations can be
+written
+
+\begin{align}
+    \nonumber
+    \int_{x_L}^{x_R} {\bf U}(x,t_2) {\rm d}x &= 
+    \int_{x_L}^{x_R} {\bf U}(x,t_1) {\rm d}x 
+    -\int_{t_1}^{t_2} {\bf F}({\bf U}(x_R,t)) {\rm d}x \\
+    &+ \int_{t_1}^{t_2} {\bf F}({\bf U}(x_L,t)) {\rm d}x \,.
+    \label{eq:eulerIntegral}
+\end{align}
+%
 Explain fintite volume, conservative schemes and the difference between
 centered and RP-based schemes. 
 
