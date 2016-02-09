@@ -4,6 +4,7 @@
 \usepackage{mathtools}
 \usepackage{tikz}
 \usepackage{pgfplots}
+\usepackage{algorithm2e}
 
 \biboptions{super, square, sort&compress}
 
@@ -100,7 +101,18 @@ equation of state. For an ideal gas, the equation of state is
      \label{eq:EoS}
  \end{equation}
 %
-where $\gamma$ denotes the ratio of specific heats for the gas. 
+where $\gamma$ denotes the ratio of specific heats for the gas. Several other
+fluids can be approximated by a so-called stiffened ideal gas equation of
+state, 
+
+\begin{equation}
+    e = \frac{p+\gamma p_{\infty}}{(\gamma-1)\rho} \,.
+    \label{eq:stiffEoS}
+\end{equation}
+%
+Here, a material-dependent stiffening parameter $p_{\infty}$ has been
+introduced. Note that Eq.\ \eqref{eq:stiffEoS} reduces to Eq. \eqref{eq:EoS} for
+materials with $p_{\infty}=0$.
 
 Many important milestones have led us to the current state of the art of
 solving the Euler equations numerically. Riemann identified and worked on the
@@ -166,7 +178,7 @@ report.
 \section{Numerical methods}
 \label{sec:numerical}
 
-\subsection{Riemann Solvers}
+\subsection{Riemann solvers}
 \label{subsec:riemann}
 
 Given a conservation equation and two sets of piecewise constant states
@@ -189,14 +201,14 @@ For the Euler equations and initial conditions
     \end{cases} \,,
 \end{equation*}
 %
-Figure \ref{fig:riemann} shows typical states the system can have, in addition
-to characteristics for waves propagating in space-time. There are two types of
-resultant waves that propagate through space, in addition to the contact wave
-(dashed). The first is a shock wave, depicted as a thick line on the left,
-while the second is a rarefaction wave, shown as several gradually decaying
-lines on the left. Any combination of shock and rarefaction waves can occur on
-the left and right sides of the contact discontinuity, and the result is only
-dependent on ${\bf W}(x,0)$. 
+typical states the system can have are shown in Figure \ref{fig:riemann}, in
+addition to characteristics for waves propagating in space-time. There are two
+types of resultant waves that propagate through space, in addition to the
+contact wave (dashed). The first is a shock wave, depicted as a thick line on
+the left, while the second is a rarefaction wave, shown as several gradually
+decaying lines on the right. Four different combinations of shock and
+rarefaction waves can occur on the left and right sides of the contact
+discontinuity, and the result is only dependent on ${\bf W}(x,0)$. 
 
 \begin{figure}[htb]
     \centering
@@ -215,6 +227,8 @@ dependent on ${\bf W}(x,0)$.
         \node () at (-0.5,0.2) {${\bf W}_L$};
         \node[fill=white] () at (-0.1,0.8) {${\bf W}_{*L}$};
         \node () at (0.5,0.7) {${\bf W}_{*R}$};
+        \node () at (0.8,0.9) {${\bf W}_{R,{\rm fan}}$};
+        \draw[<-] (0.85,0.6) -- (0.8,0.8) {};
         \node () at (0.7,0.2) {${\bf W}_R$};
     \end{tikzpicture}
     \caption{Possible wave configurations for the Riemann problem for Euler's
@@ -222,11 +236,120 @@ dependent on ${\bf W}(x,0)$.
     \label{fig:riemann}
 \end{figure}
 
+As seen from Figure \ref{fig:riemann}, there are (up to) four unknown states
+for the Riemann problem: the left and right star states ${\bf W}_{*K}$ located
+between the left and right waves, and additionally the states inside
+rarefaction waves ${\bf W}_{K, {\rm fan}}$. Note that the density in the $K$
+star state depends on whether the corresponding wave is of shock of rarefaction
+type. One must therefore be able to compute all these states, and also determine which
+of them is the correct one based on the speeds of the waves. 
+
 \subsubsection{Exact solver}
 \label{subsubsec:exact}
 
+The exact solver, as first introduced by Godunov \cite{godunov1959difference},
+has been implemented following Toro's comprehensive overview of Riemann solvers
+and their uses \cite{toro2013riemann}, but extended to take into consideration
+that different (stiffened) ideal gases may be present on each side of the
+discontinuity. 
+
+It can be proven that the pressure in the star states $p_{*}$ is given by
+the root of the nonlinear function
+
+\begin{equation}
+    f(p) = f_L(p)+f_R(p)- (u_L-u_R) \,.
+    \label{eq:pressureEquation}
+\end{equation}
+%
+Here,  
+
+\begin{equation*}
+    f_K(p) = 
+    \begin{cases}
+        \frac{2a_K}{\gamma_K-1} \left[ \left(
+            \frac{p+p_{\infty,K}}{p_K+p_{\infty,K}}
+        \right)^{\frac{\gamma_K-1}{2\gamma_K}}-1\right], &p\leq p_K \\
+        (p-p_K)\left( \frac{A_K}{B_K+p} \right)^{\frac{1}{2}}, &p>p_K
+    \end{cases} \,,
+\end{equation*}
+%
+where $a_K = \sqrt{\frac{\gamma(p_K+p_{\infty,K})}{\rho_K}}$ is the speed of
+sound and 
+
+\begin{equation*}
+    A_K = \frac{2}{(\gamma_K+1)\rho_K} \,, 
+    \quad B_K = \frac{(\gamma_K-1)p_K+2\gamma_K p_{\infty, K}}{\gamma_K+1} \,.
+\end{equation*}
+% 
+In the exact solver, the pressure in the star region is found by applying an
+iterative scheme to Eq.~ \eqref{eq:pressureEquation}. Due to the nature of
+$f(p)$, it is well-suited for iterative schemes, but
+it is important to ensure that the pressure stays positive. For this project,
+Newton-Raphson iterations were implemented, taking the initial guess as
+$\frac{1}{2}(p_L+p_R)$. After finding $p_*$, the velocity in the star region is computed as
+
+\begin{equation}
+    u_{*} = \frac{1}{2} (u_L+u_R)-\frac{1}{2}\left[ f_L(p_*)-f_R(p_*) \right] \,.
+    \label{eq:ustar}
+\end{equation}
+
+When the pressure and velocity in the star region have been computed, one can
+calculate the wave speeds (one per shock wave, two per rarefaction wave and one
+for the contact discontinuity) and use this to sample the state at a given
+point $S = x/t$ in space-time. Pseudocode for this procedure is given in
+Algorithm \ref{alg:sample}. Formulas for wave speeds and densities in different
+states have been left out for brevity, but they in general depend on the
+initial conditions (including material properties).
+
+\begin{algorithm}[htb]
+    \KwData{$S$, ${\bf W}_L$, ${\bf W}_R$, $p_{*}$, $u_{*}$, material
+properties}
+    \KwResult{${\bf W}(S)$}
+    \eIf{$S \leq$ \rm speed of contact discontinuity}
+    {
+        \eIf{\rm left wave is rarefaction}
+        {
+            \eIf{$S \leq $ \rm speed of rarefaction head}
+            {
+                return ${\bf W}_L$\;
+            }
+            {
+                \eIf{$S >$ \rm speed of rarefaction tail}
+                {
+                    return ${\bf W}_{*L, {\rm fan}}$\;
+                }
+                {
+                    return ${\bf W}_{L, {\rm fan}}$\;
+                }
+            }
+        }
+        {
+            \eIf{$S \leq $ \rm speed of shock wave}
+            {
+                return ${\bf W}_L$\;
+            }
+            {
+                return ${\bf W}_{*L}$\;
+            }
+        }
+    }
+    {
+        perform similar analysis for sampling point on right side of contact
+        discontinuity; 
+    }
+    \caption{Sample exact solution of Riemann problem given pressure and
+    velocity in star states.}
+    \label{alg:sample}
+\end{algorithm}
+
 \subsubsection{HLLC}
 \label{subsubsec:hllc}
+
+By far the most computationally expensive part of the exact solver is the
+iterative root finding procedure for finding $p_*$. Since most modern schemes
+require the solution of local Riemann problems at all points in the
+computational domain, high gains in terms of computational efficiency can be
+achieved by 
 
 \subsection{Schemes for the Euler equations}
 \label{subsec:eulerschemes}
@@ -478,18 +601,6 @@ centered and RP-based schemes.
 \subsection{Water-gas shock tube test}
 \label{subsec:water}
 
-Several other fluids can be approximated by a so-called stiffened ideal gas
-equation of state, 
-
-\begin{equation}
-    e = \frac{p+\gamma p_{\infty}}{(\gamma-1)\rho} \,.
-    \label{eq:stiffEoS}
-\end{equation}
-%
-Here, a material-dependent stiffening parameter $p_{\infty}$ has been
-introduced. Note that Eq.\ \eqref{eq:stiffEoS} reduces to Eq. \eqref{eq:EoS} for
-materials with $p_{\infty}=0$. 
-
 \pgfplotstableread{../Results/testE_RGFM_N100.out}{\one}
 \pgfplotstableread{../Results/testE_RGFM_N200.out}{\two}
 \pgfplotstableread{../Results/testE_RGFM_N400.out}{\four}
@@ -594,12 +705,11 @@ materials with $p_{\infty}=0$.
 
 Everythings went better as expectance!
 
-\bibliographystyle{elsarticle-num}
-\bibliography{references.bib}
-
-
 \section*{Acknowledgements}
 \label{sec:acknowledgements}
 Thanks Steve. 
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references.bib}
 
 \end{document}
