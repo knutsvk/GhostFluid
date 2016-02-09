@@ -27,8 +27,14 @@
 
 \begin{abstract}
     The unsteady, compressible Euler equations for multimaterial flow in one
-    dimension have been solved numerically by employing a level set method and
-    two versions of the Ghost Fluid Method. 
+    dimension have been solved numerically by employing level-set based
+    tracking of fronts and two versions of the Ghost Fluid Method. Equations of
+    state for stiffened ideal gases are supported, to allow simulations with
+    water. An exact Riemann solver is demonstrated, in addition to usage of
+    both centered and upwind higher-order time-marching schemes, namely
+    MUSCL-Hancock with HLLC and SLIC. Results from several varied test cases
+    show that the implementation works in accordance with that presented in
+    previous literature. 
 \end{abstract}
 
 \end{frontmatter}
@@ -388,22 +394,63 @@ book \cite{toro2013riemann}.
 \subsection{Schemes for the Euler equations}
 \label{subsec:eulerschemes}
 
-When the Euler equations are given as in Eq.\ \eqref{eq:euler}, they are said
-to be a system of conservation equations in differential form. In integral
-form, on a spatial domain $[x_L, x_R]$, the same system of equations can be
-written
+The Euler equations as given in Eq.\ \eqref{eq:euler} are said to be a system
+of conservation equations in differential form. In integral form, on a spatial
+domain $[x_L, x_R]$, the same system of equations can be written
 
 \begin{align}
     \nonumber
-    \int_{x_L}^{x_R} {\bf U}(x,t_2) {\rm d}x &= 
-    \int_{x_L}^{x_R} {\bf U}(x,t_1) {\rm d}x 
-    -\int_{t_1}^{t_2} {\bf F}({\bf U}(x_R,t)) {\rm d}x \\
-    &+ \int_{t_1}^{t_2} {\bf F}({\bf U}(x_L,t)) {\rm d}x \,.
+    \int_{x_L}^{x_R} {\bf U}(x,t_2) {\rm d}x = 
+    \int_{x_L}^{x_R} &{\bf U}(x,t_1) {\rm d}x 
+    -\int_{t_1}^{t_2} {\bf F}({\bf U}(x_R,t)) {\rm d}t \\
+    &+ \int_{t_1}^{t_2} {\bf F}({\bf U}(x_L,t)) {\rm d}t \,.
     \label{eq:eulerIntegral}
 \end{align}
+
+From Eq. \eqref{eq:eulerIntegral}, it is straightforward to discretize the
+Euler equations to produce a conservative time-marching scheme through the
+Finite Volume Method (FVM). Let the spatial domain $x \in [0,1]$ be divided
+into $N$ equal cells of width $\Delta x = 1/N$.  We denote by $x_i$ the center
+of the $i$-th cell, \emph{i.e.~} $x_i = (i+1/2)\Delta x$. 
 %
-Explain fintite volume, conservative schemes and the difference between
-centered and RP-based schemes. 
+Temporal discretization is done with variable time step $\Delta t^n$, so that
+$t^n = \sum_{i=1}^n \Delta t^i$. 
+
+We write the discrete
+approximation of ${\bf U}(x_i, t^n)$ as ${\bf U}_i^n$, and let it be the
+weighted average of ${\bf U}(x,t^n)$ in the cell with boundaries at
+$x_{i-1/2}$ and $x_{i+1/2}$: 
+
+\begin{equation}
+    {\bf U}_i^n \approx \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} {\bf
+    U}(x,t^n) {\rm d}x 
+    \label{eq:Udiscrete}
+\end{equation}
+%
+Similarly, the fluxes at each interface are approximated as 
+
+\begin{equation}
+    {\bf F}_{i+1/2}^n \approx \frac{1}{\Delta t^n} 
+    \int_{t_{n}}^{t_{n+1}} {\bf F}({\bf U}(x_{i+1/2},t)) {\rm d}t \,. 
+    \label{eq:Fdiscrete}
+\end{equation}
+%
+By applying Eq. \eqref{eq:eulerIntegral} on each cell $[x_{i-1/2},x_{i+1/2}]$,
+and by inserting the discrete approximations in Eqns. \eqref{eq:Udiscrete} and
+\eqref{eq:Fdiscrete}, a conservative, time-marching scheme for evolving the
+Euler equations in time is 
+
+\begin{equation}
+    {\bf U}_i^{n+1} = {\bf U}_i^n - \frac{\Delta t^n}{\Delta x} \left(
+    {\bf F}_{i+1/2}^n - {\bf F}_{i-1/2}^n \right) \,. 
+    \label{eq:conservativeScheme}
+\end{equation}
+
+All the most common schemes used for solving conservation laws are of the same
+form as Eq. \eqref{eq:conservativeScheme}, and the difference between them is
+in the evaluation of the fluxes ${\bf F}_{i\pm 1/2}^n$. 
+
+\emph{Explain difference between centered and RP-based schemes. }
 
 \subsubsection{MUSCL-Hancock}
 \label{subsubsec:muscl}
