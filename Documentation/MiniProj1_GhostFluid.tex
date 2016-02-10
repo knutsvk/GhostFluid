@@ -356,8 +356,8 @@ iterative root finding procedure for finding $p_*$. Since most modern schemes
 require the solutions of local Riemann problems between all points in the
 computational domain, high gains in terms of computational efficiency can be
 achieved by employing exact solvers instead. One such solver is the
-Harten-Lax-van Leer-Contact (HLLC) solver, which has been implemented for this
-project. 
+Harten-Lax-van Leer-Contact (HLLC) solver \cite{toro1994restoration}, which has
+been implemented for this project. 
 
 When compared to the exact solver, the main simplifications in HLLC are that
 the pressure in the star region is approximated instead of found by iterative
@@ -442,15 +442,40 @@ Euler equations in time is
 
 \begin{equation}
     {\bf U}_i^{n+1} = {\bf U}_i^n - \frac{\Delta t^n}{\Delta x} \left(
-    {\bf F}_{i+1/2}^n - {\bf F}_{i-1/2}^n \right) \,. 
+    {\bf F}_{i+1/2} - {\bf F}_{i-1/2} \right) \,. 
     \label{eq:conservativeScheme}
 \end{equation}
+%
+The Courant-Friedrichs-Lewis condition for convergence demands that 
+
+\begin{equation}
+    \Delta t^n \leq \frac{\Delta x}{S_{\rm max}^n} \,,
+\end{equation}
+%
+so we let $\Delta t^n = C_{\rm CFL} \Delta x / S_{\rm max}^n$, where $0 \leq
+C_{\rm CFL} \leq 1$. In our implementation, we use $C_{\rm CFL}=0.9$. 
 
 All the most common schemes used for solving conservation laws are of the same
 form as Eq. \eqref{eq:conservativeScheme}, and the difference between them is
-in the evaluation of the fluxes ${\bf F}_{i\pm 1/2}^n$. 
+in the evaluation of the fluxes ${\bf F}_{i\pm 1/2}$. There are two main
+classes of flux evaluation schemes; the upwind schemes are based on the
+solution of local Riemann problems, while the centered schemes are extensions
+of the First ORder CEntered (FORCE) flux: 
 
-\emph{Explain difference between centered and RP-based schemes. }
+\begin{equation}
+    {\bf F}_{i+1/2}^{\rm FORCE} = \frac{1}{2} \left[ {\bf F}_{i+1/2}^{n+1/2} +
+    \frac{1}{2} ({\bf F}_i^n + {\bf F}_{i+1}^n) \right] - \frac{1}{4}
+    \frac{\Delta x}{\Delta t^n} ({\bf U}_{i+1}^n - {\bf U}_i^n) \,. 
+    \label{eq:FORCE}
+\end{equation}
+%
+Here, ${\bf F}_i^n = {\bf F}({\bf U}_i^n)$ and 
+
+\begin{equation}
+    \label{eq:richtmyer}
+    {\bf U}_{i+1/2}^{n+1/2} = \frac{1}{2}({\bf U}_i^n+{\bf U}_{i+1}^n) -
+    \frac{1}{2} \frac{\Delta t}{\Delta x}({\bf F}_{i+1}^n - {\bf F}_i^n) \,.
+\end{equation}
 
 \subsubsection{MUSCL-Hancock}
 \label{subsubsec:muscl}
