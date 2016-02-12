@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 \documentclass[final,3p,twocolumn,times]{elsarticle}
    
+=======
+\documentclass[final,3p,twocolumn]{elsarticle}
+
+>>>>>>> 15f3e29f097c8b33a4611c23ea6c3cf9cb82331b
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{tikz}
@@ -247,8 +252,8 @@ for the Riemann problem: the left and right star states ${\bf W}_{*K}$ located
 between the left and right waves, and additionally the states inside
 rarefaction waves ${\bf W}_{K, {\rm fan}}$. Note that the density in the $K$
 star state depends on whether the corresponding wave is of shock of rarefaction
-type. One must therefore be able to compute all these states, and also determine which
-of them is the correct one based on the speeds of the waves. 
+type. One must therefore be able to compute all these states, and also
+determine which of them is the correct one based on the speeds of the waves. 
 
 \subsubsection{Exact solver}
 \label{subsubsec:exact}
@@ -283,8 +288,8 @@ where $a_K = \sqrt{\frac{\gamma(p_K+p_{\infty,K})}{\rho_K}}$ is the speed of
 sound and 
 
 \begin{equation*}
-    A_K = \frac{2}{(\gamma_K+1)\rho_K} \,, 
-    \quad B_K = \frac{(\gamma_K-1)p_K+2\gamma_K p_{\infty, K}}{\gamma_K+1} \,.
+    A_K = \frac{2}{(\gamma_K+1)\rho_K} \,,\,
+    B_K = \frac{(\gamma_K-1)p_K+2\gamma_K p_{\infty, K}}{\gamma_K+1} \,.
 \end{equation*}
 % 
 In the exact solver, the pressure in the star region is found by applying an
@@ -355,9 +360,8 @@ By far the most computationally expensive part of the exact solver is the
 iterative root finding procedure for finding $p_*$. Since most modern schemes
 require the solutions of local Riemann problems between all points in the
 computational domain, high gains in terms of computational efficiency can be
-achieved by employing exact solvers instead. One such solver is the
-Harten-Lax-van Leer-Contact (HLLC) solver, which has been implemented for this
-project. 
+achieved by employing exact solvers instead. One such solver is the HLLC solver
+\cite{toro1994restoration}, which has been implemented for this project. 
 
 When compared to the exact solver, the main simplifications in HLLC are that
 the pressure in the star region is approximated instead of found by iterative
@@ -384,12 +388,12 @@ of the contact discontinuity is then approximated as
 
 There are four possible states, separated by the three (approximated) wave
 speeds.  Contrary to the exact solver, where the output is the state ${\bf
-W}(S)$, the HLLC solver outputs a flux ${\bf F}^{\rm HLLC}$ based on the state
-corresponding to $S=0$. This is because the flux at the intermediate point
-between cells is the quantity employed in the update formula as introduced in
-Subsection \ref{subsec:eulerschemes}. For an overview of the approximate states
-and the flux calculation employed in the HLLC solver, see Chapter 9 of Toro's
-book \cite{toro2013riemann}. 
+W}(S)$, the HLLC solver outputs a flux ${\bf F}^{\rm HLLC}({\bf W}_L, {\bf
+W}_R)$ based on the state corresponding to $S=0$. This is because the flux at
+the intermediate point between cells is the quantity employed in the update
+formula as introduced in Subsection \ref{subsec:eulerschemes}. For an overview
+of the approximate states and the flux calculation employed in the HLLC solver,
+see Chapter 9 of Toro's book \cite{toro2013riemann}. 
 
 \subsection{Schemes for the Euler equations}
 \label{subsec:eulerschemes}
@@ -401,8 +405,8 @@ domain $[x_L, x_R]$, the same system of equations can be written
 \begin{align}
     \nonumber
     \int_{x_L}^{x_R} {\bf U}(x,t_2) {\rm d}x = 
-    \int_{x_L}^{x_R} &{\bf U}(x,t_1) {\rm d}x 
-    -\int_{t_1}^{t_2} {\bf F}({\bf U}(x_R,t)) {\rm d}t \\
+    \int_{x_L}^{x_R} &{\bf U}(x,t_1) {\rm d}x \\ 
+    -\int_{t_1}^{t_2} {\bf F}({\bf U}(x_R,t)) {\rm d}t 
     &+ \int_{t_1}^{t_2} {\bf F}({\bf U}(x_L,t)) {\rm d}t \,.
     \label{eq:eulerIntegral}
 \end{align}
@@ -442,30 +446,301 @@ Euler equations in time is
 
 \begin{equation}
     {\bf U}_i^{n+1} = {\bf U}_i^n - \frac{\Delta t^n}{\Delta x} \left(
-    {\bf F}_{i+1/2}^n - {\bf F}_{i-1/2}^n \right) \,. 
+    {\bf F}_{i+1/2} - {\bf F}_{i-1/2} \right) \,. 
     \label{eq:conservativeScheme}
 \end{equation}
+%
+The Courant-Friedrichs-Lewis condition for convergence demands that 
+
+\begin{equation}
+    \Delta t^n \leq \frac{\Delta x}{S_{\rm max}^n} \,,
+\end{equation}
+%
+so we let $\Delta t^n = C_{\rm CFL} \Delta x / S_{\rm max}^n$, where $0 \leq
+C_{\rm CFL} \leq 1$. In our implementation, we use $C_{\rm CFL}=0.9$.
+Transmissive boundary conditions are implemented on both boundaries, so that
+
+\begin{equation}
+    \label{eq:BCs} 
+    {\bf W}_{-i}^{n+1} = {\bf W}_{-(i-1)}^{n} \,, \quad
+    {\bf W}_{N+i}^{n+1} = {\bf W}_{N+(i-1)}^{n} \,, \quad 
+\end{equation}
+%
+for $i=1, \dots, N_{GC}$ where the number of ghost cells $N_{GC}$ equals the
+order of the scheme employed. 
 
 All the most common schemes used for solving conservation laws are of the same
 form as Eq. \eqref{eq:conservativeScheme}, and the difference between them is
-in the evaluation of the fluxes ${\bf F}_{i\pm 1/2}^n$. 
+in the evaluation of the fluxes ${\bf F}_{i\pm 1/2}$. For this project, we have
+implemented so-called total variation diminishing (TVD) high resolution methods
+for this purpose. High resolution methods are accurate to at least second
+order; they avoid spurious oscillations in the solution, capture
+discontinuities and shock waves well and satisfy a discrete form of the entropy
+condition. There are two main classes of higher-order flux evaluation schemes;
+the upwind schemes are based on the solution of local Riemann problems, while
+the centered schemes are extensions of the First ORder CEntered (FORCE) flux: 
 
-\emph{Explain difference between centered and RP-based schemes. }
+\begin{align} 
+    \nonumber 
+    {\bf F}^{\rm FORCE}({\bf U}_L,{\bf U}_R) = \frac{1}{2}
+    &\left[ {\bf F}_0 + \frac{1}{2} ({\bf F}_L + {\bf F}_{R})
+    \right] \\
+    \label{eq:FORCE} 
+    &- \frac{1}{4} \frac{\Delta x}{\Delta t^n} ({\bf U}_{R} - {\bf
+    U}_L) \,.  
+\end{align}
+%
+Here, ${\bf F}_K = {\bf F}({\bf U}_K)$ and 
 
-\subsubsection{MUSCL-Hancock}
-\label{subsubsec:muscl}
+\begin{equation}
+    \label{eq:richtmyer}
+    {\bf U}_0 = \frac{1}{2}({\bf U}_L+{\bf U}_R) -
+    \frac{1}{2} \frac{\Delta t}{\Delta x}({\bf F}_R - {\bf F}_L) \,.
+\end{equation}
 
-\subsubsection{SLIC}
-\label{subsubsec:slic}
+The MUSCL-Hancock \cite{van1979towards} and SLIC \cite{toro2000centred}
+schemes, as mentioned in the Introduction, exemplify upwind and centred
+schemes, respectively. They are similar in many regards, and both consist of
+three main steps. 
 
+First, the data cell averages ${\bf U}_i^n$ are replaced
+locally by linear functions so that at the left and right cell interfaces, the
+boundary extrapolated values are 
+
+\begin{equation}
+    \label{eq:BEV}
+    {\bf U}_i^L = {\bf U}_i^n-\frac{1}{2}\Delta_i \,,\quad 
+    {\bf U}_i^R = {\bf U}_i^n+\frac{1}{2}\Delta_i \,.
+\end{equation}
+%
+Here, the slope vector $\Delta_i$ has been introduced, which in our case is
+chosen such that the schemes are TVD. For the MUSCL-Hancock scheme, we have
+implemented limited slopes \cite{anderson1986comparison}, while SLIC uses slope
+limiters \cite{toro2000centred}. 
+
+After calculating the boundary extrapolated values for each cell, these are
+advanced to time $t^n+\Delta t^n$ to obtain
+
+\begin{equation}
+    \label{eq:evolution}
+    {\bf \bar{U}}_i^{L,R} = {\bf U}_i^{L,R} - \frac{1}{2} \frac{\Delta
+    t}{\Delta x} \left[ {\bf F}({\bf U}_i^R)-{\bf F}({\bf U}_i^L) \right] \,.
+\end{equation}
+
+The third and final step is the actual evaluation of the intercell flux ${\bf
+F}_{i+1/2}$ based on the partially evolved boundary extrapolated values. For
+MUSCL-Hancock, this is done by using the HLLC solver to solve the local Riemann
+problem across each cell interface, \emph{i.e.~} 
+
+\begin{equation}
+    \label{eq:MUSCL}
+    {\bf F}_{i+1/2}^{\rm MUSCL} = {\bf F}^{\rm HLLC}({\bf
+    \bar{W}}_i^R, {\bf \bar{W}}_{i+1}^L) \,.
+\end{equation}
+%
+For SLIC, however, the intercell flux is directly evaluated as the FORCE flux with 
+
+\begin{equation}
+    \label{eq:SLIC}
+    {\bf F}_{i+1/2}^{\rm SLIC} = {\bf F}^{\rm FORCE}({\bf
+    \bar{U}}_i^R, {\bf \bar{U}}_{i+1}^L) \,.
+\end{equation}
 \subsection{Level-set method}
 \label{subsec:levelset}
 
-\subsection{Ghost Fluid Methods}
+In order to represent the interfaces between materials, we employ a level-set
+function $\phi(x)$ whose sign is a boolean indicator of the material present. The
+interfaces between materials are thus located at the points where $\phi=0$.
+Figure \ref{fig:levelSet} shows the simple case of a single material interface
+separating materials A and B; several interfaces have been incoorporated by
+letting $\phi$ be piecewise linear throughout the domain in a zig-zag
+pattern. 
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}[scale=2.5]
+        \coordinate (origin) at (0,0) node[left]{0};
+        \coordinate (mid) at (1,0);
+        \coordinate (xright) at (2.1,0);
+        \coordinate (bottom) at (0,-0.6);
+        \coordinate (top) at (0,0.6);
+        \coordinate (yleft) at (0,-0.5);
+        \coordinate (yright) at (2,0.5);
+        \coordinate (dashtop) at (1,0.5);
+        \coordinate (dashbottom) at (1,-0.5);
+
+        \fill[blue!20!white] (yleft) rectangle (dashtop);
+        \fill[green!20!white] (dashbottom) rectangle (yright);
+
+        \draw[->] (origin) -- (xright) node[right]{$x$};
+        \draw[->] (bottom) -- (top) node[above]{$\phi$};
+        \draw[thick] (yleft) -- (yright) {};
+
+        \node[fill=blue!20!white] () at (0.5,0.2) {Material A};
+        \node[fill=green!20!white] () at (1.5,-0.3) {Material B};
+    \end{tikzpicture}
+    \caption{Simple example of level-set function for one material interface.
+    In the left region, where $\phi(x)<0$, material A is present,
+    while material B is present in the right region. }
+    \label{fig:levelSet}
+\end{figure}
+
+Initializing the level-set function is trivial, but it is a good idea to make
+sure that the zeros end up between cell centers, so that each grid point has
+well-defined material properties. In order to capture the evolution of the
+system, the level-set function itself must be advanced in time for each time
+step. Since $\phi$ is a consequence of the state of the fluid rather than a
+property, it is not coupled to the other variables in the system.  Thus it is
+governed by the advection equation 
+
+\begin{equation}
+    \label{eq:phi}
+    \partial_t \phi + u\partial_x \phi = 0 \,,
+\end{equation}
+%
+Due to frequent discontinuities in density at material interfaces, conservative
+schemes lead to smearing of the locations of the zeros. Since the only
+interesting information contained in $\phi$ are these locations,
+non-conservative methods can be safely implemented as long as $\phi$ remains
+smooth and not too sharp. In our implementation, we have implemented the
+first-order upwind scheme 
+
+\begin{equation}
+    \label{eq:advanceLevelSet}
+    \phi_i^{n+1} = \begin{cases}
+        \phi_i^n-u_i^n \frac{\Delta t^n}{\Delta x}(\phi_i^n-\phi_{i-1}^n)
+        \,,\quad u_i^n > 0 \\
+        \phi_i^n-u_i^n \frac{\Delta t^n}{\Delta x}(\phi_{i+1}^n-\phi_i^n) 
+        \,,\quad u_i^n \leq 0
+    \end{cases} \,.
+\end{equation}
+%
+Note that $u_i^n$ is the velocity of material A at $x_i$ if $\phi_i^n < 0$, and
+the velocity of material B otherwise.  In order to avoid the level set function
+becoming too sharp, we reinitialize it after every update by demanding
+$|\phi_{i+1}^n-\phi_i^n|=\Delta x$. In this procedure, we also make sure that
+the zeros of $\phi$ lie between grid points. 
+
+\subsection{Ghost fluid methods}
 \label{subsec:ghostfluid}
 
-\subsubsection{Original Ghost Fluid Method}
+Multimaterial simulations require one final consideration in addition to
+interface tracking; namely which boundary conditions to enforce across these
+interfaces. These dynamic boundary conditions should be thermodynamically
+consistent in order to capture the physical interactions between materials. In
+the computational implementation, the Euler equations are solved on a separate
+domain for each material, where that material is present in all cells. For the
+regions where $\phi(x) < 0$, fluid A is present in domain A, while \emph{ghost
+fluid} B is present in domain B. The opposite is true when $\phi(x) > 0$. The
+only interesting cells in the ghost fluids are the $N_{GC}$ points located
+immediately adjacent to a material interface, since these affect the solution
+in the actual fluid. It is the goal of ghost fluid methods to update these
+ghost cells in a thermodynamically consistent manner. 
+
+\subsubsection{Original ghost fluid method}
 \label{subsubsec:ogfm}
+
+The first successful attempt at implementing a ghost fluid method was performed by
+Fedkiw et al.~ in 1998 \cite{fedkiw1999nonoscillatory}. In this approach, which
+we refer to as OGFM, the entropy $S$ is held constant across the ghost fluid
+interface, in order to give conditions for thermodynamic consistensy. The
+assumption of constant entropy is not entirely true in the case of shocks, so
+one does not expect excellent capturing of large shock waves. The pressure and
+velocity in the ghost cells are set equal to the pressure and velocity in the
+same cells of the other material domain. It is the density which is
+extrapolated by enforcing constant entropy. To derive how, we note that the
+entropy of an ideal gas is given by 
+
+\begin{equation}
+    \label{eq:entropy}
+    S = c_V \ln \left( \frac{p}{\rho^{\gamma}} \right) + {\rm const} \,,
+\end{equation}
+%
+so if two cells $i$ and $j$ have the same entropy and contain the same
+material, they must satisfy 
+
+\begin{equation}
+    \label{eq:constEntropy}
+    \rho_i = \left( \frac{p_i}{p_j} \right)^{1/\gamma} \rho_j \,.
+\end{equation}
+%
+In order to avoid ``overheating'' across the material boundary, an isobaric fix
+has been implemented for OGFM by enforcing constant entropy from the neighbour
+of the boundary cell to the boundary as well as from the boundary and into
+the ghost fluid. A schematic illustration, including the isobaric fix, is given
+in Figure \ref{fig:OGFM}. 
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}[scale=1.8]
+        \coordinate (origin) at (0,0);
+        \coordinate (x0) at (-1.5,0);
+        \coordinate (x1) at (-0.5,0);
+        \coordinate (x2) at (0.5,0);
+        \coordinate (x3) at (1.5,0);
+        \coordinate (y0) at (-1.5,0.5);
+        \coordinate (y1) at (-0.5,0.5);
+        \coordinate (y2) at (0.5,0.5);
+        \coordinate (y3) at (1.5,0.5);
+        \coordinate (z0) at (-1.5,1.4);
+        \coordinate (z1) at (-0.5,1.4);
+        \coordinate (z2) at (0.5,1.4);
+        \coordinate (z3) at (1.5,1.4);
+        \coordinate (bottomLeft) at (-2,0);
+        \coordinate (topMid) at (0,2);
+        \coordinate (bottomRight) at (2,0);
+        \coordinate (topRight) at (2,2);
+
+        \fill[blue!20!white] (bottomLeft) rectangle (topMid);
+        \fill[green!20!white] (origin) rectangle (topRight);
+
+        \draw[thick,blue] (y0) circle (0.2);
+        \draw[thick,blue] (y1) circle (0.2);
+        \draw[thick,blue,dashed] (y2) circle (0.2);
+        \draw[thick,blue,dashed] (y3) circle (0.2);
+        \draw[thick,green!40!black,dashed] (z0) circle (0.2);
+        \draw[thick,green!40!black,dashed] (z1) circle (0.2);
+        \draw[thick,green!40!black] (z2) circle (0.2);
+        \draw[thick,green!40!black] (z3) circle (0.2);
+
+        \draw[->] ($(y0)+(0,0.25)$)--($(z0)-(0,0.25)$) 
+        node[fill=blue!20!white,midway]{$p,u$};
+        \draw[->] ($(y1)+(0,0.25)$)--($(z1)-(0,0.25)$) 
+        node[fill=blue!20!white,midway]{$p,u$};
+        \draw[<-] ($(y2)+(0,0.25)$)--($(z2)-(0,0.25)$) 
+        node[fill=green!20!white,midway]{$p,u$};
+        \draw[<-] ($(y3)+(0,0.25)$)--($(z3)-(0,0.25)$) 
+        node[fill=green!20!white,midway]{$p,u$};
+
+        \draw[->] ($(y1)+(0.2,-0.2)$) arc (250:290:0.9);
+        \draw[->] ($(y1)+(0.2,-0.2)$) arc (250:290:2.4)
+        node[fill=green!20!white,midway]{$S$};
+        \draw[black!50!white,->] ($(y0)+(0.2,-0.2)$) arc (250:290:0.9)
+        node[black!50!white,fill=blue!20!white,midway]{$S$};
+
+        \draw[->] ($(z2)-(0.2,-0.2)$) arc (70:110:0.9);
+        \draw[->] ($(z2)-(0.2,-0.2)$) arc (70:110:2.4)
+        node[fill=blue!20!white,midway]{$S$};
+        \draw[black!50!white,->] ($(z3)-(0.2,-0.2)$) arc (70:110:0.9)
+        node[black!50!white,fill=green!20!white,midway]{$S$};
+
+        \draw[->] (bottomLeft) -- (bottomRight) node[right]{$x$};
+        \draw[blue] (-2,0.5)--(0,0.5) {};
+        \draw[blue,dashed] (0,0.5)--(2,0.5) {};
+        \draw[green!40!black,dashed] (-2,1.4)--(0,1.4) {};
+        \draw[green!40!black] (0,1.4)--(2,1.4) {};
+        \node[below] () at (x0) {$x_{i-1}$};
+        \node[below] () at (x1) {$x_{i}$};
+        \node[below] () at (x2) {$x_{i+1}$};
+        \node[below] () at (x3) {$x_{i+2}$};
+    \end{tikzpicture}
+    \caption{Updating of cells in ghost fluids as implemented in OGFM. The
+    pressure and velocities are inherited from the other material, while
+    entropy is kept constant across the ghost fluid interface. With the
+    isobaric fix (grey), the entropy condition is enforced from further inside the
+    actual fluid, to reduce overheating.}
+    \label{fig:OGFM}
+\end{figure}
 
 \subsubsection{Modified Ghost Fluid Method}
 \label{subsubsec:mgfm}
@@ -476,325 +751,396 @@ in the evaluation of the fluxes ${\bf F}_{i\pm 1/2}^n$.
 \subsection{Moving contact discontinuity}
 \label{subsec:moving}
 
+\pgfplotstableread{../Results/MPA_OGFM_FORCE_N5000.out}{\exact}
+\pgfplotstableread{../Results/MPA_single_SLIC_minbee_N100.out}{\slic}
+\pgfplotstableread{../Results/MPA_single_MUSCL_minbee_N100.out}{\muscl}
+\pgfplotstableread{../Results/MPA_OGFMIF_MUSCL_minbee_N100.out}{\ogfm}
+\pgfplotstableread{../Results/MPA_MGFM_MUSCL_minbee_N100.out}{\mgfm}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            [xlabel=$x$, xmin=0.6, xmax=0.9, ylabel=$\rho$, ylabel
+            style={rotate=-90}, legend style={font=\footnotesize}]
+            \addplot+[mark=none, color=black] 
+            table[x={x}, y={rhoEx}]{\exact};
+            \addlegendentry{Exact};
+            \addplot+[only marks, mark=triangle, color=red] 
+            table[x={x}, y={rho}] {\slic}; 
+            \addlegendentry{SLIC};
+            \addplot+[only marks, mark=o, color=blue] 
+            table[x={x}, y={rho}] {\muscl}; 
+            \addlegendentry{MUCSL};
+            \addplot+[only marks, mark=square, color=purple] 
+            table[x={x}, y={rho}] {\ogfm}; 
+            \addlegendentry{OGFM};
+            \addplot+[only marks, mark=x, color=teal] 
+            table[x={x}, y={rho}] {\mgfm}; 
+            \addlegendentry{MGFM};
+        \end{axis}
+    \end{tikzpicture}
+    \caption[caption]
+    {
+        Results from test A. Since the moving contact discontinuity is the
+        only interesting feature, we do not show what is happening in the rest of
+        the domain.
+    }
+    \label{fig:testA}
+\end{figure}
+
+\pgfplotstableread{../Results/MPB_OGFM_FORCE_N5000.out}{\exact}
+\pgfplotstableread{../Results/MPB_OGFMIF_MUSCL_minbee_N100.out}{\ogfm}
+\pgfplotstableread{../Results/MPB_MGFM_MUSCL_minbee_N100.out}{\mgfm}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            [xlabel=$x$, xmin=0.6, xmax=0.9, ylabel=$\rho$, ylabel
+            style={rotate=-90}, legend style={font=\footnotesize}]
+            \addplot+[mark=none, color=black] 
+            table[x={x}, y={rhoEx}]{\exact};
+            \addlegendentry{Exact};
+            \addplot+[only marks, mark=o, color=blue] 
+            table[x={x}, y={rho}] {\ogfm}; 
+            \addlegendentry{OGFM};
+            \addplot+[only marks, mark=x, color=teal] 
+            table[x={x}, y={rho}] {\mgfm}; 
+            \addlegendentry{MGFM};
+        \end{axis}
+    \end{tikzpicture}
+    \caption[caption]
+    {
+        Results from test B.
+    }
+    \label{fig:testB}
+\end{figure}
+
 \subsection{Simple ghost fluid tests}
 \label{subsec:toro}
 
 \subsection{Multimaterial shock tubes for gases}
 \label{subsec:shocktubes}
 
-\pgfplotstableread{../Results/testC_OGFM_N100.out}{\one}
-\pgfplotstableread{../Results/testC_OGFM_N200.out}{\two}
-\pgfplotstableread{../Results/testC_OGFM_N400.out}{\four}
+%\pgfplotstableread{../Results/testC_OGFM_N100.out}{\one}
+%\pgfplotstableread{../Results/testC_OGFM_N200.out}{\two}
+%\pgfplotstableread{../Results/testC_OGFM_N400.out}{\four}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 2}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={rho}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={rho}]{\four};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={u}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={u}]{\four};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={p}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={p}]{\four};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={e}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={e}]{\four};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Original Ghost Fluid method for test C.
+%    \textcolor{teal}{$\triangle$}$N=100$
+%    \textcolor{red}{$\times$}$N=200$
+%    \textcolor{blue}{$\circ$}$N=400$ }
+%\label{fig:testC_OGFM}
+%\end{figure*}
+%
+%\pgfplotstableread{../Results/testC_RGFM_N100.out}{\one}
+%\pgfplotstableread{../Results/testC_RGFM_N200.out}{\two}
+%\pgfplotstableread{../Results/testC_RGFM_N400.out}{\four}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 2}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={rho}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={rho}]{\four};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={u}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={u}]{\four};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={p}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={p}]{\four};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={e}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={e}]{\four};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Riemann Ghost Fluid method for test C.
+%    \textcolor{teal}{$\triangle$}$N=100$
+%    \textcolor{red}{$\times$}$N=200$
+%    \textcolor{blue}{$\circ$}$N=400$ }
+%\label{fig:testC_RGFM}
+%\end{figure*}
+%
+%\pgfplotstableread{../Results/testD_OGFM_N100.out}{\one}
+%\pgfplotstableread{../Results/testD_OGFM_N200.out}{\two}
+%\pgfplotstableread{../Results/testD_OGFM_N400.out}{\four}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 2}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={rho}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={rho}]{\four};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={u}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={u}]{\four};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={p}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={p}]{\four};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={e}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={e}]{\four};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Original Ghost Fluid method for test D. 
+%    \textcolor{teal}{$\triangle$}$N=100$
+%    \textcolor{red}{$\times$}$N=200$
+%    \textcolor{blue}{$\circ$}$N=400$ }
+%\label{fig:testD_OGFM}
+%\end{figure*}
+%
+%\pgfplotstableread{../Results/testD_RGFM_N100.out}{\one}
+%\pgfplotstableread{../Results/testD_RGFM_N200.out}{\two}
+%\pgfplotstableread{../Results/testD_RGFM_N400.out}{\four}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 2}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={rho}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={rho}]{\four};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={u}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={u}]{\four};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={p}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={p}]{\four};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={e}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={e}]{\four};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Riemann Ghost Fluid method for test D. 
+%    \textcolor{teal}{$\triangle$}$N=100$
+%    \textcolor{red}{$\times$}$N=200$
+%    \textcolor{blue}{$\circ$}$N=400$ }
+%\label{fig:testD_RGFM}
+%\end{figure*}
 
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 2}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={rho}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={rho}]{\four};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={u}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={u}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={u}]{\four};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={p}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={p}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={p}]{\four};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={e}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={e}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={e}]{\four};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Original Ghost Fluid method for test C.
-    \textcolor{teal}{$\triangle$}$N=100$
-    \textcolor{red}{$\times$}$N=200$
-    \textcolor{blue}{$\circ$}$N=400$ }
-\label{fig:testC_OGFM}
-\end{figure*}
-
-\pgfplotstableread{../Results/testC_RGFM_N100.out}{\one}
-\pgfplotstableread{../Results/testC_RGFM_N200.out}{\two}
-\pgfplotstableread{../Results/testC_RGFM_N400.out}{\four}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 2}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={rho}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={rho}]{\four};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={u}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={u}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={u}]{\four};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={p}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={p}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={p}]{\four};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={e}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={e}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={e}]{\four};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Riemann Ghost Fluid method for test C.
-    \textcolor{teal}{$\triangle$}$N=100$
-    \textcolor{red}{$\times$}$N=200$
-    \textcolor{blue}{$\circ$}$N=400$ }
-\label{fig:testC_RGFM}
-\end{figure*}
-
-\pgfplotstableread{../Results/testD_OGFM_N100.out}{\one}
-\pgfplotstableread{../Results/testD_OGFM_N200.out}{\two}
-\pgfplotstableread{../Results/testD_OGFM_N400.out}{\four}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 2}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={rho}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={rho}]{\four};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={u}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={u}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={u}]{\four};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={p}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={p}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={p}]{\four};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={e}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={e}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={e}]{\four};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Original Ghost Fluid method for test D. 
-    \textcolor{teal}{$\triangle$}$N=100$
-    \textcolor{red}{$\times$}$N=200$
-    \textcolor{blue}{$\circ$}$N=400$ }
-\label{fig:testD_OGFM}
-\end{figure*}
-
-\pgfplotstableread{../Results/testD_RGFM_N100.out}{\one}
-\pgfplotstableread{../Results/testD_RGFM_N200.out}{\two}
-\pgfplotstableread{../Results/testD_RGFM_N400.out}{\four}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 2}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={rho}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={rho}]{\four};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={u}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={u}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={u}]{\four};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={p}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={p}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={p}]{\four};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={e}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={e}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={e}]{\four};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Riemann Ghost Fluid method for test D. 
-    \textcolor{teal}{$\triangle$}$N=100$
-    \textcolor{red}{$\times$}$N=200$
-    \textcolor{blue}{$\circ$}$N=400$ }
-\label{fig:testD_RGFM}
-\end{figure*}
 \subsection{Water-gas shock tube test}
 \label{subsec:water}
 
-\pgfplotstableread{../Results/testE_RGFM_N100.out}{\one}
-\pgfplotstableread{../Results/testE_RGFM_N200.out}{\two}
-\pgfplotstableread{../Results/testE_RGFM_N400.out}{\four}
-\pgfplotstableread{../Results/testE_RGFM_N1000.out}{\tausen}
+%\pgfplotstableread{../Results/testE_RGFM_N100.out}{\one}
+%\pgfplotstableread{../Results/testE_RGFM_N200.out}{\two}
+%\pgfplotstableread{../Results/testE_RGFM_N400.out}{\four}
+%\pgfplotstableread{../Results/testE_RGFM_N1000.out}{\tausen}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 2}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={rhoEx}]{\tausen};
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={rho}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={rho}]{\four};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\tausen};
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={u}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={u}]{\four};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\tausen};
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={p}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={p}]{\four};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\tausen};
+%            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
+%            table[x={x}, y={e}]{\one};
+%            \addplot+[only marks, mark=x, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\two};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
+%            table[x={x}, y={e}]{\four};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%    \caption{Riemann Ghost Fluid method for test E.
+%    \textcolor{teal}{$\triangle$}$N=100$
+%    \textcolor{red}{$\times$}$N=200$
+%    \textcolor{blue}{$\circ$}$N=400$ }
+%\label{fig:testE_RGFM}
+%\end{figure*}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 2}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={rhoEx}]{\tausen};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
+%            table[x={x}, y={rho}]{\tausen};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\tausen};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
+%            table[x={x}, y={u}]{\tausen};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\tausen};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
+%            table[x={x}, y={p}]{\tausen};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\tausen};
+%            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
+%            table[x={x}, y={e}]{\tausen};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Riemann Ghost Fluid method for test E with higher accuracy ($N=1000$).}
+%\label{fig:testE_RGFM_N1000}
+%\end{figure*}
 
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 2}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
+\subsection{More interfaces!}
+\label{subsec:more}
 
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\tausen};
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={rho}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={rho}]{\four};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\tausen};
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={u}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={u}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={u}]{\four};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\tausen};
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={p}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={p}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={p}]{\four};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\tausen};
-            \addplot+[only marks, mark=triangle, color=teal, each nth point=1]
-            table[x={x}, y={e}]{\one};
-            \addplot+[only marks, mark=x, color=red, each nth point=2]
-            table[x={x}, y={e}]{\two};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=4]
-            table[x={x}, y={e}]{\four};
-
-        \end{groupplot}
-    \end{tikzpicture}
-    \caption{Riemann Ghost Fluid method for test E.
-    \textcolor{teal}{$\triangle$}$N=100$
-    \textcolor{red}{$\times$}$N=200$
-    \textcolor{blue}{$\circ$}$N=400$ }
-\label{fig:testE_RGFM}
-\end{figure*}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 2}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\tausen};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
-            table[x={x}, y={rho}]{\tausen};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\tausen};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
-            table[x={x}, y={u}]{\tausen};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\tausen};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
-            table[x={x}, y={p}]{\tausen};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\tausen};
-            \addplot+[only marks, mark=o, color=blue,  mark size=1pt, each nth point=10]
-            table[x={x}, y={e}]{\tausen};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Riemann Ghost Fluid method for test E with higher accuracy ($N=1000$).}
-\label{fig:testE_RGFM_N1000}
-\end{figure*}
 \section{Conclusions}
 \label{sec:conclusion}
 
