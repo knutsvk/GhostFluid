@@ -448,6 +448,7 @@ Euler equations in time is
 The Courant-Friedrichs-Lewis condition for convergence demands that 
 
 \begin{equation}
+    \label{eq:timeStep}
     \Delta t^n \leq \frac{\Delta x}{S_{\rm max}^n} \,,
 \end{equation}
 %
@@ -492,6 +493,9 @@ Here, ${\bf F}_K = {\bf F}({\bf U}_K)$ and
     {\bf U}_0 = \frac{1}{2}({\bf U}_L+{\bf U}_R) -
     \frac{1}{2} \frac{\Delta t}{\Delta x}({\bf F}_R - {\bf F}_L) \,.
 \end{equation}
+%
+In general, upwind schemes offer higher accuracy than centered once, but they
+are computationally more demanding and difficult to implement. 
 
 The MUSCL-Hancock \cite{van1979towards} and SLIC \cite{toro2000centred}
 schemes, as mentioned in the Introduction, exemplify upwind and centred
@@ -737,14 +741,108 @@ in Figure \ref{fig:OGFM}.
     \label{fig:OGFM}
 \end{figure}
 
-\subsubsection{Modified Ghost Fluid Method}
+\subsubsection{Modified ghost fluid method}
 \label{subsubsec:mgfm}
+
+In order to be able to solve a wider range of problems, including those with
+strong shock waves or large density gradients, the MGFM was developed
+\cite{liu2003ghost, sambasivan2009ghost}. In this approach, the intermaterial
+boundary conditions are enforced in a way which is based on solving a local
+Riemann problem across the interface. As explained in Subsection
+\ref{subsec:riemann}, it is unproblematic so solve a Riemann problem with
+different material properties on each side of the initial discontinuity. Given
+the two states immediately adjacent to the material interface, ${\bf W}_L$ and
+${\bf W}_R$, and the corresponding material properties, we calculate the star
+states ${\bf W}_{*L}$ and ${\bf W}_{*R}$, and set the ghost fluid cells equal
+to them. Thus every extrapolated value in the ghost fluid corresponds to a
+physical state of the system, and we have thermodynamical consistensy. In order
+to compute the star states, the exact solver is employed. 
+
+\subsection{Complete algorithm}
+\label{subsec:complete}
+
+A summary of all the steps made in the simulations is given in Algorithm
+\ref{alg:complete}.
+
+\begin{algorithm}[htb]
+    \KwData{initial configuration of system, \\ 
+        choice of scheme, $N$, $t_{\rm end}$}
+    \KwResult{configuration of system at time $t_{\rm end}$}
+    set $t=0$\; 
+    initiate computational domain\;
+    \While{$t<t_{\rm end}$}
+    {
+        find locations of material interfaces\;
+        \For{\rm each interface}
+        {
+            update ghost fluid using GFM\;
+        }
+        calculate $\Delta t^n$ from Eq. \eqref{eq:timeStep}\;
+        \If{$t+\Delta t^n > t_{\rm end}$}
+        {
+            $\Delta t^n \rightarrow t_{\rm end} - t$ \;
+        }
+        update boundaries according to Eq. \eqref{eq:BCs}\;
+        advance $\phi$ according to Eq. \eqref{eq:advanceLevelSet}\;
+        \For{\rm each material}
+        {
+            compute fluxes using Eq. \eqref{eq:MUSCL} or \eqref{eq:SLIC}\;
+            evolve system in time with Eq.
+            \eqref{eq:conservativeScheme}\;
+        }
+        $t \rightarrow t + \Delta t^n$\;
+    }
+    \If{\rm initially there was one interface}
+    {
+        compute exact solution for reference\;
+    }
+    \caption{Complete structure for simulating multimaterial system}
+    \label{alg:complete}
+\end{algorithm}
 
 \section{Results}
 \label{sec:results}
 
+The different tests described in this section aim to show how the implemented
+methods cope under different circumstances. Since there are quite many
+different choices one can make for each method, we inform that unless otherwise
+specified:
+\begin{itemize}
+    \item fluxes are computed using the MUSCL-Hancock scheme,
+    \item slope limiters are of minbee type, 
+    \item OGFM is implemented with the isobaric fix.
+\end{itemize}
+
 \subsection{Moving contact discontinuity}
 \label{subsec:moving}
+
+To illustrate how the combination of a level set function and GFMs allow
+capture of a moving contact discontinuity, test A has a single discontinuity in
+density, and the system moves with constant speed to the right. Full test
+specifications are given in Table \ref{tab:testA}. Air occupies the entire
+domain, so both single-material solvers and multimaterial GFM solvers are
+employed. 
+
+\begin{table}[htb]
+    \caption{Initial conditions for test A.}
+    \label{tab:testA}
+    \centering
+    \begin{tabular}{ccccc}
+        \hline
+        $x \in $ & $\rho$ & $u$ & $p$ & $\gamma$ \\
+        \hline
+        $[0,0.25]$ & 1.000 & 0.5 & 1 & 1.4 \\
+        $(0.25,1]$ & 0.138 & 0.5 & 1 & 1.4 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Results for test A are shown in Figure \ref{fig:testA}. Please note that only
+half of the spatial domain is included, since the discontinuity is located
+here. As is evident, both ghost fluid methods capture the discontinuity far
+better than the single-material solvers, in fact no error at all is apparent.
+Of the schemes used for the single-material solver, the MUSCL-Hancock scheme
+provides a higher accuracy around the discontinuity, as expected. 
 
 \pgfplotstableread{../Results/MPA_OGFM_FORCE_N5000.out}{\exact}
 \pgfplotstableread{../Results/MPA_single_SLIC_minbee_N100.out}{\slic}
@@ -756,7 +854,7 @@ in Figure \ref{fig:OGFM}.
     \centering
     \begin{tikzpicture}
         \begin{axis}
-            [xlabel=$x$, xmin=0.6, xmax=0.9, ylabel=$\rho$, ylabel
+            [xlabel=$x$, xmin=0.5, xmax=1.0, ylabel=$\rho$, ylabel
             style={rotate=-90}, legend style={font=\footnotesize}]
             \addplot+[mark=none, color=black] 
             table[x={x}, y={rhoEx}]{\exact};
@@ -766,7 +864,7 @@ in Figure \ref{fig:OGFM}.
             \addlegendentry{SLIC};
             \addplot+[only marks, mark=o, color=blue] 
             table[x={x}, y={rho}] {\muscl}; 
-            \addlegendentry{MUCSL};
+            \addlegendentry{MUSCL};
             \addplot+[only marks, mark=square, color=purple] 
             table[x={x}, y={rho}] {\ogfm}; 
             \addlegendentry{OGFM};
@@ -777,12 +875,14 @@ in Figure \ref{fig:OGFM}.
     \end{tikzpicture}
     \caption[caption]
     {
-        Results from test A. Since the moving contact discontinuity is the
-        only interesting feature, we do not show what is happening in the rest of
-        the domain.
+        Results from test A with $N=100$ and $t_{\rm end}=1$. 
     }
     \label{fig:testA}
 \end{figure}
+
+Test B is identical to test A except for the fact that the discontinuity now
+separates two different fluids; namely air and helium ($\gamma=1.67$). As such, only the GFM
+solvers have been utilized. 
 
 \pgfplotstableread{../Results/MPB_OGFM_FORCE_N5000.out}{\exact}
 \pgfplotstableread{../Results/MPB_OGFMIF_MUSCL_minbee_N100.out}{\ogfm}
@@ -807,10 +907,13 @@ in Figure \ref{fig:OGFM}.
     \end{tikzpicture}
     \caption[caption]
     {
-        Results from test B.
+        Results from test B with $N=100$ and $t_{\rm end}=1$. 
     }
     \label{fig:testB}
 \end{figure}
+
+Results for test B are shown in Figure \ref{fig:testB}, which demonstrates that
+the solvers work well for the multimaterial case as well. 
 
 \subsection{Simple ghost fluid tests}
 \label{subsec:toro}
