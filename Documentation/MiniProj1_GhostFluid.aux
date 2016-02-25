@@ -1,0 +1,162 @@
+\relax 
+\citation{euler1757principes}
+\citation{laplace1816vitesse}
+\citation{christodoulou2007euler}
+\citation{navier1822memoire,stokes1845theories}
+\citation{drela1985twodimensional,anderson1986comparison,guruswamy1990unsteady}
+\citation{laprise1992euler,skamarock2008time}
+\citation{trac2003primer}
+\citation{nikiforakis1996numerical,williams1996detailed,saurel2001multiphase}
+\citation{riemann1860fortpflanzung}
+\citation{godunov1959difference}
+\citation{toro1994restoration}
+\citation{nishikawa2008very}
+\citation{courant1928partiellen}
+\citation{godunov1959difference}
+\citation{lax1960systems}
+\citation{leveque2002finite}
+\citation{jameson1981numerical}
+\citation{van1979towards}
+\citation{toro1989weighted}
+\citation{toro2000centred}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\newlabel{sec:introduction}{{1}{1}}
+\newlabel{eq:euler}{{1}{1}}
+\newlabel{eq:energy}{{2}{1}}
+\newlabel{eq:EoS}{{3}{1}}
+\newlabel{eq:stiffEoS}{{4}{1}}
+\citation{osher1988fronts}
+\citation{osher2001level}
+\citation{fedkiw1999nonoscillatory}
+\citation{liu2003ghost,sambasivan2009ghost}
+\citation{wang2006real}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Numerical methods}{2}}
+\newlabel{sec:numerical}{{2}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Riemann solvers}{2}}
+\newlabel{subsec:riemann}{{2.1}{2}}
+\citation{godunov1959difference}
+\citation{toro2013riemann}
+\citation{toro1994restoration}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Possible wave configurations for the Riemann problem for Euler's equations in one dimension.}}{3}}
+\newlabel{fig:riemann}{{1}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{Exact solver}{3}}
+\newlabel{subsubsec:exact}{{2.1}{3}}
+\newlabel{eq:pressureEquation}{{5}{3}}
+\newlabel{eq:ustar}{{6}{3}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Sample exact solution of Riemann problem given pressure and velocity in star states.}}{3}}
+\newlabel{alg:sample}{{1}{3}}
+\citation{toro2013riemann}
+\@writefile{toc}{\contentsline {subsubsection}{HLLC}{4}}
+\newlabel{subsubsec:hllc}{{2.1}{4}}
+\newlabel{eq:pressureHLLC}{{7}{4}}
+\newlabel{eq:speedHLLC}{{8}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Schemes for the Euler equations}{4}}
+\newlabel{subsec:eulerschemes}{{2.2}{4}}
+\newlabel{eq:eulerIntegral}{{9}{4}}
+\newlabel{eq:Udiscrete}{{10}{4}}
+\newlabel{eq:Fdiscrete}{{11}{4}}
+\newlabel{eq:conservativeScheme}{{12}{4}}
+\newlabel{eq:timeStep}{{13}{4}}
+\newlabel{eq:BCs}{{14}{4}}
+\citation{van1979towards}
+\citation{toro2000centred}
+\citation{anderson1986comparison}
+\citation{toro2000centred}
+\newlabel{eq:FORCE}{{15}{5}}
+\newlabel{eq:richtmyer}{{16}{5}}
+\newlabel{eq:BEV}{{17}{5}}
+\newlabel{eq:evolution}{{18}{5}}
+\newlabel{eq:MUSCL}{{19}{5}}
+\newlabel{eq:SLIC}{{20}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Level-set method}{5}}
+\newlabel{subsec:levelset}{{2.3}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Simple example of level-set function for one material interface. In the left region, where $\phi (x)<0$, material A is present, while material B is present in the right region. }}{5}}
+\newlabel{fig:levelSet}{{2}{5}}
+\newlabel{eq:phi}{{21}{5}}
+\citation{fedkiw1999nonoscillatory}
+\citation{liu2003ghost,sambasivan2009ghost}
+\newlabel{eq:advanceLevelSet}{{22}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Ghost fluid methods}{6}}
+\newlabel{subsec:ghostfluid}{{2.4}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{Original ghost fluid method}{6}}
+\newlabel{subsubsec:ogfm}{{2.4}{6}}
+\newlabel{eq:entropy}{{23}{6}}
+\newlabel{eq:constEntropy}{{24}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Updating of cells in ghost fluids as implemented in OGFM. The pressure and velocities are inherited from the other material, while entropy is kept constant across the ghost fluid interface. With the isobaric fix (grey), the entropy condition is enforced from further inside the actual fluid, to reduce overheating.}}{6}}
+\newlabel{fig:OGFM}{{3}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{Modified ghost fluid method}{6}}
+\newlabel{subsubsec:mgfm}{{2.4}{6}}
+\citation{toro2013riemann}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Complete algorithm}{7}}
+\newlabel{subsec:complete}{{2.5}{7}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Complete structure for simulating multimaterial system}}{7}}
+\newlabel{alg:complete}{{2}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{7}}
+\newlabel{sec:results}{{3}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Moving contact discontinuity}{7}}
+\newlabel{subsec:moving}{{3.1}{7}}
+\newlabel{tab:testA}{{3.1}{7}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Initial conditions for test A.}}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces caption}}{7}}
+\newlabel{fig:testA}{{4}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Simple ghost fluid tests}{7}}
+\newlabel{subsec:toro}{{3.2}{7}}
+\citation{sod1978survey}
+\citation{woodward1984numerical}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces caption}}{8}}
+\newlabel{fig:testB}{{5}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{Test 1}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{Test 2}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{Test 3}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{Test 4}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{Test 5}{8}}
+\bibstyle{elsarticle-num}
+\bibdata{references.bib}
+\bibcite{euler1757principes}{{1}{}{{}}{{}}}
+\bibcite{laplace1816vitesse}{{2}{}{{}}{{}}}
+\bibcite{christodoulou2007euler}{{3}{}{{}}{{}}}
+\bibcite{navier1822memoire}{{4}{}{{}}{{}}}
+\bibcite{stokes1845theories}{{5}{}{{}}{{}}}
+\bibcite{drela1985twodimensional}{{6}{}{{}}{{}}}
+\bibcite{anderson1986comparison}{{7}{}{{}}{{}}}
+\bibcite{guruswamy1990unsteady}{{8}{}{{}}{{}}}
+\bibcite{laprise1992euler}{{9}{}{{}}{{}}}
+\bibcite{skamarock2008time}{{10}{}{{}}{{}}}
+\bibcite{trac2003primer}{{11}{}{{}}{{}}}
+\bibcite{nikiforakis1996numerical}{{12}{}{{}}{{}}}
+\bibcite{williams1996detailed}{{13}{}{{}}{{}}}
+\bibcite{saurel2001multiphase}{{14}{}{{}}{{}}}
+\bibcite{riemann1860fortpflanzung}{{15}{}{{}}{{}}}
+\bibcite{godunov1959difference}{{16}{}{{}}{{}}}
+\bibcite{toro1994restoration}{{17}{}{{}}{{}}}
+\bibcite{nishikawa2008very}{{18}{}{{}}{{}}}
+\bibcite{courant1928partiellen}{{19}{}{{}}{{}}}
+\bibcite{lax1960systems}{{20}{}{{}}{{}}}
+\bibcite{leveque2002finite}{{21}{}{{}}{{}}}
+\bibcite{jameson1981numerical}{{22}{}{{}}{{}}}
+\bibcite{van1979towards}{{23}{}{{}}{{}}}
+\bibcite{toro1989weighted}{{24}{}{{}}{{}}}
+\bibcite{toro2000centred}{{25}{}{{}}{{}}}
+\bibcite{osher1988fronts}{{26}{}{{}}{{}}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Parameters for each of the five test from Toro's book.}}{9}}
+\newlabel{tab:toro}{{2}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Multimaterial shock tubes for gases}{9}}
+\newlabel{subsec:shocktubes}{{3.3}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Water-gas shock tube test}{9}}
+\newlabel{subsec:water}{{3.4}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}More interfaces!}{9}}
+\newlabel{subsec:more}{{3.5}{9}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Conclusions}{9}}
+\newlabel{sec:conclusion}{{4}{9}}
+\newlabel{sec:acknowledgements}{{4}{9}}
+\bibcite{osher2001level}{{27}{}{{}}{{}}}
+\bibcite{fedkiw1999nonoscillatory}{{28}{}{{}}{{}}}
+\bibcite{liu2003ghost}{{29}{}{{}}{{}}}
+\bibcite{sambasivan2009ghost}{{30}{}{{}}{{}}}
+\bibcite{wang2006real}{{31}{}{{}}{{}}}
+\bibcite{toro2013riemann}{{32}{}{{}}{{}}}
+\bibcite{sod1978survey}{{33}{}{{}}{{}}}
+\bibcite{woodward1984numerical}{{34}{}{{}}{{}}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\@writefile{toc}{\contentsline {section}{\numberline {Appendix A}Results for Toro's tests}{11}}
+\newlabel{app:toro}{{Appendix A}{11}}

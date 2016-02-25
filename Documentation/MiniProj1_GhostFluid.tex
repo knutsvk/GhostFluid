@@ -8,9 +8,11 @@
 
 \biboptions{super, square, sort&compress}
 
-\pgfplotsset{width=\columnwidth, height=0.6\columnwidth, compat=1.8}
+\pgfplotsset{width=\columnwidth, height=0.7\columnwidth, compat=1.12}
 \usepgfplotslibrary{groupplots, external}
 \tikzexternalize
+
+\setcounter{secnumdepth}{2}
 
 \journal{MPhil in Scientific Computing}
 
@@ -808,8 +810,10 @@ methods cope under different circumstances. Since there are quite many
 different choices one can make for each method, we inform that unless otherwise
 specified, fluxes are computed using the MUSCL-Hancock scheme; slope limiters
 are of minbee type; OGFM is implemented with the isobaric fix. The reference
-solutions, where avilable, are obtained using the exact solver with 5000
-points.
+solutions, where available, are obtained using the exact solver with 5000
+points. Although the amount of grid points varies throughout the results, only
+50 points in the solutions are included in all plots, so as to avoid the
+high-accuracy tests overshadowing the information from the lower accuracy ones.
 
 \subsection{Moving contact discontinuity}
 \label{subsec:moving}
@@ -822,7 +826,6 @@ domain, so both single-material solvers and multimaterial GFM solvers are
 employed. 
 
 \begin{table}[htb]
-    \caption{Initial conditions for test A.}
     \label{tab:testA}
     \centering
     \begin{tabular}{ccccc}
@@ -833,6 +836,7 @@ employed.
         $(0.25,1]$ & 0.138 & 0.5 & 1 & 1.4 \\
         \hline
     \end{tabular}
+    \caption{Initial conditions for test A.}
 \end{table}
 
 Results for test A are shown in Figure \ref{fig:testA}. Please note that only
@@ -879,7 +883,9 @@ provides a higher accuracy around the discontinuity, as expected.
 \end{figure}
 
 Test B is identical to test A except for the fact that the discontinuity now
-separates two different fluids; namely air and helium ($\gamma=1.67$). 
+separates two different fluids; namely air and helium ($\gamma=1.67$).  Results
+are shown in Figure \ref{fig:testB}, which demonstrates that the solvers work
+well for the multimaterial case as well. 
 
 \pgfplotstableread{../Results/MPB_OGFM_FORCE_N5000.out}{\exact}
 \pgfplotstableread{../Results/MPB_OGFMIF_MUSCL_minbee_N100.out}{\ogfm}
@@ -909,9 +915,6 @@ separates two different fluids; namely air and helium ($\gamma=1.67$).
     \label{fig:testB}
 \end{figure}
 
-Results for test B are shown in Figure \ref{fig:testB}, which demonstrates that
-the solvers work well for the multimaterial case as well. 
-
 \subsection{Simple ghost fluid tests}
 \label{subsec:toro}
 
@@ -922,7 +925,9 @@ considered. They are taken from Chapter 4 in Toro's book
 and right states separated at time $t=0$. For all cases considered, the initial
 discontinuity is located in the middle of the domain ($x=0.5$), and the
 material considered is air, so $\gamma=1.4$.  The state parameters and final
-simulation times for all tests are given in Table \ref{tab:toro}.
+simulation times for all tests are given in Table \ref{tab:toro}. For
+readability, the full set of results from these test cases have been moved to
+\ref{app:toro}. 
 
 \begin{table*}[htb]
     \centering
@@ -942,550 +947,66 @@ simulation times for all tests are given in Table \ref{tab:toro}.
 \end{table*}
 
 \subsubsection{Test 1}
+
 The first test is a fairly mild test tube problem, but is nevertheless a useful
 indicator that all possible types of wave propagations are captured by the
 scheme. Two regions of a tube containing a gas are separated by a membrane, and
-Ithe densities and pressures differ across this interface. At time $t=0$ the
+the densities and pressures differ across this interface. At time $t=0$ the
 membrane is removed, and the states start interacting. The solution contains
 (from left to right) a rarefaction wave, a contact wave and a shock wave. Since
 it was introduced by G.A.~ Sod in 1978 \cite{sod1978survey}, it has gradually
 become the go-to test case for investigating the behaviour of simple Euler
-schemes, hence its alternative name ``the Sod test tube''.
+schemes, hence its alias ``the Sod test tube''. Figure
+\ref{fig:toro1} exhibits our results. All features are captured very well by
+both models. 
 
-\pgfplotstableread{../Results/Toro1_OGFM_FORCE_N5000.out}{\exact}
-\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
-\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
-\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
-\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
-\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
-\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
-\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
-\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
+{\bf \huge HERE BE COMMENT ON ISOBARIC FIXR WITH FIGURE SHOWING INTERNAL ENERGY
+WITH AND WITHOUT IT}
 
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 4}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
+\subsubsection{Test 2}
 
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\OGFMfour};
+Test two is also known as ``the 123-problem'', and its solution consists of two
+strong rarefaction waves, one in each direction. Their speeds are equal,
+resulting in a static contact in the middle of the domain. Due to the low
+pressures, difficulties can also arise when estimating $p$. As seen from
+Figure \ref{fig:toro2}, both GFMs handle this problem fairly well too. MGFM
+is more precise than OGFM for pressure, velocity and density, and although the
+OGFM yields a closer approximation to the specific internal energy in the
+middle of the region, it overshoots more and more when the spatial accuracy is
+increased. MGFM, on the other hand, converges towards the exact solution. 
 
-            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
-            \addplot+[mark=none, color=black, ytick pos=right]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\MGFMfour};
+\subsubsection{Test 3}
 
-            \nextgroupplot[ylabel=$u$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\OGFMfour};
+Woodward and Colella investigated strong shocks in 2D in 1984
+\cite{woodward1984numerical}, and the remaining three tests are based on their
+work (albeit in a 1D framework). Test three is the left part of their blast
+wave problem, and has a huge pressure difference and a correspondingly large
+production of entropy. For this reason, the constant entropy condition employed
+in OGFM is expected to break down. The solution of the test case contains a
+left rarefaction, a contact, and a right shock. Our results are shown in
+Figure \ref{fig:toro3}, from which it is apparent that MGFM is far more suited
+to the task than OGFM, as expected. For other schemes such as FLIC and SLIC,
+our OGFM solver was unable to provide any solution at all for this problem. 
 
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\MGFMfour};
+{\bf \huge HERE BE COMMENT ON FLUX LIMITERS AND COMPARISON OF SUPERBEE VS
+MINBEE}
 
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\OGFMfour};
+\subsubsection{Test 4}
 
-            \nextgroupplot[ylabel=$p$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\MGFMfour};
+The right part of Woodward and Colella's blast wave problem also has a large
+pressure difference, but here the shock and rarefaction waves are travelling in
+opposite directions. Figure \ref{fig:toro4} confirms the behaviour of our
+solvers when applied to these types of tests. 
 
-            \nextgroupplot[ylabel=$e$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\OGFMfour};
+\subsubsection{Test 5}
 
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\MGFMfour};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Original Ghost Fluid method for Toro's test 1.
-    \textcolor{red}{$\triangle$}$N=100$
-    \textcolor{blue}{$\circ$}$N=200$
-    \textcolor{teal}{$\times$}$N=400$ }
-\label{fig:toro1}
-\end{figure*}
-
-\pgfplotstableread{../Results/Toro2_OGFM_FORCE_N5000.out}{\exact}
-\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
-\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
-\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
-\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
-\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
-\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
-\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
-\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 4}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
-            \addplot+[mark=none, color=black, ytick pos=right]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$u$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$p$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$e$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\MGFMfour};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Original Ghost Fluid method for Toro's test 2.
-    \textcolor{red}{$\triangle$}$N=100$
-    \textcolor{blue}{$\circ$}$N=200$
-    \textcolor{teal}{$\times$}$N=400$ }
-\label{fig:toro2}
-\end{figure*}
-
-\pgfplotstableread{../Results/Toro3_OGFM_FORCE_N5000.out}{\exact}
-\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
-\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
-\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
-\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
-\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
-\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
-\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
-\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 4}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
-            \addplot+[mark=none, color=black, ytick pos=right]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$u$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$p$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$e$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\MGFMfour};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Original Ghost Fluid method for Toro's test 3.
-    \textcolor{red}{$\triangle$}$N=100$
-    \textcolor{blue}{$\circ$}$N=200$
-    \textcolor{teal}{$\times$}$N=400$ }
-\label{fig:toro3}
-\end{figure*}
-
-\pgfplotstableread{../Results/Toro4_OGFM_FORCE_N5000.out}{\exact}
-\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
-\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
-\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
-\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
-\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
-\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
-\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
-\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 4}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
-            \addplot+[mark=none, color=black, ytick pos=right]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$u$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$p$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$e$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\MGFMfour};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Original Ghost Fluid method for Toro's test 4.
-    \textcolor{red}{$\triangle$}$N=100$
-    \textcolor{blue}{$\circ$}$N=200$
-    \textcolor{teal}{$\times$}$N=400$ }
-\label{fig:toro4}
-\end{figure*}
-
-\pgfplotstableread{../Results/Toro5_OGFM_FORCE_N5000.out}{\exact}
-\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
-\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
-\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
-\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
-\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
-\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
-\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
-\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
-
-\begin{figure*}[htb]
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[
-            group style={group size=2 by 4}, 
-            xlabel=$x$, xmin=0, xmax=1, 
-            ylabel style={rotate=-90}]
-
-            \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
-            \addplot+[mark=none, color=black, ytick pos=right]
-            table[x={x}, y={rhoEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={rho}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={rho}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={rho}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$u$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$u$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={uEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={u}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={u}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={u}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$p$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$p$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={pEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={p}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={p}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={p}]{\MGFMfour};
-
-            \nextgroupplot[ylabel=$e$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\OGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\OGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\OGFMfour};
-
-            \nextgroupplot[ylabel=$e$, ytick pos=right]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={eEx}]{\exact};
-            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
-            table[x={x}, y={e}]{\MGFMone};
-            \addplot+[only marks, mark=o, color=blue, each nth point=4]
-            table[x={x}, y={e}]{\MGFMtwo};
-            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
-            table[x={x}, y={e}]{\MGFMfour};
-
-        \end{groupplot}
-    \end{tikzpicture}
-\caption{Original Ghost Fluid method for Toro's test 5.
-    \textcolor{red}{$\triangle$}$N=100$
-    \textcolor{blue}{$\circ$}$N=200$
-    \textcolor{teal}{$\times$}$N=400$ }
-\label{fig:toro5}
-\end{figure*}
+As a last example, the fifth test case mimics what happens when the left-moving
+shock wave from test 3 meets the right-moving shock wave from test 4. As seen
+from Figure \ref{fig:toro5}, both OGFM and MGFM handle this case very well:
+both shock waves are captured with great accuracy. The pressure ratio between
+the left and right states is only a factor of ten here, so compared to the
+previous two test cases the entropy production across the shock is not expected
+to be substantial. 
 
 \subsection{Multimaterial shock tubes for gases}
 \label{subsec:shocktubes}
@@ -1819,5 +1340,545 @@ Thanks Steve.
 
 \bibliographystyle{elsarticle-num}
 \bibliography{references.bib}
+
+\clearpage
+\appendix
+\section{Results for Toro's tests}
+\label{app:toro}
+
+%\pgfplotstableread{../Results/Toro1_OGFM_FORCE_N5000.out}{\exact}
+%\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
+%\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
+%\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
+%\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
+%\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
+%\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
+%\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
+%\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 4}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
+%            \addplot+[mark=none, color=black, ytick pos=right]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\MGFMfour};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Original Ghost Fluid method for Toro's test 1.
+%    \textcolor{red}{$\triangle$}$N=100$
+%    \textcolor{blue}{$\circ$}$N=200$
+%    \textcolor{teal}{$\times$}$N=400$ }
+%\label{fig:toro1}
+%\end{figure*}
+%
+%\pgfplotstableread{../Results/Toro2_OGFM_FORCE_N5000.out}{\exact}
+%\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
+%\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
+%\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
+%\pgfplotstableread{../Results/Toro2_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
+%\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
+%\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
+%\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
+%\pgfplotstableread{../Results/Toro2_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 4}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
+%            \addplot+[mark=none, color=black, ytick pos=right]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\MGFMfour};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Original Ghost Fluid method for Toro's test 2.
+%    \textcolor{red}{$\triangle$}$N=100$
+%    \textcolor{blue}{$\circ$}$N=200$
+%    \textcolor{teal}{$\times$}$N=400$ }
+%\label{fig:toro2}
+%\end{figure*}
+%
+%\pgfplotstableread{../Results/Toro3_OGFM_FORCE_N5000.out}{\exact}
+%\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
+%\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
+%\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
+%\pgfplotstableread{../Results/Toro3_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
+%\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
+%\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
+%\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
+%\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 4}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
+%            \addplot+[mark=none, color=black, ytick pos=right]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\MGFMfour};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Original Ghost Fluid method for Toro's test 3.
+%    \textcolor{red}{$\triangle$}$N=100$
+%    \textcolor{blue}{$\circ$}$N=200$
+%    \textcolor{teal}{$\times$}$N=400$ }
+%\label{fig:toro3}
+%\end{figure*}
+%
+%\pgfplotstableread{../Results/Toro4_OGFM_FORCE_N5000.out}{\exact}
+%\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
+%\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
+%\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
+%\pgfplotstableread{../Results/Toro4_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
+%\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
+%\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
+%\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
+%\pgfplotstableread{../Results/Toro4_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 4}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
+%            \addplot+[mark=none, color=black, ytick pos=right]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\MGFMfour};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Original Ghost Fluid method for Toro's test 4.
+%    \textcolor{red}{$\triangle$}$N=100$
+%    \textcolor{blue}{$\circ$}$N=200$
+%    \textcolor{teal}{$\times$}$N=400$ }
+%\label{fig:toro4}
+%\end{figure*}
+%
+%\pgfplotstableread{../Results/Toro5_OGFM_FORCE_N5000.out}{\exact}
+%\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
+%\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
+%\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
+%\pgfplotstableread{../Results/Toro5_OGFMIF_MUSCL_minbee_N2000.out}{\OGFMtausen}
+%\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N100.out}{\MGFMone}
+%\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N200.out}{\MGFMtwo}
+%\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N400.out}{\MGFMfour}
+%\pgfplotstableread{../Results/Toro5_MGFM_MUSCL_minbee_N2000.out}{\MGFMtausen}
+%
+%\begin{figure*}[htb]
+%    \centering
+%    \begin{tikzpicture}
+%        \begin{groupplot}[
+%            group style={group size=2 by 4}, 
+%            xlabel=$x$, xmin=0, xmax=1, 
+%            ylabel style={rotate=-90}]
+%
+%            \nextgroupplot[ylabel=$\rho$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$\rho$, ytick pos=right]
+%            \addplot+[mark=none, color=black, ytick pos=right]
+%            table[x={x}, y={rhoEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={rho}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={rho}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={rho}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$u$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={uEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={u}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={u}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={u}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$p$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={pEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={p}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={p}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={p}]{\MGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\OGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\OGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\OGFMfour};
+%
+%            \nextgroupplot[ylabel=$e$, ytick pos=right]
+%            \addplot+[mark=none, color=black]
+%            table[x={x}, y={eEx}]{\exact};
+%            \addplot+[only marks, mark=triangle, color=red, each nth point=2]
+%            table[x={x}, y={e}]{\MGFMone};
+%            \addplot+[only marks, mark=o, color=blue, each nth point=4]
+%            table[x={x}, y={e}]{\MGFMtwo};
+%            \addplot+[only marks, mark=x, color=teal,  each nth point=8]
+%            table[x={x}, y={e}]{\MGFMfour};
+%
+%        \end{groupplot}
+%    \end{tikzpicture}
+%\caption{Original Ghost Fluid method for Toro's test 5.
+%    \textcolor{red}{$\triangle$}$N=100$
+%    \textcolor{blue}{$\circ$}$N=200$
+%    \textcolor{teal}{$\times$}$N=400$ }
+%\label{fig:toro5}
+%\end{figure*}
 
 \end{document}

@@ -1,0 +1,164 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{euler1757principes}
+L.~Euler, Principes g{\'e}n{\'e}raux de l'{\'e}tat d'{\'e}quilibre d'un fluide,
+  Acad{\'e}mie Royale des Sciences et des Belles Lettres de Berlin 11 (1757)
+  217--273.
+
+\bibitem{laplace1816vitesse}
+P.-S. de~Laplace, Sur la vitesse du son dans l'air et dans l'eau, Annales de
+  Chimie et de Physique 3 (1816) 283--241.
+
+\bibitem{christodoulou2007euler}
+D.~Christodoulou, The {E}uler equations of compressible fluid flow, Bulletin of
+  the American Mathematical Society 44~(4) (2007) 581--602.
+
+\bibitem{navier1822memoire}
+C.~L. M.~H. Navier, Memoire sur les lois du mouvement des fluides, M{\'e}moires
+  de l'Acad{\'e}mie Royale des Sciences de l'Institut de France 6 (1822)
+  389--440.
+
+\bibitem{stokes1845theories}
+G.~G. Stokes, On the theories of the internal friction of fluids in motion and
+  of the equilibrium and motion of elastic solids, Transactions of the
+  Cambridge Philosophical Society 8 (1845) 287--319.
+
+\bibitem{drela1985twodimensional}
+M.~Drela, Two-dimensional transonic aerodynamic design and analysis using the
+  {E}uler equations, Ph.D. thesis, Massachusetts Institute of Technology
+  (1985).
+
+\bibitem{anderson1986comparison}
+W.~K. Anderson, J.~L. Thomas, B.~Van~Leer, Comparison of finite volume flux
+  vector splittings for the {E}uler equations, AIAA journal 24~(9) (1986)
+  1453--1460.
+
+\bibitem{guruswamy1990unsteady}
+G.~P. Guruswamy, Unsteady aerodynamic and aeroelastic calculations for wings
+  using {E}uler equations, AIAA journal 28~(3) (1990) 461--469.
+
+\bibitem{laprise1992euler}
+R.~Laprise, The {E}uler equations of motion with hydrostatic pressure as an
+  independent variable, Monthly weather review 120~(1) (1992) 197--207.
+
+\bibitem{skamarock2008time}
+W.~C. Skamarock, J.~B. Klemp, A time-split nonhydrostatic atmospheric model for
+  weather research and forecasting applications, Journal of Computational
+  Physics 227~(7) (2008) 3465--3485.
+
+\bibitem{trac2003primer}
+H.~Trac, U.-L. Pen, A primer on {E}ulerian computational fluid dynamics for
+  astrophysics, Publications of the Astronomical Society of the Pacific
+  115~(805) (2003) 303.
+
+\bibitem{nikiforakis1996numerical}
+N.~Nikiforakis, J.~Clarke, Numerical studies of the evolution of detonations,
+  Mathematical and Computer Modelling 24~(8) (1996) 149--164.
+
+\bibitem{williams1996detailed}
+D.~N. Williams, L.~Bauwens, E.~S. Oran, Detailed structure and propagation of
+  three-dimensional detonations, in: Symposium (International) on Combustion,
+  Vol.~26, Elsevier, 1996, pp. 2991--2998.
+
+\bibitem{saurel2001multiphase}
+R.~Saurel, O.~Lemetayer, A multiphase model for compressible flows with
+  interfaces, shocks, detonation waves and cavitation, Journal of Fluid
+  Mechanics 431 (2001) 239--271.
+
+\bibitem{riemann1860fortpflanzung}
+B.~Riemann, {\"U}ber die Fortpflanzung ebener Luftwellen von endlicher
+  Schwingungsweite, Verlag der Dieterichschen Buchhandlung, 1860.
+
+\bibitem{godunov1959difference}
+S.~K. Godunov, A difference method for numerical calculation of discontinuous
+  solutions of the equations of hydrodynamics, Matematicheskii Sbornik 89~(3)
+  (1959) 271--306.
+
+\bibitem{toro1994restoration}
+E.~F. Toro, M.~Spruce, W.~Speares, Restoration of the contact surface in the
+  {HLL}-{R}iemann solver, Shock Waves 4~(1) (1994) 25--34.
+
+\bibitem{nishikawa2008very}
+H.~Nishikawa, K.~Kitamura, Very simple, carbuncle-free,
+  boundary-layer-resolving, rotated-hybrid {R}iemann solvers, Journal of
+  Computational Physics 227~(4) (2008) 2560--2581.
+
+\bibitem{courant1928partiellen}
+R.~Courant, K.~Friedrichs, H.~Lewy, {\"U}ber die partiellen
+  {D}ifferenzengleichungen der mathematischen {P}hysik, Mathematische Annalen
+  100~(1) (1928) 32--74.
+
+\bibitem{lax1960systems}
+P.~Lax, B.~Wendroff, Systems of conservation laws, Communications on Pure and
+  Applied mathematics 13~(2) (1960) 217--237.
+
+\bibitem{leveque2002finite}
+R.~J. LeVeque, Finite volume methods for hyperbolic problems, Vol.~31,
+  Cambridge university press, 2002.
+
+\bibitem{jameson1981numerical}
+A.~Jameson, W.~Schmidt, E.~Turkel, et~al., Numerical solutions of the {E}uler
+  equations by finite volume methods using {R}unge-{K}utta time-stepping
+  schemes, AIAA paper 1259.
+
+\bibitem{van1979towards}
+B.~van Leer, Towards the ultimate conservative difference scheme. {V}. {A}
+  second-order sequel to {G}odunov's method, Journal of Computational Physics
+  32~(1) (1979) 101--136.
+
+\bibitem{toro1989weighted}
+E.~Toro, A weighted average flux method for hyperbolic conservation laws, in:
+  Proceedings of the Royal Society of London A: Mathematical, Physical and
+  Engineering Sciences, Vol. 423, The Royal Society, 1989, pp. 401--418.
+
+\bibitem{toro2000centred}
+E.~Toro, S.~Billett, Centred {TVD} schemes for hyperbolic conservation laws,
+  IMA Journal of Numerical Analysis 20~(1) (2000) 47--79.
+
+\bibitem{osher1988fronts}
+S.~Osher, J.~A. Sethian, Fronts propagating with curvature-dependent speed:
+  algorithms based on {H}amilton-{J}acobi formulations, Journal of
+  Computational Physics 79~(1) (1988) 12--49.
+
+\bibitem{osher2001level}
+S.~Osher, R.~P. Fedkiw, Level set methods: an overview and some recent results,
+  Journal of Computational physics 169~(2) (2001) 463--502.
+
+\bibitem{fedkiw1999nonoscillatory}
+R.~P. Fedkiw, T.~Aslam, B.~Merriman, S.~Osher, A non-oscillatory {E}ulerian
+  approach to interfaces in multimaterial flows (the ghost fluid method),
+  Journal of Computational Physics 152~(2) (1999) 457--492.
+
+\bibitem{liu2003ghost}
+T.~Liu, B.~Khoo, K.~Yeo, Ghost fluid method for strong shock impacting on
+  material interface, Journal of Computational Physics 190~(2) (2003) 651--681.
+
+\bibitem{sambasivan2009ghost}
+S.~K. Sambasivan, H.~Udaykumar, Ghost fluid method for strong shock
+  interactions part 1: Fluid-fluid interfaces, AIAA Journal 47~(12) (2009)
+  2907--2922.
+
+\bibitem{wang2006real}
+C.~Wang, T.~Liu, B.~Khoo, A real ghost fluid method for the simulation of
+  multimedium compressible flow, SIAM Journal on Scientific Computing 28~(1)
+  (2006) 278--302.
+
+\bibitem{toro2013riemann}
+E.~F. Toro, Riemann solvers and numerical methods for fluid dynamics: a
+  practical introduction, Springer Science \& Business Media, 2013.
+
+\bibitem{sod1978survey}
+G.~A. Sod, A survey of several finite difference methods for systems of
+  nonlinear hyperbolic conservation laws, Journal of Computational Physics
+  27~(1) (1978) 1--31.
+
+\bibitem{woodward1984numerical}
+P.~Woodward, P.~Colella, The numerical simulation of two-dimensional fluid flow
+  with strong shocks, Journal of Computational Physics 54~(1) (1984) 115--173.
+
+\end{thebibliography}
