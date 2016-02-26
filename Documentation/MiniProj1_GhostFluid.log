@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.31)  25 FEB 2016 13:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.31)  26 FEB 2016 14:04
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -849,11 +849,11 @@ ABD: EveryShipout initializing macros
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.12}).
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 42.
+LaTeX Font Info:    Try loading font information for U+msa on input line 39.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 42.
+LaTeX Font Info:    Try loading font information for U+msb on input line 39.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -866,24 +866,21 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (5.30852pt too wide) detected at line 282
+Overfull \hbox (5.30852pt too wide) detected at line 279
 \OML/cmm/m/it/10 f[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 ) = []  
 \OML/cmm/m/it/10 ;
  []
 
 
-Overfull \hbox (6.78558pt too wide) detected at line 290
+Overfull \hbox (6.78558pt too wide) detected at line 287
 \OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ;  B[] \OT1/cmr/m/n/
 10 = [] \OML/cmm/m/it/10 :
  []
 
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
-
-Underfull \vbox (badness 1845) has occurred while \output is active []
-
- [3 <./MiniProj1_GhostFluid-figure0.pdf>]
-Overfull \hbox (11.64706pt too wide) detected at line 384
+[3 <./MiniProj1_GhostFluid-figure0.pdf>]
+Overfull \hbox (11.64706pt too wide) detected at line 381
 \OML/cmm/m/it/10 S[] \OMS/cmsy/m/n/10 ^^Y [] \OML/cmm/m/it/10 :
  []
 
@@ -891,9 +888,9 @@ Overfull \hbox (11.64706pt too wide) detected at line 384
 ===== Image 'MiniProj1_GhostFluid-figure1' is up-to-date. ======
 [5 <./MiniProj1_GhostFluid-figure1.pdf>]
 ===== Image 'MiniProj1_GhostFluid-figure2' is up-to-date. ======
-[6 <./MiniProj1_GhostFluid-figure2.pdf>]
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
+[6 <./MiniProj1_GhostFluid-figure2.pdf>]
 PGFPlots: reading {../Results/MPA_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPA_single_SLIC_minbee_N100.out}
 PGFPlots: reading {../Results/MPA_single_MUSCL_minbee_N100.out}
@@ -907,71 +904,113 @@ PGFPlots: reading {../Results/MPB_MGFM_MUSCL_minbee_N100.out}
 ===== Image 'MiniProj1_GhostFluid-figure4' is up-to-date. ======
 [7 <./MiniProj1_GhostFluid-figure3.pdf>]
 
-LaTeX Warning: Reference `fig:toro1' on page 8 undefined on input line 960.
+LaTeX Warning: Reference `fig:toro1' on page 8 undefined on input line 961.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 963--965
+Underfull \hbox (badness 10000) in paragraph at lines 964--966
 []\OT1/cmr/bx/n/20.74 HERE BE COM-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 963--965
+Underfull \hbox (badness 10000) in paragraph at lines 964--966
 \OT1/cmr/bx/n/20.74 MENT ON ISO-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 963--965
+Underfull \hbox (badness 10000) in paragraph at lines 964--966
 \OT1/cmr/bx/n/20.74 IN-TER-NAL EN-
  []
 
 
-Underfull \hbox (badness 1122) in paragraph at lines 963--965
+Underfull \hbox (badness 1122) in paragraph at lines 964--966
 \OT1/cmr/bx/n/20.74 ERGY WITH AND
  []
 
 
-LaTeX Warning: Reference `fig:toro2' on page 8 undefined on input line 972.
+LaTeX Warning: Reference `fig:toro2' on page 8 undefined on input line 973.
 
 
-LaTeX Warning: Reference `fig:toro3' on page 8 undefined on input line 987.
+LaTeX Warning: Reference `fig:toro3' on page 8 undefined on input line 988.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
+Underfull \hbox (badness 10000) in paragraph at lines 992--994
 []\OT1/cmr/bx/n/20.74 HERE BE COM-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
+Underfull \hbox (badness 10000) in paragraph at lines 992--994
 \OT1/cmr/bx/n/20.74 MENT ON FLUX
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
+Underfull \hbox (badness 10000) in paragraph at lines 992--994
 \OT1/cmr/bx/n/20.74 LIM-ITERS AND
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
+Underfull \hbox (badness 10000) in paragraph at lines 992--994
 \OT1/cmr/bx/n/20.74 COM-PAR-I-SON OF
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
+Underfull \hbox (badness 10000) in paragraph at lines 992--994
 \OT1/cmr/bx/n/20.74 SU-PER-BEE VS
  []
 
 
-LaTeX Warning: Reference `fig:toro4' on page 8 undefined on input line 998.
+LaTeX Warning: Reference `fig:toro4' on page 8 undefined on input line 999.
 
 
-LaTeX Warning: Reference `fig:toro5' on page 8 undefined on input line 1005.
+LaTeX Warning: Reference `fig:toro5' on page 8 undefined on input line 1006.
 
-[8 <./MiniProj1_GhostFluid-figure4.pdf>] (./MiniProj1_GhostFluid.bbl
+[8 <./MiniProj1_GhostFluid-figure4.pdf>]
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1022--1031
+ [][] 
+ []
+
+PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N2000.out}
+PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N2000.out}
+===== Image 'MiniProj1_GhostFluid-figure5' is up-to-date. ======
+
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1161--1171
+ [][] 
+ []
+
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N2000.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N2000.out}
+===== Image 'MiniProj1_GhostFluid-figure6' is up-to-date. ======
+PGFPlots: reading {../Results/MPE_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N400.out}
+===== Image 'MiniProj1_GhostFluid-figure7' is up-to-date. ======
+(./MiniProj1_GhostFluid.bbl [9]
 Underfull \hbox (badness 1845) in paragraph at lines 92--95
 \OT1/cmr/m/n/8 Dif-feren-zen-gle-ichun-gen der math-e-ma-tis-chen Physik,
  []
 
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10 <./MiniProj1_GhostFluid-figure5.pdf>]
 Underfull \hbox (badness 3514) in paragraph at lines 124--127
 \OT1/cmr/m/n/8 curvature-dependent speed: al-go-rithms based on
  []
@@ -979,22 +1018,29 @@ Underfull \hbox (badness 3514) in paragraph at lines 124--127
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9])
-[10
+)
 
-] [11
+LaTeX Warning: Reference `fig:toro1' on page 11 undefined on input line 1451.
 
 
-] (./MiniProj1_GhostFluid.aux)
+LaTeX Warning: Reference `fig:toro5' on page 11 undefined on input line 1451.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [11 <./MiniProj1_GhostFluid-figure6.pdf>] [12
+
+ <./MiniProj1_GhostFluid-figure7.pdf>]
+(./MiniProj1_GhostFluid.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 24912 strings out of 493089
- 607591 string characters out of 6134841
- 1391950 words of memory out of 5000000
- 27910 multiletter control sequences out of 15000+600000
+ 25055 strings out of 493089
+ 610265 string characters out of 6134841
+ 1885833 words of memory out of 5000000
+ 28004 multiletter control sequences out of 15000+600000
  11980 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,21n,83p,740b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1014,12 +1060,14 @@ e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2015/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2015/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2015/texmf
--dist/fonts/type1/public/amsfonts/cm/cmti8.pfb>
-Output written on MiniProj1_GhostFluid.pdf (11 pages, 334171 bytes).
+f-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2015/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2015/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2015/texmf-dis
+t/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on MiniProj1_GhostFluid.pdf (12 pages, 719080 bytes).
 PDF statistics:
- 184 PDF objects out of 1000 (max. 8388607)
- 146 compressed objects within 2 object streams
+ 238 PDF objects out of 1000 (max. 8388607)
+ 194 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 38 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 53 words of extra memory for PDF output out of 10000 (max. 10000000)
 
