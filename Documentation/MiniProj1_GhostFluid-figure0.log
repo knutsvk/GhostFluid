@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.31)  26 FEB 2016 13:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.31)  27 FEB 2016 19:31
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -802,11 +802,11 @@ ABD: EveryShipout initializing macros
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.12}).
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 42.
+LaTeX Font Info:    Try loading font information for U+msa on input line 39.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 42.
+LaTeX Font Info:    Try loading font information for U+msb on input line 39.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -818,13 +818,13 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (5.30852pt too wide) detected at line 282
+Overfull \hbox (5.30852pt too wide) detected at line 279
 \OML/cmm/m/it/10 f[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 ) = []  
 \OML/cmm/m/it/10 ;
  []
 
 
-Overfull \hbox (6.78558pt too wide) detected at line 290
+Overfull \hbox (6.78558pt too wide) detected at line 287
 \OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ;  B[] \OT1/cmr/m/n/
 10 = [] \OML/cmm/m/it/10 :
  []
@@ -832,7 +832,7 @@ Overfull \hbox (6.78558pt too wide) detected at line 290
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (11.64706pt too wide) detected at line 384
+Overfull \hbox (11.64706pt too wide) detected at line 381
 \OML/cmm/m/it/10 S[] \OMS/cmsy/m/n/10 ^^Y [] \OML/cmm/m/it/10 :
  []
 
@@ -854,53 +854,20 @@ PGFPlots: reading {../Results/MPB_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPB_MGFM_MUSCL_minbee_N100.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
+PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no º in font cmr10!
 
-Underfull \hbox (badness 10000) in paragraph at lines 963--965
-[]\OT1/cmr/bx/n/20.74 HERE BE COM-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 963--965
-\OT1/cmr/bx/n/20.74 MENT ON ISO-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 963--965
-\OT1/cmr/bx/n/20.74 IN-TER-NAL EN-
- []
-
-
-Underfull \hbox (badness 1122) in paragraph at lines 963--965
-\OT1/cmr/bx/n/20.74 ERGY WITH AND
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
-[]\OT1/cmr/bx/n/20.74 HERE BE COM-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
-\OT1/cmr/bx/n/20.74 MENT ON FLUX
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
-\OT1/cmr/bx/n/20.74 LIM-ITERS AND
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
-\OT1/cmr/bx/n/20.74 COM-PAR-I-SON OF
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 991--993
-\OT1/cmr/bx/n/20.74 SU-PER-BEE VS
- []
-
-
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1019--1028
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1102--1111
  [][] 
  []
 
@@ -914,22 +881,38 @@ PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N2000.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
-No file MiniProj1_GhostFluid-figure0.bbl.
-PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}
-PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N200.out}
-PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N400.out}
-PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N100.out}
-PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N200.out}
-PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N400.out}
+
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1246--1256
+ [][] 
+ []
+
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N2000.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N2000.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
+PGFPlots: reading {../Results/MPE_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N400.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+No file MiniProj1_GhostFluid-figure0.bbl.
  ) 
 Here is how much of TeX's memory you used:
- 24908 strings out of 493089
- 607197 string characters out of 6134841
- 1390140 words of memory out of 5000000
- 27902 multiletter control sequences out of 15000+600000
- 12281 words of font info for 46 fonts, out of 8000000 for 9000
+ 25006 strings out of 493089
+ 609017 string characters out of 6134841
+ 2047048 words of memory out of 5000000
+ 27963 multiletter control sequences out of 15000+600000
+ 11974 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  56i,21n,83p,790b,687s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb

@@ -760,8 +760,7 @@ to compute the star states, the exact solver is employed.
 \subsection{Complete algorithm}
 \label{subsec:complete}
 
-A summary of all the steps made in the simulations is given in Algorithm
-\ref{alg:complete}.
+A summary is given in Algorithm \ref{alg:complete}.
 
 \begin{algorithm}[htb]
     \KwData{initial configuration of system, \\ 
@@ -795,7 +794,7 @@ A summary of all the steps made in the simulations is given in Algorithm
     {
         compute exact solution for reference\;
     }
-    \caption{Complete structure for simulating multimaterial system}
+    \caption{Multimaterial solver}
     \label{alg:complete}
 \end{algorithm}
 
@@ -815,8 +814,6 @@ high-accuracy tests overshadowing the information from the lower accuracy ones.
 \subsection{Moving contact discontinuity}
 \label{subsec:moving}
 
-\subsubsection{Test A}
-
 To illustrate how the combination of a level set function and GFMs allow
 capture of a moving contact discontinuity, test A has a single discontinuity in
 density, and the system moves with constant speed to the right. Full test
@@ -825,7 +822,6 @@ domain, so both single-material solvers and multimaterial GFM solvers are
 employed. 
 
 \begin{table}[htb]
-    \label{tab:testA}
     \centering
     \begin{tabular}{ccccc}
         \hline
@@ -836,6 +832,7 @@ employed.
         \hline
     \end{tabular}
     \caption{Initial conditions for test A.}
+    \label{tab:testA}
 \end{table}
 
 Results for test A are shown in Figure \ref{fig:testA}. Please note that only
@@ -881,8 +878,6 @@ provides a higher accuracy around the discontinuity, as expected.
     \label{fig:testA}
 \end{figure}
 
-\subsubsection{Test B}
-
 Test B is identical to test A except for the fact that the discontinuity now
 separates two different fluids; namely air and helium ($\gamma=1.67$).  Results
 are shown in Figure \ref{fig:testB}, which demonstrates that the solvers work
@@ -901,10 +896,10 @@ well for the multimaterial case as well.
             \addplot+[mark=none, color=black] 
             table[x={x}, y={rhoEx}]{\exact};
             \addlegendentry{Exact};
-            \addplot+[only marks, mark=o, color=blue] 
+            \addplot+[only marks, mark=triangle, color=red] 
             table[x={x}, y={rho}] {\ogfm}; 
             \addlegendentry{OGFM};
-            \addplot+[only marks, mark=x, color=teal] 
+            \addplot+[only marks, mark=o, color=blue] 
             table[x={x}, y={rho}] {\mgfm}; 
             \addlegendentry{MGFM};
         \end{axis}
@@ -918,17 +913,6 @@ well for the multimaterial case as well.
 
 \subsection{Simple ghost fluid tests}
 \label{subsec:toro}
-
-In order to check how well the GFM solvers capture general single-material
-contact discontinuities, a set of five standard tests for these schemes are
-considered. They are taken from Chapter 4 in Toro's book
-\cite{toro2013riemann}, and are typical Riemann problems, i.e.~ they have left
-and right states separated at time $t=0$. For all cases considered, the initial
-discontinuity is located in the middle of the domain ($x=0.5$), and the
-material considered is air, so $\gamma=1.4$.  The state parameters and final
-simulation times for all tests are given in Table \ref{tab:toro}. For
-readability, the full set of results from these test cases have been moved to
-\ref{app:toro}. 
 
 \begin{table*}[htb]
     \centering
@@ -947,6 +931,17 @@ readability, the full set of results from these test cases have been moved to
     \label{tab:toro}
 \end{table*}
 
+In order to check how well the GFM solvers capture general single-material
+contact discontinuities, a set of five standard tests for these schemes are
+considered. They are taken from Chapter 4 in Toro's book
+\cite{toro2013riemann}, and are typical Riemann problems, i.e.~ they have left
+and right states separated at time $t=0$. For all cases considered, the initial
+discontinuity is located in the middle of the domain ($x=0.5$), and the
+material considered is air, so $\gamma=1.4$.  The state parameters and final
+simulation times for all tests are given in Table \ref{tab:toro}. For
+readability, the full set of results from these test cases have been moved to
+\ref{app:toro}. 
+
 \subsubsection{Test 1}
 
 The first test is a fairly mild test tube problem, but is nevertheless a useful
@@ -957,12 +952,48 @@ membrane is removed, and the states start interacting. The solution contains
 (from left to right) a rarefaction wave, a contact wave and a shock wave. Since
 it was introduced by G.A.~ Sod in 1978 \cite{sod1978survey}, it has gradually
 become the go-to test case for investigating the behaviour of simple Euler
-schemes, hence its alias ``the Sod test tube''. Figure
-\ref{fig:toro1} exhibits our results. All features are captured very well by
-both models. 
+schemes, hence its alias ``the Sod test tube''. Figure \ref{fig:toro1} exhibits
+our results. All features are captured very well by both models. 
 
-{\bf \huge HERE BE COMMENT ON ISOBARIC FIXR WITH FIGURE SHOWING INTERNAL ENERGY
-WITH AND WITHOUT IT}
+This test also lends itself well to display the improvement that can be
+achieved in the solution by applying the isobaric fix. From Figure
+\ref{fig:toro1isobarix}, it is evident that the overheating in internal energy
+is reduced when the isobaric fix is implemented. 
+
+\pgfplotstableread{../Results/Toro1_OGFM_FORCE_N5000.out}{\exact}
+\pgfplotstableread{../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}{\ogfmif}
+\pgfplotstableread{../Results/Toro1_OGFM_MUSCL_minbee_N100.out}{\ogfm}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            [
+                xlabel=$x$, 
+                xmin=0.5, xmax=1.0, 
+                ylabel=$e$, 
+                ylabel style={rotate=-90}, 
+                legend style={font=\footnotesize},
+                legend pos=north west
+            ]
+            \addplot+[mark=none, color=black] 
+            table[x={x}, y={eEx}]{\exact};
+            \addlegendentry{Exact};
+            \addplot+[only marks, mark=triangle, color=red] 
+            table[x={x}, y={e}] {\ogfmif}; 
+            \addlegendentry{With i.f.};
+            \addplot+[only marks, mark=o, color=blue] 
+            table[x={x}, y={e}] {\ogfm}; 
+            \addlegendentry{Without i.f.};
+        \end{axis}
+    \end{tikzpicture}
+    \caption[caption]
+    {
+        Internal energy for OGFM applied to Toro's test 1 with and without isobaric
+        fix. For both cases, $N=100$.
+    }
+    \label{fig:toro1isobarix}
+\end{figure}
 
 \subsubsection{Test 2}
 
@@ -986,11 +1017,48 @@ production of entropy. For this reason, the constant entropy condition employed
 in OGFM is expected to break down. The solution of the test case contains a
 left rarefaction, a contact, and a right shock. Our results are shown in
 Figure \ref{fig:toro3}, from which it is apparent that MGFM is far more suited
-to the task than OGFM, as expected. For other schemes such as FLIC and SLIC,
-our OGFM solver was unable to provide any solution at all for this problem. 
+to the task than OGFM, as expected. 
 
-{\bf \huge HERE BE COMMENT ON FLUX LIMITERS AND COMPARISON OF SUPERBEE VS
-MINBEE}
+The effect on the density of using a different limiter for test 3, namely
+superbee, is shown in Figure \ref{fig:toro3limiters}. The superbee limiter is
+in general less conservative than the minbee type, and can capture rapid
+changes more precisely. When it fails, however, oscillations can occur in the
+solution.
+
+\pgfplotstableread{../Results/Toro3_OGFM_FORCE_N5000.out}{\exact}
+\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_minbee_N100.out}{\min}
+\pgfplotstableread{../Results/Toro3_MGFM_MUSCL_superbee_N100.out}{\super}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            [
+                xlabel=$x$, 
+                xmin=0.5, xmax=1.0, 
+                ylabel=$\rho$, 
+                ylabel style={rotate=-90}, 
+                legend style={font=\footnotesize},
+                legend pos=north east
+            ]
+            \addplot+[mark=none, color=black] 
+            table[x={x}, y={rhoEx}]{\exact};
+            \addlegendentry{Exact};
+            \addplot+[only marks, mark=triangle, color=red] 
+            table[x={x}, y={rho}] {\min}; 
+            \addlegendentry{Minbee};
+            \addplot+[only marks, mark=o, color=blue] 
+            table[x={x}, y={rho}] {\super}; 
+            \addlegendentry{Superbee};
+        \end{axis}
+    \end{tikzpicture}
+    \caption[caption]
+    {
+        Density for MGFM applied to Toro's test 3 showing the difference
+        between minbee and superbee type limiters.  For both cases, $N=100$.
+    }
+    \label{fig:toro3limiters}
+\end{figure}
 
 \subsubsection{Test 4}
 
@@ -1012,12 +1080,25 @@ to be substantial.
 \subsection{Multimaterial shock tubes for gases}
 \label{subsec:shocktubes}
 
+In order to investigate how the solvers cope with the interaction of material
+interfaces and shock waves, the following two multimaterial shock tube test
+cases have been used. 
+
 \subsubsection{Test C}
 
-Write about test C here. 
+This test case was introduced by Smadar Karni in 1996 \cite{karni1996hybrid},
+and is also one of the test cases used to verify OGFM in 1999
+\cite{fedkiw1999nonoscillatory}. In it, a weak shock wave in air travels
+towards the right and refracts at a interface with helium gas. The result of
+the interfacial interaction is a narrow, reflected rarefaction wave and weak,
+transmitted shock wave. Since $\gamma$ (and thus the speed of sound $a$) is
+higher for helium than for air, the transmitted shock wave travels faster than
+the incident shock wave in air.  Initial parameters for the left (air
+postshock), middle (air preshock) and right (heliúm preshock) parts of the
+domain are tabulated in Table \ref{tab:testC}, and the simulation is run to a
+final time $t_{\rm end}=0.0012$. 
 
 \begin{table}[htb]
-    \label{tab:testC}
     \centering
     \begin{tabular}{ccccc}
         \hline
@@ -1029,9 +1110,15 @@ Write about test C here.
         \hline
     \end{tabular}
     \caption{Initial conditions for test C.}
+    \label{tab:testC}
 \end{table}
 
-Write about the results for test C here. 
+The results for test C are depicted in Figure \ref{fig:testC}. Since the
+initial data has two discontinuities, our exact solver cannot be used to find
+a reference solution directly in this case. As a workaround, we evolved the
+system until only two regions exist, namely air postshock and helium preshock,
+which is a single discontinuity and thus a Riemann problem. For both GFMs, the
+reflected rarefaction, transmitted shock and contact are captured very well. 
 
 \pgfplotstableread{../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
 \pgfplotstableread{../Results/MPC_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
@@ -1156,7 +1243,6 @@ Write about the results for test C here.
 Write about test D here. 
 
 \begin{table}[htb]
-    \label{tab:testD}
     \centering
     \begin{tabular}{ccccc}
         \hline
@@ -1169,6 +1255,7 @@ Write about test D here.
         \hline
     \end{tabular}
     \caption{Initial conditions for test D.}
+    \label{tab:testD}
 \end{table}
 
 Write about the results from test D here. 
@@ -1297,7 +1384,6 @@ Write about the results from test D here.
 Write about test E here. 
 
 \begin{table}[htb]
-    \label{tab:testE}
     \centering
     \begin{tabular}{cccccc}
         \hline
@@ -1308,6 +1394,7 @@ Write about test E here.
         \hline
     \end{tabular}
     \caption{Initial conditions for test E.}
+    \label{tab:testE}
 \end{table}
 
 Write about the results from test E here. 

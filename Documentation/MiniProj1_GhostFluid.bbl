@@ -161,4 +161,8 @@ G.~A. Sod, A survey of several finite difference methods for systems of
 P.~Woodward, P.~Colella, The numerical simulation of two-dimensional fluid flow
   with strong shocks, Journal of Computational Physics 54~(1) (1984) 115--173.
 
+\bibitem{karni1996hybrid}
+S.~Karni, Hybrid multifluid algorithms, SIAM Journal on Scientific Computing
+  17~(5) (1996) 1019--1039.
+
 \end{thebibliography}
