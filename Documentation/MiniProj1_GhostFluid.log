@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.31)  27 FEB 2016 21:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.31)  27 FEB 2016 22:59
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -904,36 +904,33 @@ PGFPlots: reading {../Results/MPB_MGFM_MUSCL_minbee_N100.out}
 ===== Image 'MiniProj1_GhostFluid-figure4' is up-to-date. ======
 [7 <./MiniProj1_GhostFluid-figure3.pdf> <./MiniProj1_GhostFluid-figure4.pdf>]
 
-LaTeX Warning: Reference `fig:toro1' on page 8 undefined on input line 955.
+LaTeX Warning: Reference `fig:toro1' on page 8 undefined on input line 959.
 
 PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
 ===== Image 'MiniProj1_GhostFluid-figure5' is up-to-date. ======
 
-LaTeX Warning: Reference `fig:toro2' on page 8 undefined on input line 1004.
+LaTeX Warning: Reference `fig:toro2' on page 8 undefined on input line 1008.
 
 
-LaTeX Warning: Reference `fig:toro3' on page 8 undefined on input line 1019.
+LaTeX Warning: Reference `fig:toro3' on page 8 undefined on input line 1023.
 
 PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_superbee_N100.out}
 ===== Image 'MiniProj1_GhostFluid-figure6' is up-to-date. ======
 
-LaTeX Warning: Reference `fig:toro4' on page 8 undefined on input line 1067.
+LaTeX Warning: Reference `fig:toro4' on page 8 undefined on input line 1071.
 
+[8 <./MiniProj1_GhostFluid-figure5.pdf> <./MiniProj1_GhostFluid-figure6.pdf>]
 
-Underfull \vbox (badness 1286) has occurred while \output is active []
-
- [8 <./MiniProj1_GhostFluid-figure5.pdf>]
-
-LaTeX Warning: Reference `fig:toro5' on page 9 undefined on input line 1074.
+LaTeX Warning: Reference `fig:toro5' on page 9 undefined on input line 1078.
 
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no º in font cmr10!
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1103--1112
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1107--1116
  [][] 
  []
 
@@ -947,7 +944,7 @@ PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N2000.out}
 ===== Image 'MiniProj1_GhostFluid-figure7' is up-to-date. ======
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1247--1257
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1251--1261
  [][] 
  []
 
@@ -968,7 +965,7 @@ PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N400.out}
 ===== Image 'MiniProj1_GhostFluid-figure9' is up-to-date. ======
-(./MiniProj1_GhostFluid.bbl [9 <./MiniProj1_GhostFluid-figure6.pdf>]
+(./MiniProj1_GhostFluid.bbl [9]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [10 <./MiniProj1_GhostFluid-figure7.pdf>]
@@ -995,10 +992,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [12 <./MiniProj1_GhostFluid-figure9.pdf>])
 
-LaTeX Warning: Reference `fig:toro1' on page 13 undefined on input line 1538.
+LaTeX Warning: Reference `fig:toro1' on page 13 undefined on input line 1542.
 
 
-LaTeX Warning: Reference `fig:toro5' on page 13 undefined on input line 1538.
+LaTeX Warning: Reference `fig:toro5' on page 13 undefined on input line 1542.
 
 [13
 
@@ -1010,7 +1007,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  25107 strings out of 493089
  611120 string characters out of 6134841
- 2050100 words of memory out of 5000000
+ 2051223 words of memory out of 5000000
  28043 multiletter control sequences out of 15000+600000
  11673 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1034,7 +1031,7 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2015/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2015/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2015/texmf-di
 st/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on MiniProj1_GhostFluid.pdf (13 pages, 781280 bytes).
+Output written on MiniProj1_GhostFluid.pdf (13 pages, 781662 bytes).
 PDF statistics:
  261 PDF objects out of 1000 (max. 8388607)
  214 compressed objects within 3 object streams
