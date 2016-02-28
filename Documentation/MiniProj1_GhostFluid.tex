@@ -1124,6 +1124,7 @@ system until only two regions exist, namely air postshock and helium preshock,
 which is a single discontinuity and thus a Riemann problem. For both GFMs, the
 reflected rarefaction, transmitted shock and contact are captured very well. 
 
+\pgfplotstableread{../Results/MPC_OGFM_FORCE_N5000.out}{\exact}
 \pgfplotstableread{../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
 \pgfplotstableread{../Results/MPC_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
 \pgfplotstableread{../Results/MPC_OGFMIF_MUSCL_minbee_N400.out}{\OGFMfour}
@@ -1153,92 +1154,91 @@ reflected rarefaction, transmitted shock and contact are captured very well.
             scaled y ticks=false
         ]
             \nextgroupplot[ylabel=$\rho$]
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={rhoEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={rho}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={rho}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={rho}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={rho}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={rhoEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={rho}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={rho}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={rho}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={rho}]{\MGFMtausen};
 
             \nextgroupplot[ylabel=$u$]
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={uEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={u}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={u}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={u}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={u}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={uEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={u}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={u}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={u}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={u}]{\MGFMtausen};
 
             \nextgroupplot[ylabel=$p$]
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={pEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={p}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={p}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={p}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={p}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={pEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={p}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={p}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={p}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={p}]{\MGFMtausen};
 
             \nextgroupplot[ylabel=$e$]
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={eEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={e}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={e}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={e}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={e}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[mark=none, color=black]
+            table[x={x}, y={eEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={e}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={e}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={e}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={e}]{\MGFMtausen};
 
         \end{groupplot}
     \end{tikzpicture}
 \caption{Results for Test C using OGFM (left) and MGFM (right).
     \textcolor{red}{$\triangle$}$N=100$
     \textcolor{blue}{$\circ$}$N=200$
-    \textcolor{teal}{$\times$}$N=400$ 
-    \textcolor{purple}{$\square$}$N=2000$ }
+    \textcolor{teal}{$\times$}$N=400$ }
 \label{fig:testC}
 \end{figure*}
 
@@ -1293,84 +1293,92 @@ Write about the results from test D here.
             scaled y ticks=false
         ]
             \nextgroupplot[ylabel=$\rho$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple, 
+            each nth point=2]
+            table[x={x}, y={rho}]{\OGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={rho}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={rho}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={rho}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={rho}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple,
+            each nth point=2]
+            table[x={x}, y={rho}]{\MGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={rho}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={rho}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={rho}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={rho}]{\MGFMtausen};
 
             \nextgroupplot[ylabel=$u$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple,
+            each nth point=2]
+            table[x={x}, y={u}]{\OGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={u}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={u}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={u}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={u}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple,
+            each nth point=2]
+            table[x={x}, y={u}]{\MGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={u}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={u}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={u}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={u}]{\MGFMtausen};
 
             \nextgroupplot[ylabel=$p$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple,
+            each nth point=2]
+            table[x={x}, y={p}]{\OGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={p}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={p}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={p}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={p}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple,
+            each nth point=2]
+            table[x={x}, y={p}]{\MGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={p}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={p}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={p}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={p}]{\MGFMtausen};
 
             \nextgroupplot[ylabel=$e$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple,
+            each nth point=2]
+            table[x={x}, y={e}]{\OGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={e}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={e}]{\OGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={e}]{\OGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={e}]{\OGFMtausen};
 
             \nextgroupplot
+            \addplot+[only marks, mark=*, mark size=0.2, color=purple,
+            each nth point=2]
+            table[x={x}, y={e}]{\MGFMtausen};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={e}]{\MGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
             table[x={x}, y={e}]{\MGFMtwo};
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={e}]{\MGFMfour};
-            \addplot+[only marks, mark=square, color=purple,  each nth point=40]
-            table[x={x}, y={e}]{\MGFMtausen};
 
         \end{groupplot}
     \end{tikzpicture}
@@ -1378,7 +1386,7 @@ Write about the results from test D here.
     \textcolor{red}{$\triangle$}$N=100$
     \textcolor{blue}{$\circ$}$N=200$
     \textcolor{teal}{$\times$}$N=400$ 
-    \textcolor{purple}{$\square$}$N=2000$ }
+    \textcolor{purple}{$\cdot$}$N=2000$ }
 \label{fig:testD}
 \end{figure*}
 
