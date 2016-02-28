@@ -165,4 +165,19 @@ P.~Woodward, P.~Colella, The numerical simulation of two-dimensional fluid flow
 S.~Karni, Hybrid multifluid algorithms, SIAM Journal on Scientific Computing
   17~(5) (1996) 1019--1039.
 
+\bibitem{quirk1996dynamics}
+J.~J. Quirk, S.~Karni, On the dynamics of a shock-bubble interaction, Journal
+  of Fluid Mechanics 318 (1996) 129--163.
+
+\bibitem{wang2004thermodynamically}
+S.-P. Wang, M.~H. Anderson, J.~G. Oakley, M.~L. Corradini, R.~Bonazza, A
+  thermodynamically consistent and fully conservative treatment of contact
+  discontinuities for compressible multicomponent flows, Journal of
+  Computational Physics 195~(2) (2004) 528--559.
+
+\bibitem{chinnayya2004modelling}
+A.~Chinnayya, E.~Daniel, R.~Saurel, Modelling detonation waves in heterogeneous
+  energetic materials, Journal of Computational Physics 196~(2) (2004)
+  490--538.
+
 \end{thebibliography}

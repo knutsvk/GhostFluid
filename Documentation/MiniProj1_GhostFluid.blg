@@ -5,45 +5,45 @@ The style file: elsarticle-num.bst
 Database file #1: references.bib.bib
 Warning--can't use both volume and number fields in williams1996detailed
 Warning--can't use both volume and number fields in toro1989weighted
-You've used 35 entries,
+You've used 38 entries,
             2937 wiz_defined-function locations,
-            900 strings with 10977 characters,
-and the built_in function-call counts, 9958 in all, are:
-= -- 1011
-> -- 227
+            917 strings with 11529 characters,
+and the built_in function-call counts, 10881 in all, are:
+= -- 1104
+> -- 260
 < -- 5
-+ -- 99
-- -- 64
-* -- 696
-:= -- 1335
-add.period$ -- 35
-call.type$ -- 35
-change.case$ -- 32
++ -- 112
+- -- 74
+* -- 770
+:= -- 1464
+add.period$ -- 38
+call.type$ -- 38
+change.case$ -- 35
 chr.to.int$ -- 0
-cite$ -- 37
-duplicate$ -- 288
-empty$ -- 1150
-format.name$ -- 83
-if$ -- 2583
+cite$ -- 40
+duplicate$ -- 312
+empty$ -- 1245
+format.name$ -- 96
+if$ -- 2812
 int.to.chr$ -- 0
-int.to.str$ -- 35
-missing$ -- 37
-newline$ -- 113
-num.names$ -- 35
-pop$ -- 187
+int.to.str$ -- 38
+missing$ -- 40
+newline$ -- 122
+num.names$ -- 38
+pop$ -- 202
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 643
+skip$ -- 694
 stack$ -- 0
-substring$ -- 745
-swap$ -- 54
+substring$ -- 820
+swap$ -- 57
 text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 2
-while$ -- 94
-width$ -- 37
-write$ -- 290
+while$ -- 103
+width$ -- 40
+write$ -- 314
 (There were 2 warnings)
