@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  28 FEB 2016 13:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  8 MAR 2016 19:22
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -812,7 +812,7 @@ isable this.
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no º in font cmr10!
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1107--1116
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1108--1117
  [][] 
  []
 
@@ -9630,10 +9630,12 @@ NOTE: coordinate (0.99875,1.08233e+06) has been dropped because of a coordinate
 [9
 
 {/opt/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1251--1261
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1260--1270
  [][] 
  []
 
+Missing character: There is no Â in font cmr10!
+Missing character: There is no   in font cmr10!
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N400.out}
@@ -9654,19 +9656,64 @@ PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N400.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
 No file MiniProj1_GhostFluid-figure7.bbl.
+PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N400.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+PGFPlots: reading {../Results/Toro2_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro2_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro2_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro2_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/Toro2_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro2_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro2_MGFM_MUSCL_minbee_N400.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro3_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro3_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro3_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N400.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+PGFPlots: reading {../Results/Toro4_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro4_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro4_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro4_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/Toro4_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro4_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro4_MGFM_MUSCL_minbee_N400.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+PGFPlots: reading {../Results/Toro5_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro5_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro5_OGFMIF_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro5_OGFMIF_MUSCL_minbee_N400.out}
+PGFPlots: reading {../Results/Toro5_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro5_MGFM_MUSCL_minbee_N200.out}
+PGFPlots: reading {../Results/Toro5_MGFM_MUSCL_minbee_N400.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
  )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 25055 strings out of 494105
- 616537 string characters out of 6144722
- 3691112 words of memory out of 5000000
- 27894 multiletter control sequences out of 15000+600000
+ 25122 strings out of 494105
+ 618562 string characters out of 6144722
+ 3691172 words of memory out of 5000000
+ 27899 multiletter control sequences out of 15000+600000
  11974 words of font info for 45 fonts, out of 8000000 for 9000
  465 hyphenation exceptions out of 8191
- 59i,21n,103p,790b,4790s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 59i,21n,103p,790b,4788s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 mi10.pfb></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 ></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></opt/te

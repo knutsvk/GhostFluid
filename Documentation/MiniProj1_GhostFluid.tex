@@ -4,7 +4,6 @@
 \usepackage{mathtools}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\usepackage{pgffor}
 \usepackage{algorithm2e}
 
 \biboptions{super, square, sort&compress}
@@ -355,7 +354,7 @@ By far the most computationally expensive part of the exact solver is the
 iterative root finding procedure for finding $p_*$. Since most modern schemes
 require the solutions of local Riemann problems between all points in the
 computational domain, high gains in terms of computational efficiency can be
-achieved by employing exact solvers instead. One such solver is the HLLC solver
+achieved by employing approximate solvers instead. One such solver is the HLLC solver
 \cite{toro1994restoration}, which has been implemented for this project. 
 
 When compared to the exact solver, the main simplifications in HLLC are that
@@ -1156,8 +1155,7 @@ reflected rarefaction, transmitted shock and contact are captured very well.
             scaled y ticks=false
         ]
             \nextgroupplot[ylabel=$\rho$]
-            \addplot+[mark=none, color=black]
-            table[x={x}, y={rhoEx}]{\exact};
+            \addplot+[mark=none, color=black] table[x={x}, y={rhoEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
             table[x={x}, y={rho}]{\OGFMone};
             \addplot+[only marks, mark=o, color=blue, each nth point=4]
