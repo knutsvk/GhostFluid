@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  8 MAR 2016 19:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  9 MAR 2016 14:32
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -661,18 +661,18 @@ Package TikZ externalization: calling \geometry{driver=none} during externaliza
 tion.
 
 No file MiniProj1_GhostFluid-figure5.aux.
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
 (/opt/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count147
@@ -750,11 +750,11 @@ ABD: EveryShipout initializing macros
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.12}).
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 39.
+LaTeX Font Info:    Try loading font information for U+msa on input line 42.
 (/opt/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 39.
+LaTeX Font Info:    Try loading font information for U+msb on input line 42.
 (/opt/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -763,13 +763,13 @@ isable this.
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (5.30852pt too wide) detected at line 279
+Overfull \hbox (5.30852pt too wide) detected at line 297
 \OML/cmm/m/it/10 f[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 ) = []  
 \OML/cmm/m/it/10 ;
  []
 
 
-Overfull \hbox (6.78558pt too wide) detected at line 287
+Overfull \hbox (6.78558pt too wide) detected at line 305
 \OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ;  B[] \OT1/cmr/m/n/
 10 = [] \OML/cmm/m/it/10 :
  []
@@ -777,7 +777,7 @@ Overfull \hbox (6.78558pt too wide) detected at line 287
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (11.64706pt too wide) detected at line 381
+Overfull \hbox (11.64706pt too wide) detected at line 399
 \OML/cmm/m/it/10 S[] \OMS/cmsy/m/n/10 ^^Y [] \OML/cmm/m/it/10 :
  []
 
@@ -800,28 +800,229 @@ PGFPlots: reading {../Results/MPB_MGFM_MUSCL_minbee_N100.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
 PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
-PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
 \openout5 = `MiniProj1_GhostFluid-figure5.dpth'.
 
 Missing character: There is no ; in font nullfont!
+NOTE: coordinate (0.015,1) has been dropped because of a coordinate filter. (se
+e also unbounded coords=jump). 
+NOTE: coordinate (0.035,1) has been dropped because of a coordinate filter. (se
+e also unbounded coords=jump). 
+NOTE: coordinate (0.055,1) has been dropped because of a coordinate filter. (se
+e also unbounded coords=jump). 
+NOTE: coordinate (0.075,1) has been dropped because of a coordinate filter. (se
+e also unbounded coords=jump). 
+NOTE: coordinate (0.095,0.999997) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.115,0.999962) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.135,0.999688) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.155,0.99818) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.175,0.992452) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.195,0.977528) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.215,0.950008) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.235,0.91129) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.255,0.865178) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.275,0.818274) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.295,0.773097) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.315,0.729789) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.335,0.688325) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.355,0.648702) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.375,0.610879) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.395,0.574828) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.415,0.540546) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.435,0.5081) has been dropped because of a coordinate filter
+. (see also unbounded coords=jump). 
+NOTE: coordinate (0.455,0.477693) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.475,0.450437) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.495,0.430511) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.515,0.425257) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.535,0.426032) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.555,0.425974) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.575,0.425859) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.595,0.425896) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.615,0.425611) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.635,0.425429) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.655,0.424881) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.675,0.423287) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.695,0.418221) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.715,0.413373) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.735,0.262819) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.755,0.263576) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.775,0.264944) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.795,0.265377) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.815,0.265455) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.835,0.265473) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.855,0.265557) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.875,0.265576) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.895,0.265529) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.915,0.265587) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.935,0.25316) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.955,0.126865) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.975,0.125001) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.995,0.125) has been dropped because of a coordinate filter.
+ (see also unbounded coords=jump). 
 Missing character: There is no ; in font nullfont!
+NOTE: coordinate (0.015,1) has been dropped because of a coordinate filter. (se
+e also unbounded coords=jump). 
+NOTE: coordinate (0.035,1) has been dropped because of a coordinate filter. (se
+e also unbounded coords=jump). 
+NOTE: coordinate (0.055,1) has been dropped because of a coordinate filter. (se
+e also unbounded coords=jump). 
+NOTE: coordinate (0.075,0.999999) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.095,0.999988) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.115,0.999882) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.135,0.999186) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.155,0.996007) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.175,0.986069) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.195,0.964572) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.215,0.930555) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.235,0.887206) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.255,0.839686) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.275,0.793606) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.295,0.74942) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.315,0.707105) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.335,0.666665) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.355,0.628031) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.375,0.591236) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.395,0.556195) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.415,0.52301) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.435,0.491808) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.455,0.463235) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.475,0.439557) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.495,0.42692) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.515,0.425962) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.535,0.425866) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.555,0.425906) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.575,0.425793) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.595,0.425717) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.615,0.425427) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.635,0.425231) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.655,0.424456) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.675,0.421068) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.695,0.413472) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.715,0.41066) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.735,0.263744) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.755,0.263794) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.775,0.264489) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.795,0.265207) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.815,0.265387) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.835,0.265433) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.855,0.26552) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.875,0.265488) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.895,0.265456) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.915,0.26556) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.935,0.265087) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.955,0.153708) has been dropped because of a coordinate filt
+er. (see also unbounded coords=jump). 
+NOTE: coordinate (0.975,0.12503) has been dropped because of a coordinate filte
+r. (see also unbounded coords=jump). 
+NOTE: coordinate (0.995,0.125) has been dropped because of a coordinate filter.
+ (see also unbounded coords=jump). 
 Missing character: There is no ; in font nullfont!
 [8
 
 {/opt/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+
+Underfull \vbox (badness 2134) has occurred while \output is active []
+
 PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_superbee_N100.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
-Missing character: There is no Ã in font cmr10!
-Missing character: There is no º in font cmr10!
-
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1108--1117
- [][] 
- []
-
 PGFPlots: reading {../Results/MPC_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N200.out}
@@ -833,13 +1034,13 @@ PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N2000.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no º in font cmr10!
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1260--1270
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1281--1290
  [][] 
  []
 
-Missing character: There is no Â in font cmr10!
-Missing character: There is no   in font cmr10!
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N400.out}
@@ -850,6 +1051,13 @@ PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N2000.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
+
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1442--1452
+ [][] 
+ []
+
+Missing character: There is no Â in font cmr10!
+Missing character: There is no   in font cmr10!
 PGFPlots: reading {../Results/MPE_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N200.out}
@@ -911,17 +1119,17 @@ isable this.
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 25077 strings out of 494105
- 617324 string characters out of 6144722
- 2390337 words of memory out of 5000000
- 27854 multiletter control sequences out of 15000+600000
+ 25075 strings out of 494105
+ 617293 string characters out of 6144722
+ 2404489 words of memory out of 5000000
+ 27852 multiletter control sequences out of 15000+600000
  11974 words of font info for 45 fonts, out of 8000000 for 9000
  465 hyphenation exceptions out of 8191
- 58i,21n,103p,790b,4737s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 58i,21n,103p,790b,4729s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 mi10.pfb></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 ></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb>
-Output written on MiniProj1_GhostFluid-figure5.pdf (1 page, 63289 bytes).
+Output written on MiniProj1_GhostFluid-figure5.pdf (1 page, 61171 bytes).
 PDF statistics:
  23 PDF objects out of 1000 (max. 8388607)
  16 compressed objects within 1 object stream

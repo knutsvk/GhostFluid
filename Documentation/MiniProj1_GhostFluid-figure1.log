@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  8 MAR 2016 19:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  9 MAR 2016 11:25
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -763,13 +763,13 @@ isable this.
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (5.30852pt too wide) detected at line 279
+Overfull \hbox (5.30852pt too wide) detected at line 294
 \OML/cmm/m/it/10 f[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 ) = []  
 \OML/cmm/m/it/10 ;
  []
 
 
-Overfull \hbox (6.78558pt too wide) detected at line 287
+Overfull \hbox (6.78558pt too wide) detected at line 302
 \OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ;  B[] \OT1/cmr/m/n/
 10 = [] \OML/cmm/m/it/10 :
  []
@@ -777,7 +777,7 @@ Overfull \hbox (6.78558pt too wide) detected at line 287
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (11.64706pt too wide) detected at line 381
+Overfull \hbox (11.64706pt too wide) detected at line 396
 \OML/cmm/m/it/10 S[] \OMS/cmsy/m/n/10 ^^Y [] \OML/cmm/m/it/10 :
  []
 
@@ -815,7 +815,7 @@ isable this.
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no º in font cmr10!
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1108--1117
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1122--1131
  [][] 
  []
 
@@ -831,7 +831,7 @@ PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N2000.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1260--1270
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1274--1284
  [][] 
  []
 
@@ -910,15 +910,15 @@ isable this.
 Here is how much of TeX's memory you used:
  24703 strings out of 494105
  604909 string characters out of 6144722
- 2071772 words of memory out of 5000000
+ 2072483 words of memory out of 5000000
  27480 multiletter control sequences out of 15000+600000
  11974 words of font info for 45 fonts, out of 8000000 for 9000
  465 hyphenation exceptions out of 8191
- 56i,21n,83p,790b,3059s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 56i,21n,83p,790b,3061s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 mi10.pfb></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 >
-Output written on MiniProj1_GhostFluid-figure1.pdf (1 page, 20145 bytes).
+Output written on MiniProj1_GhostFluid-figure1.pdf (1 page, 20148 bytes).
 PDF statistics:
  19 PDF objects out of 1000 (max. 8388607)
  13 compressed objects within 1 object stream

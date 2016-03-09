@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  8 MAR 2016 19:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  9 MAR 2016 16:44
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -709,18 +709,18 @@ externalshared.code.tex)))
  (./MiniProj1_GhostFluid.aux)
 \openout1 = `MiniProj1_GhostFluid.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
 
 (/opt/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -806,30 +806,29 @@ ABD: EveryShipout initializing macros
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.12}).
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 39.
+LaTeX Font Info:    Try loading font information for U+msa on input line 42.
 (/opt/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 39.
+LaTeX Font Info:    Try loading font information for U+msb on input line 42.
 
 (/opt/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1{/opt/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
-]
+] [2]
 ===== Image 'MiniProj1_GhostFluid-figure0' is up-to-date. ======
-[2]
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (5.30852pt too wide) detected at line 279
+Overfull \hbox (5.30852pt too wide) detected at line 297
 \OML/cmm/m/it/10 f[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 ) = []  
 \OML/cmm/m/it/10 ;
  []
 
 
-Overfull \hbox (6.78558pt too wide) detected at line 287
+Overfull \hbox (6.78558pt too wide) detected at line 305
 \OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ;  B[] \OT1/cmr/m/n/
 10 = [] \OML/cmm/m/it/10 :
  []
@@ -837,7 +836,7 @@ Overfull \hbox (6.78558pt too wide) detected at line 287
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 [3 <./MiniProj1_GhostFluid-figure0.pdf>]
-Overfull \hbox (11.64706pt too wide) detected at line 381
+Overfull \hbox (11.64706pt too wide) detected at line 399
 \OML/cmm/m/it/10 S[] \OMS/cmsy/m/n/10 ^^Y [] \OML/cmm/m/it/10 :
  []
 
@@ -845,9 +844,10 @@ Overfull \hbox (11.64706pt too wide) detected at line 381
 ===== Image 'MiniProj1_GhostFluid-figure1' is up-to-date. ======
 [5 <./MiniProj1_GhostFluid-figure1.pdf>]
 ===== Image 'MiniProj1_GhostFluid-figure2' is up-to-date. ======
+[6]
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
-[6 <./MiniProj1_GhostFluid-figure2.pdf>]
+ [7 <./MiniProj1_GhostFluid-figure2.pdf>]
 PGFPlots: reading {../Results/MPA_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPA_single_SLIC_minbee_N100.out}
 PGFPlots: reading {../Results/MPA_single_MUSCL_minbee_N100.out}
@@ -859,24 +859,21 @@ PGFPlots: reading {../Results/MPB_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPB_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPB_MGFM_MUSCL_minbee_N100.out}
 ===== Image 'MiniProj1_GhostFluid-figure4' is up-to-date. ======
-[7 <./MiniProj1_GhostFluid-figure3.pdf> <./MiniProj1_GhostFluid-figure4.pdf>]
+PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
+===== Image 'MiniProj1_GhostFluid-figure5' is up-to-date. ======
 PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
-
-===== Image 'MiniProj1_GhostFluid-figure5' is up-to-date. ======
+===== Image 'MiniProj1_GhostFluid-figure6' is up-to-date. ======
+[8 <./MiniProj1_GhostFluid-figure3.pdf> <./MiniProj1_GhostFluid-figure4.pdf> <.
+/MiniProj1_GhostFluid-figure5.pdf> <./MiniProj1_GhostFluid-figure6.pdf>]
 PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_superbee_N100.out}
-===== Image 'MiniProj1_GhostFluid-figure6' is up-to-date. ======
-[8 <./MiniProj1_GhostFluid-figure5.pdf> <./MiniProj1_GhostFluid-figure6.pdf>]
-Missing character: There is no Ã in font cmr10!
-Missing character: There is no º in font cmr10!
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1108--1117
- [][] 
- []
-
+===== Image 'MiniProj1_GhostFluid-figure7' is up-to-date. ======
 PGFPlots: reading {../Results/MPC_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N200.out}
@@ -886,15 +883,21 @@ PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N2000.out}
-===== Image 'MiniProj1_GhostFluid-figure7' is up-to-date. ======
-
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1260--1270
+===== Image 'MiniProj1_GhostFluid-figure8' is up-to-date. ======
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no º in font cmr10!
+[9 <./MiniProj1_GhostFluid-figure7.pdf>]
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1283--1292
  [][] 
  []
 
-Missing character: There is no Â in font cmr10!
-Missing character: There is no   in font cmr10!
-[9]
+[10 <./MiniProj1_GhostFluid-figure8.pdf>]
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1319--1329
+ [][] 
+ []
+
+PGFPlots: reading {../Results/MPD_init.out}
+===== Image 'MiniProj1_GhostFluid-figure9' is up-to-date. ======
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N400.out}
@@ -903,9 +906,9 @@ PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N2000.out}
-
-===== Image 'MiniProj1_GhostFluid-figure8' is up-to-date. ======
-[10 <./MiniProj1_GhostFluid-figure7.pdf>]
+===== Image 'MiniProj1_GhostFluid-figure10' is up-to-date. ======
+Missing character: There is no Â in font cmr10!
+Missing character: There is no   in font cmr10!
 PGFPlots: reading {../Results/MPE_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N200.out}
@@ -913,15 +916,24 @@ PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPE_MGFM_MUSCL_minbee_N400.out}
+===== Image 'MiniProj1_GhostFluid-figure11' is up-to-date. ======
+[11 <./MiniProj1_GhostFluid-figure9.pdf>]
+PGFPlots: reading {../Results/MPF_MGFM_MUSCL_minbee_N2000.out}
 
-===== Image 'MiniProj1_GhostFluid-figure9' is up-to-date. ======
-[11 <./MiniProj1_GhostFluid-figure8.pdf>] (./MiniProj1_GhostFluid.bbl
+===== Image 'MiniProj1_GhostFluid-figure12' is up-to-date. ======
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [12 <./MiniProj1_GhostFluid-figure9.pdf>]
+ [12 <./MiniProj1_GhostFluid-figure10.pdf>] (./MiniProj1_GhostFluid.bbl
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13 <./MiniProj1_GhostFluid-figure11.pdf>]
 Underfull \hbox (badness 1845) in paragraph at lines 92--95
 \OT1/cmr/m/n/8 Dif-feren-zen-gle-ichun-gen der math-e-ma-tis-chen Physik,
  []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \hbox (badness 3514) in paragraph at lines 124--127
@@ -931,7 +943,7 @@ Underfull \hbox (badness 3514) in paragraph at lines 124--127
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-)
+ [14 <./MiniProj1_GhostFluid-figure12.pdf>])
 PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N200.out}
@@ -940,7 +952,7 @@ PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N400.out}
 
-===== Image 'MiniProj1_GhostFluid-figure10' is up-to-date. ======
+===== Image 'MiniProj1_GhostFluid-figure13' is up-to-date. ======
 PGFPlots: reading {../Results/Toro2_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro2_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro2_OGFMIF_MUSCL_minbee_N200.out}
@@ -948,7 +960,7 @@ PGFPlots: reading {../Results/Toro2_OGFMIF_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/Toro2_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro2_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/Toro2_MGFM_MUSCL_minbee_N400.out}
-===== Image 'MiniProj1_GhostFluid-figure11' is up-to-date. ======
+===== Image 'MiniProj1_GhostFluid-figure14' is up-to-date. ======
 PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro3_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro3_OGFMIF_MUSCL_minbee_N200.out}
@@ -956,7 +968,7 @@ PGFPlots: reading {../Results/Toro3_OGFMIF_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N400.out}
-===== Image 'MiniProj1_GhostFluid-figure12' is up-to-date. ======
+===== Image 'MiniProj1_GhostFluid-figure15' is up-to-date. ======
 PGFPlots: reading {../Results/Toro4_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro4_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro4_OGFMIF_MUSCL_minbee_N200.out}
@@ -964,7 +976,7 @@ PGFPlots: reading {../Results/Toro4_OGFMIF_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/Toro4_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro4_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/Toro4_MGFM_MUSCL_minbee_N400.out}
-===== Image 'MiniProj1_GhostFluid-figure13' is up-to-date. ======
+===== Image 'MiniProj1_GhostFluid-figure16' is up-to-date. ======
 PGFPlots: reading {../Results/Toro5_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro5_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro5_OGFMIF_MUSCL_minbee_N200.out}
@@ -972,23 +984,25 @@ PGFPlots: reading {../Results/Toro5_OGFMIF_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/Toro5_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro5_MGFM_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/Toro5_MGFM_MUSCL_minbee_N400.out}
-===== Image 'MiniProj1_GhostFluid-figure14' is up-to-date. ======
-[13] [14 <./MiniProj1_GhostFluid-figure10.pdf>] [15 <./MiniProj1_GhostFluid-fig
-ure11.pdf>] [16 <./MiniProj1_GhostFluid-figure12.pdf>] [17 <./MiniProj1_GhostFl
-uid-figure13.pdf>] [18 <./MiniProj1_GhostFluid-figure14.pdf>]
+===== Image 'MiniProj1_GhostFluid-figure17' is up-to-date. ======
+[15
+
+] [16 <./MiniProj1_GhostFluid-figure13.pdf>] [17 <./MiniProj1_GhostFluid-figure
+14.pdf>] [18 <./MiniProj1_GhostFluid-figure15.pdf>] [19 <./MiniProj1_GhostFluid
+-figure16.pdf>] [20 <./MiniProj1_GhostFluid-figure17.pdf>]
 (./MiniProj1_GhostFluid.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 24781 strings out of 494105
- 606553 string characters out of 6144722
- 2075489 words of memory out of 5000000
- 27538 multiletter control sequences out of 15000+600000
+ 24792 strings out of 494105
+ 606775 string characters out of 6144722
+ 2169686 words of memory out of 5000000
+ 27542 multiletter control sequences out of 15000+600000
  11673 words of font info for 44 fonts, out of 8000000 for 9000
  465 hyphenation exceptions out of 8191
- 55i,21n,83p,740b,2802s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,21n,83p,740b,2894s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 bx10.pfb></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pf
 b></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></opt
@@ -1006,10 +1020,10 @@ live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></opt/texlive/201
 dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></opt/texlive/2015/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmti10.pfb></opt/texlive/2015/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmti8.pfb>
-Output written on MiniProj1_GhostFluid.pdf (18 pages, 2886369 bytes).
+Output written on MiniProj1_GhostFluid.pdf (20 pages, 3488076 bytes).
 PDF statistics:
- 318 PDF objects out of 1000 (max. 8388607)
- 262 compressed objects within 3 object streams
+ 355 PDF objects out of 1000 (max. 8388607)
+ 294 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
- 88 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 103 words of extra memory for PDF output out of 10000 (max. 10000000)
 

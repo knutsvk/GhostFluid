@@ -6,6 +6,9 @@
 \usepackage{pgfplots}
 \usepackage{algorithm2e}
 
+\renewcommand\AlCapFnt{\footnotesize\normalfont}
+\renewcommand\AlCapNameFnt{\footnotesize\normalfont}
+
 \biboptions{super, square, sort&compress}
 
 \pgfplotsset{width=\columnwidth, height=0.6\columnwidth, compat=1.12}
@@ -70,7 +73,8 @@ velocity $u$, total energy $E$ and pressure $p$, they are given by
     \label{eq:euler}
 \end{equation}
 %
-where the vector of conserved quantities ${\bf U}$ and their fluxes ${\bf F(U)}$ are given by
+where the vector of conserved quantities ${\bf U}$ and their fluxes ${\bf
+F(U)}$ are given by
 
 \begin{equation*}
     {\bf U} = 
@@ -89,9 +93,9 @@ where the vector of conserved quantities ${\bf U}$ and their fluxes ${\bf F(U)}$
     \,.
 \end{equation*}
 %
-It is sometimes convenient to work in terms of the primitive variables ${\bf W} =
-\begin{pmatrix} \rho, & u, & p \end{pmatrix}^T$. The total energy is the sum of
-the kinetic and potential energy of the system, i.e.~ 
+It is sometimes convenient to work in terms of the primitive variables ${\bf W}
+= \begin{pmatrix} \rho, & u, & p \end{pmatrix}^T$. The total energy is the sum
+    of the kinetic and potential energy of the system, i.e.~ 
 
 \begin{equation}
     E = \frac{1}{2} \rho u^2 + \rho e \,,
@@ -99,7 +103,12 @@ the kinetic and potential energy of the system, i.e.~
 \end{equation}
 %
 where $e$ is the internal energy, related to the other variables through the
-equation of state. For an ideal gas, the equation of state is 
+equation of state. This equation is of fundamental importance for two reasons.
+Firstly, it allows us to treat the materials in question from a continuum point
+of view. It is thus the connection between the physics taking place on a
+microscopic scale and the thermodynamics which we apply to the macroscopic one.
+Secondly, it provides the missing fourth equation to our four unknowns ($\rho$,
+$u$, $p$ and $E$), so that the system becomes mathematically consistent. For an ideal gas, the equation of state is 
 
 \begin{equation}
      e = \frac{p}{(\gamma-1)\rho} \,,
@@ -142,9 +151,18 @@ Flux/Slope LImiter Centred (SLIC/FLIC) \cite{toro2000centred} schemes.
 
 Considerations of multimaterial interactions and flow are among the more recent
 (less than twenty year old) developments within numerical solutions for the
-Euler equations. It is the goal of this report to demonstrate some techniques
-available for multimaterial simulations of the Euler equations in one
-dimension. Different fluids are characterized by their material properties,
+Euler equations.  From a continuum fluid mechanics point of view, multimaterial
+interactions are used to describe problems where there is a relatively sharp
+interface between two materials. Examples of such cases are water/oil
+separation (liquid-liquid interaction), penguins swimming through water
+(solid-liquid interaction) and water splashing into the air as a result of a
+surface disruption (liquid-gas interaction). In reality, all these interfaces
+are continuous from one material to the other. Since the length scale of the
+interface is far smaller than even the discrete control volumes used for
+simulation, however, it is a good approximation to treat the interfaces as
+sharp discontinuities.  It is the goal of this report to demonstrate some
+techniques available for multimaterial simulations of the Euler equations in
+one dimension. Different fluids are characterized by their material properties,
 such as $\gamma$, and thus special care must be taken in the treatment of
 boundaries separating different fluids. 
 
@@ -504,12 +522,8 @@ three main steps.
 First, the data cell averages ${\bf U}_i^n$ are replaced
 locally by linear functions so that at the left and right cell interfaces, the
 boundary extrapolated values are 
-
-\begin{equation}
-    \label{eq:BEV}
-    {\bf U}_i^L = {\bf U}_i^n-\frac{1}{2}\Delta_i \,,\quad 
-    {\bf U}_i^R = {\bf U}_i^n+\frac{1}{2}\Delta_i \,.
-\end{equation}
+    ${\bf U}_i^L = {\bf U}_i^n-\frac{1}{2}\Delta_i$ and 
+    ${\bf U}_i^R = {\bf U}_i^n+\frac{1}{2}\Delta_i$.
 %
 Here, the slope vector $\Delta_i$ has been introduced, which in our case is
 chosen such that the schemes are TVD. For the MUSCL-Hancock scheme, we have
@@ -547,16 +561,15 @@ For SLIC, however, the intercell flux is directly evaluated as the FORCE flux wi
 \label{subsec:levelset}
 
 In order to represent the interfaces between materials, we employ a level-set
-function $\phi(x)$ whose sign is a boolean indicator of the material present. The
-interfaces between materials are thus located at the points where $\phi=0$.
+function $\phi(x)$ whose sign is a boolean indicator of the material present.
+The interfaces between materials are thus located at the points where $\phi=0$.
 Figure \ref{fig:levelSet} shows the simple case of a single material interface
 separating materials A and B; several interfaces have been incoorporated by
-letting $\phi$ be piecewise linear throughout the domain in a zig-zag
-pattern. 
+letting $\phi$ be piecewise linear throughout the domain in a zig-zag pattern. 
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[scale=2.5]
+    \begin{tikzpicture}[scale=3.0]
         \coordinate (origin) at (0,0) node[left]{0};
         \coordinate (mid) at (1,0);
         \coordinate (xright) at (2.1,0);
@@ -577,19 +590,19 @@ pattern.
         \node[fill=blue!20!white] () at (0.5,0.2) {Material A};
         \node[fill=green!20!white] () at (1.5,-0.3) {Material B};
     \end{tikzpicture}
-    \caption{Simple example of level-set function for one material interface.
-    In the left region, where $\phi(x)<0$, material A is present,
-    while material B is present in the right region. }
+    \caption{Level-set function for a single material interface.
+    In the left region, where $\phi(x)<0$, material A is present.}
     \label{fig:levelSet}
 \end{figure}
 
 Initializing the level-set function is trivial, but it is a good idea to make
-sure that the zeros end up between cell centers, so that each grid point has
+sure that the zeros end up between cell centers, so that we avoid grid points
+where the level set function is exactly zero. By doing so, each grid point has
 well-defined material properties. In order to capture the evolution of the
-system, the level-set function itself must be advanced in time for each time
-step. Since $\phi$ is a consequence of the state of the fluid rather than a
-property, it is not coupled to the other variables in the system.  Thus it is
-governed by the advection equation 
+system, the level-set function itself must be advanced in time. Since $\phi$ is
+a consequence of the state of the fluid rather than a property, it is not
+coupled to the other variables in the system.  Thus it is governed by the
+advection equation 
 
 \begin{equation}
     \label{eq:phi}
@@ -600,7 +613,7 @@ Due to frequent discontinuities in density at material interfaces, conservative
 schemes lead to smearing of the locations of the zeros. Since the only
 interesting information contained in $\phi$ are these locations,
 non-conservative methods can be safely implemented as long as $\phi$ remains
-smooth and not too sharp. In our implementation, we have implemented the
+smooth and not too sharp. In our implementation, we have used the
 first-order upwind scheme 
 
 \begin{equation}
@@ -616,7 +629,7 @@ first-order upwind scheme
 Note that $u_i^n$ is the velocity of material A at $x_i$ if $\phi_i^n < 0$, and
 the velocity of material B otherwise.  In order to avoid the level set function
 becoming too sharp, we reinitialize it after every update by demanding
-$|\phi_{i+1}^n-\phi_i^n|=\Delta x$. In this procedure, we also make sure that
+$|\phi_{i+1}^n-\phi_i^n|=\Delta x$. We also make sure that
 the zeros of $\phi$ lie between grid points. 
 
 \subsection{Ghost fluid methods}
@@ -625,7 +638,9 @@ the zeros of $\phi$ lie between grid points.
 Multimaterial simulations require one final consideration in addition to
 interface tracking; namely which boundary conditions to enforce across these
 interfaces. These dynamic boundary conditions should be thermodynamically
-consistent in order to capture the physical interactions between materials. In
+consistent in order to capture the physical interactions between materials.
+Presence of thermodynamical inconsistencies leads to spurious entropy
+generation, which in turn results in unphysical evolution of the system.  In
 the computational implementation, the Euler equations are solved on a separate
 domain for each material, where that material is present in all cells. For the
 regions where $\phi(x) < 0$, fluid A is present in domain A, while \emph{ghost
@@ -638,10 +653,10 @@ ghost cells in a thermodynamically consistent manner.
 \subsubsection{Original ghost fluid method}
 \label{subsubsec:ogfm}
 
-The first successful attempt at implementing a ghost fluid method was performed by
-Fedkiw et al.~ in 1998 \cite{fedkiw1999nonoscillatory}. In this approach, which
-we refer to as OGFM, the entropy $S$ is held constant across the ghost fluid
-interface, in order to give conditions for thermodynamic consistensy. The
+The first successful attempt at implementing a ghost fluid method was performed
+by Fedkiw et al.~ in 1998 \cite{fedkiw1999nonoscillatory}. In this approach,
+which we refer to as OGFM, the entropy $S$ is held constant across the ghost
+fluid interface, in order to give conditions for thermodynamic consistensy. The
 assumption of constant entropy is not entirely true in the case of shocks, so
 one does not expect excellent capturing of large shock waves. The pressure and
 velocity in the ghost cells are set equal to the pressure and velocity in the
@@ -754,13 +769,19 @@ the two states immediately adjacent to the material interface, ${\bf W}_L$ and
 ${\bf W}_R$, and the corresponding material properties, we calculate the star
 states ${\bf W}_{*L}$ and ${\bf W}_{*R}$, and set the ghost fluid cells equal
 to them. Thus every extrapolated value in the ghost fluid corresponds to a
-physical state of the system, and we have thermodynamical consistensy. In order
-to compute the star states, the exact solver is employed. 
+physical state of the system, and we have thermodynamical consistensy. By
+looking at Figure \ref{fig:riemann}, it is easy to convince oneself that the
+chosen star states are valid choices for the boundary cells.  In order to
+compute the star states, the exact solver is employed. 
 
-\subsection{Complete algorithm}
-\label{subsec:complete}
+\subsection{Final notes}
+\label{subsec:final}
 
-A summary is given in Algorithm \ref{alg:complete}.
+With all separate parts of the computational procedure explained, it is helpful
+to explain how it all fits together. As such, Algorithm \ref{alg:complete}
+exhibits pseudocode summarizing the complete procedure. Our code is written in
+C++, but for easy input customization and result visualization we have built a
+user interface using Qt, a cross-platform application framework. 
 
 \begin{algorithm}[htb]
     \KwData{initial configuration of system, \\ 
@@ -956,8 +977,45 @@ membrane is removed, and the states start interacting. The solution contains
 (from left to right) a rarefaction wave, a contact wave and a shock wave. Since
 it was introduced by G.A.~ Sod in 1978 \cite{sod1978survey}, it has gradually
 become the go-to test case for investigating the behaviour of simple Euler
-schemes, hence its alias ``the Sod test tube''. Figure \ref{fig:toro1} exhibits
-our results. All features are captured very well by both models. 
+schemes, hence its alias ``the Sod test tube''. Figure \ref{fig:toro1density}
+exhibits the results for density for both ghost fluid methods. In Figure
+\ref{fig:toro1} in \ref{app:toro}, results for all variables with several
+different resolutions are displayed.  All features are captured very well by
+both models. 
+
+\pgfplotstableread{../Results/Toro1_OGFM_FORCE_N5000.out}{\exact}
+\pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N100.out}{\mgfm}
+\pgfplotstableread{../Results/Toro1_OGFM_MUSCL_minbee_N100.out}{\ogfm}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            [
+                xlabel=$x$, 
+                xmin=0.0, xmax=1.0, 
+                ylabel=$\rho$, 
+                ylabel style={rotate=-90}, 
+                legend style={font=\footnotesize},
+                legend pos=north east
+            ]
+            \addplot+[mark=none, color=black] 
+            table[x={x}, y={rhoEx}]{\exact};
+            \addlegendentry{Exact};
+            \addplot+[only marks, mark=triangle, color=red, each nth point=2] 
+            table[x={x}, y={rho}] {\ogfm}; 
+            \addlegendentry{OGFM};
+            \addplot+[only marks, mark=o, color=blue, each nth point=2] 
+            table[x={x}, y={rho}] {\mgfm}; 
+            \addlegendentry{MGFM};
+        \end{axis}
+    \end{tikzpicture}
+    \caption[caption]
+    {
+        Density for OGFM and MGFM  applied to Toro's test 1 with $N=100$.
+    }
+    \label{fig:toro1density}
+\end{figure}
 
 This test also lends itself well to display the improvement that can be
 achieved in the solution by applying the isobaric fix. From Figure
@@ -993,8 +1051,8 @@ internal energy is reduced when the isobaric fix is implemented.
     \end{tikzpicture}
     \caption[caption]
     {
-        Internal energy for OGFM applied to Toro's test 1 with and without isobaric
-        fix. For both cases, $N=100$.
+        Internal energy for OGFM applied to Toro's test 1 with and without
+        isobaric fix. For both cases, $N=100$.
     }
     \label{fig:toro1isobarix}
 \end{figure}
@@ -1090,40 +1148,6 @@ cases have been used. In both cases, the initial conditions are such that they
 correspond to physically realistic scales, measured in SI unites. 
 
 \subsubsection{Test C}
-
-This test case was introduced by Smadar Karni in 1996 \cite{karni1996hybrid},
-and is also one of the test cases used to verify OGFM in 1999
-\cite{fedkiw1999nonoscillatory}. In it, a weak shock wave in air travels
-towards the right and refracts at a interface with helium gas. The result of
-the interfacial interaction is a narrow, reflected rarefaction wave and weak,
-transmitted shock wave. Since $\gamma$ (and thus the speed of sound $a$) is
-higher for helium than for air, the transmitted shock wave travels faster than
-the incident shock wave in air.  Initial parameters for the left (air
-postshock), middle (air preshock) and right (heliúm preshock) parts of the
-domain are tabulated in Table \ref{tab:testC}, and the simulation is run to a
-final time $t_{\rm end}=0.0012$. 
-
-\begin{table}[htb]
-    \centering
-    \begin{tabular}{ccccc}
-        \hline
-        $x \in $ & $\rho$ & $u$ & $p$ & $\gamma$ \\
-        \hline
-        $[0,0.05]$ & 1.3333 & $0.3535\sqrt{10^5}$ & $1.5\cdot 10^5$ & 1.4 \\
-        $(0.05,0.5]$ & 1 & 0 & $1.0\cdot 10^5$ & 1.4 \\
-        $(0.5,1]$ & 0.1379 & 0 & $1.0\cdot 10^5$ & 1.67 \\
-        \hline
-    \end{tabular}
-    \caption{Initial conditions for test C.}
-    \label{tab:testC}
-\end{table}
-
-The results for test C are depicted in Figure \ref{fig:testC}. Since the
-initial data has two discontinuities, our exact solver cannot be used to find
-a reference solution directly in this case. As a workaround, we evolved the
-system until only two regions exist, namely air postshock and helium preshock,
-which is a single discontinuity and thus a Riemann problem. For both GFMs, the
-reflected rarefaction, transmitted shock and contact are captured very well. 
 
 \pgfplotstableread{../Results/MPC_OGFM_FORCE_N5000.out}{\exact}
 \pgfplotstableread{../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
@@ -1242,16 +1266,51 @@ reflected rarefaction, transmitted shock and contact are captured very well.
 \label{fig:testC}
 \end{figure*}
 
+This test case was introduced by Smadar Karni in 1996 \cite{karni1996hybrid},
+and is also one of the test cases used to verify OGFM in 1999
+\cite{fedkiw1999nonoscillatory}. In it, a weak shock wave in air travels
+towards the right and refracts at a interface with helium gas. The result of
+the interfacial interaction is a narrow, reflected rarefaction wave and weak,
+transmitted shock wave. Since $\gamma$ (and thus the speed of sound $a$) is
+higher for helium than for air, the transmitted shock wave travels faster than
+the incident shock wave in air.  Initial parameters for the left (air
+postshock), middle (air preshock) and right (heliúm preshock) parts of the
+domain are tabulated in Table \ref{tab:testC}, and the simulation is run to a
+final time $t_{\rm end}=0.0012$. 
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{ccccc}
+        \hline
+        $x \in $ & $\rho$ & $u$ & $p$ & $\gamma$ \\
+        \hline
+        $[0,0.05]$ & 1.3333 & $0.3535\sqrt{10^5}$ & $1.5\cdot 10^5$ & 1.4 \\
+        $(0.05,0.5]$ & 1 & 0 & $1.0\cdot 10^5$ & 1.4 \\
+        $(0.5,1]$ & 0.1379 & 0 & $1.0\cdot 10^5$ & 1.67 \\
+        \hline
+    \end{tabular}
+    \caption{Initial conditions for test C.}
+    \label{tab:testC}
+\end{table}
+
+The results for test C are depicted in Figure \ref{fig:testC}. Since the
+initial data has two discontinuities, our exact solver cannot be used to find
+a reference solution directly in this case. As a workaround, we evolved the
+system until only two regions exist, namely air postshock and helium preshock,
+which is a single discontinuity and thus a Riemann problem. For both GFMs, the
+reflected rarefaction, transmitted shock and contact are captured very well. 
+
 \subsubsection{Test D}
 
 A fascinating test case developed by Quirk and Karni \cite{quirk1996dynamics}
 simulates a rightward propagating shock wave in air hitting a slab of helium
 (between $x=0.4$ and $x=0.6$), on the right side of which is air. It is the
 one-dimensional equivalent of a shock wave hitting a bubble of helium in air.
-See Table \ref{tab:testD} for the initial conditions. Due to the presence of a
-local Riemann problem in the left air region in addition to two material
-interfaces, the resulting pattern becomes quite complex. The shock wave
-refracts at both material interfaces, so the end result (with $t_{\rm
+See Table \ref{tab:testD} for the initial conditions, and Figure
+\ref{fig:testDinit} for a plot of the initial density distribution. Due to the
+presence of a local Riemann problem in the left air region in addition to two
+material interfaces, the resulting pattern becomes quite complex. The shock
+wave refracts at both material interfaces, so the end result (with $t_{\rm
 end}=0.0014$) is a superposition of multiple reflected and transmitted shock
 waves and rarefactions. 
 
@@ -1271,15 +1330,30 @@ waves and rarefactions.
     \label{tab:testD}
 \end{table}
 
-Results from runs with both GFMs are visualized in Figure \ref{fig:testD}.
-Since no exact solution is available, we have included results obtained with
-high-resolution meshes ($N=2000$), plotting every second point with a small
-dot. Both GFMs yield results that converge to the expected pattern, which can
-be found {\em e.g.~} in a paper by Wang {\em et al.~} from
-2004 \cite{wang2004thermodynamically}. Note that in that paper, the internal
-energy is plotted instead of the {\em specific} internal energy, which explains the
-apparent difference in the bottom plots of Figure \ref{fig:testD} when compared
-to their results. 
+\pgfplotstableread{../Results/MPD_init.out}{\exact}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            [
+                xlabel=$x$, 
+                xmin=0.0, xmax=1.0, 
+                ylabel=$\rho$, 
+                ylabel style={rotate=-90}, 
+                legend style={font=\footnotesize},
+            ]
+            \addplot+[mark=none, color=black] table[x={x}, y={rho}]{\exact};
+        \end{axis}
+    \end{tikzpicture}
+    \caption[caption]
+    {
+        Initial density distribution for test D. A slab of helium gas is
+        located in the region $0.4 < x \leq 0.6$, while the rest of the domain
+        is filled with hydrogen. 
+    }
+    \label{fig:testDinit}
+\end{figure}
 
 \pgfplotstableread{../Results/MPD_OGFMIF_MUSCL_minbee_N100.out}{\OGFMone}
 \pgfplotstableread{../Results/MPD_OGFMIF_MUSCL_minbee_N200.out}{\OGFMtwo}
@@ -1407,25 +1481,36 @@ to their results.
 \label{fig:testD}
 \end{figure*}
 
+Results from runs with both GFMs are visualized in Figure \ref{fig:testD}.
+Since no exact solution is available, we have included results obtained with
+high-resolution meshes ($N=2000$), plotting every second point with a small
+dot. Both GFMs yield results that converge to the expected pattern, which can
+be found {\em e.g.~} in a paper by Wang {\em et al.~} from
+2004 \cite{wang2004thermodynamically}. Note that in that paper, the internal
+energy is plotted instead of the {\em specific} internal energy, which explains the
+apparent difference in the bottom plots of Figure \ref{fig:testD} when compared
+to their results. 
+
 \subsection{Water-gas shock tube test}
 \label{subsec:water}
 
 So far, all test cases have only included materials assumed to behave as ideal
 gases, {\em i.e.~} which have $p_{\infty}=0$ in  Eq. \eqref{eq:stiffEoS}. An
 example of a fluid which is approximated quite well by the stiffened gas
-equation of state, is water. As a final numerical experiment, we therefore
+equation of state, is water. As a final validation test case, we therefore
 verify the applicability of our model to water. 
 
 \subsubsection{Test E}
 
-The last test case is a standard shock-tube problem, but where the high-density
+This test case is a standard shock-tube problem, but where the high-density
 region is filled with water, following Chinnaya {\em et al.}
 \cite{chinnayya2004modelling}. Table \ref{tab:testE} shows the initial
 conditions for this case. For water, we use $p_{\infty} = 6.0 \cdot 10^8$,
 which means there is a huge difference in the equations of state between the
 two materials. The solution of the test case consists of a left rarefaction, a
 rightward moving contact and a right shock, and is it the latter two which can
-become difficult to distinguish due to this huge difference. 
+become difficult to distinguish due to this huge difference. Test E is run to a
+final time $t_{\rm end}=237.44\cdot 10^{-6}$. 
 
 \begin{table}[htb]
     \centering
@@ -1564,25 +1649,107 @@ manner by GFMs.
 \label{fig:testE}
 \end{figure*}
 
-%\subsection{More interfaces!}
-%\label{subsec:more}
+\subsection{More interfaces!}
+\label{subsec:more}
+
+The results from test D show that our level set function can track two
+material interfaces simultaneously without a problem. We wanted to ensure that
+it could track an arbitrary amount of interfaces, however, and therefore
+created an extra test where the amount of interfaces has been doubled compared
+to the previous maximum. 
+
+\subsubsection{Test F}
+
+Table \ref{tab:testF} shows the initial conditions for test F, which is run to
+a final time $t_{\rm end}=0.1$. The leftmost, center and rightmost regions
+contain hydrogen gas, and two slabs of helium are placed between these. Due to
+the initial discontinuities, shock waves travel toward the interior of both
+helium slabs, where they collide and interact.  This is not necessarily a very
+realistic case physically, but it does test the ability of the scheme to
+generate a zig-zagging level set function and track it correctly. 
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{ccccc}
+        \hline
+        $x \in $ & $\rho$ & $u$ & $p$ & $\gamma$ \\
+        \hline
+        $[0,0.2]$ & 1 & 0 & 1 & 1.4 \\
+        $(0.2,0.4]$ & 0.125 & 0 & 0.1 & 1.67 \\
+        $(0.4,0.6]$ & 1 & 0 & 1 & 1.4 \\
+        $(0.6,0.8]$ & 0.125 & 0 & 0.1 & 1.67 \\
+        $(0.8,1]$ & 1 & 0 & 1 & 1.4 \\
+        \hline
+    \end{tabular}
+    \caption{Initial conditions for test F.}
+    \label{tab:testF}
+\end{table}
+
+Results generated by applying MGFM to test F are shown in Figure
+\ref{fig:testF}. Since no exact solution is possible, and no comparison is
+provided in the literature, we ran the code with a high resolution ($N=2000$).
+The resulting patterns are complex and difficult to interpret from just a
+snapshot, but animating the results in our graphical user interface show that
+the system does indeed behave in an intuitive manner. 
+
+\pgfplotstableread{../Results/MPF_MGFM_MUSCL_minbee_N2000.out}{\mgfm}
+
+\begin{figure*}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}
+        [ 
+            group style=
+            {
+                group size=2 by 2, 
+                xlabels at=edge bottom, 
+                xticklabels at=edge bottom, 
+                vertical sep=5pt, 
+                horizontal sep=40pt
+            }, 
+            xlabel=$x$, xmin=0, xmax=1, 
+            ylabel style={rotate=-90},
+            scaled y ticks=false
+        ]
+            \nextgroupplot[ylabel=$\rho$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=blue]
+            table[x={x}, y={rho}]{\mgfm};
+
+            \nextgroupplot[ylabel=$u$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=blue]
+            table[x={x}, y={u}]{\mgfm};
+
+            \nextgroupplot[ylabel=$p$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=blue]
+            table[x={x}, y={p}]{\mgfm};
+
+            \nextgroupplot[ylabel=$e$]
+            \addplot+[only marks, mark=*, mark size=0.2, color=blue]
+            table[x={x}, y={e}]{\mgfm};
+
+        \end{groupplot}
+    \end{tikzpicture}
+    \caption{Results for test F using MGFM.}
+\label{fig:testF}
+\end{figure*}
 
 \section{Conclusions}
 \label{sec:conclusion}
 
-The unsteady, compressible Euler equations for multimaterial flow in one
-dimension have been solved numerically by employing level-set based
-tracking of fronts and two versions of the Ghost Fluid Method. Equations of
-state for stiffened ideal gases are supported, to allow simulations with
-water. An exact Riemann solver is demonstrated, in addition to usage of
-both centered and upwind higher-order time-marching schemes, namely
-MUSCL-Hancock with HLLC and SLIC. Results from several varied test cases
-show that the implementation works in accordance with that presented in
-previous literature. 
+We have successfully implemented a numerical PDE solver for the compressible
+Euler equations, which allows for multimaterial continuum simulations in one
+spatial dimension. Although there is nothing novel about the methods and
+resulting code, the project report serves as a literature review which covers
+an introduction to the Euler equations and their numerical solution, in
+addition to multimaterial problems for which level set and ghost fluids methods
+are necessary. In addition to describing the theory, we present results for
+numerous test cases which illustrate that our code is correct, robust and
+in agreement with what is described in the literature. 
 
 \section*{Acknowledgements}
 \label{sec:acknowledgements}
-Thanks Steve. 
+Gratitude is directed to project advisor Stephen Millmore for sharing his
+insight in the field and offering good advice. 
 
 \section*{References}
 \bibliographystyle{elsarticle-num}

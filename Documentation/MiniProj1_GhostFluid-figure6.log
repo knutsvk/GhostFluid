@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  8 MAR 2016 19:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  9 MAR 2016 14:32
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -661,18 +661,18 @@ Package TikZ externalization: calling \geometry{driver=none} during externaliza
 tion.
 
 No file MiniProj1_GhostFluid-figure6.aux.
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
 (/opt/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count147
@@ -750,11 +750,11 @@ ABD: EveryShipout initializing macros
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.12}).
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 39.
+LaTeX Font Info:    Try loading font information for U+msa on input line 42.
 (/opt/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 39.
+LaTeX Font Info:    Try loading font information for U+msb on input line 42.
 (/opt/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -763,13 +763,13 @@ isable this.
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (5.30852pt too wide) detected at line 279
+Overfull \hbox (5.30852pt too wide) detected at line 297
 \OML/cmm/m/it/10 f[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 ) = []  
 \OML/cmm/m/it/10 ;
  []
 
 
-Overfull \hbox (6.78558pt too wide) detected at line 287
+Overfull \hbox (6.78558pt too wide) detected at line 305
 \OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ;  B[] \OT1/cmr/m/n/
 10 = [] \OML/cmm/m/it/10 :
  []
@@ -777,7 +777,7 @@ Overfull \hbox (6.78558pt too wide) detected at line 287
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (11.64706pt too wide) detected at line 381
+Overfull \hbox (11.64706pt too wide) detected at line 399
 \OML/cmm/m/it/10 S[] \OMS/cmsy/m/n/10 ^^Y [] \OML/cmm/m/it/10 :
  []
 
@@ -800,13 +800,13 @@ PGFPlots: reading {../Results/MPB_MGFM_MUSCL_minbee_N100.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
 PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
-PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
-PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
-PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
-PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_superbee_N100.out}
+PGFPlots: reading {../Results/Toro1_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
 \openout5 = `MiniProj1_GhostFluid-figure6.dpth'.
 
 Missing character: There is no ; in font nullfont!
@@ -815,13 +815,13 @@ Missing character: There is no ; in font nullfont!
 [8
 
 {/opt/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Missing character: There is no Ã in font cmr10!
-Missing character: There is no º in font cmr10!
+Underfull \vbox (badness 2027) has occurred while \output is active []
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1108--1117
- [][] 
- []
-
+PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
+PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
+PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_superbee_N100.out}
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
 PGFPlots: reading {../Results/MPC_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPC_OGFMIF_MUSCL_minbee_N200.out}
@@ -833,13 +833,13 @@ PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPC_MGFM_MUSCL_minbee_N2000.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no º in font cmr10!
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1260--1270
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1281--1290
  [][] 
  []
 
-Missing character: There is no Â in font cmr10!
-Missing character: There is no   in font cmr10!
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N200.out}
 PGFPlots: reading {../Results/MPD_OGFMIF_MUSCL_minbee_N400.out}
@@ -850,6 +850,13 @@ PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N400.out}
 PGFPlots: reading {../Results/MPD_MGFM_MUSCL_minbee_N2000.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
+
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1442--1452
+ [][] 
+ []
+
+Missing character: There is no Â in font cmr10!
+Missing character: There is no   in font cmr10!
 PGFPlots: reading {../Results/MPE_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/MPE_OGFMIF_MUSCL_minbee_N200.out}
@@ -912,16 +919,16 @@ isable this.
 ### bottom level 
 Here is how much of TeX's memory you used:
  25078 strings out of 494105
- 617332 string characters out of 6144722
- 2414111 words of memory out of 5000000
+ 617353 string characters out of 6144722
+ 2398157 words of memory out of 5000000
  27855 multiletter control sequences out of 15000+600000
  11974 words of font info for 45 fonts, out of 8000000 for 9000
  465 hyphenation exceptions out of 8191
- 58i,21n,103p,790b,4762s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 58i,21n,103p,790b,4739s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 mi10.pfb></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 ></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb>
-Output written on MiniProj1_GhostFluid-figure6.pdf (1 page, 62570 bytes).
+Output written on MiniProj1_GhostFluid-figure6.pdf (1 page, 63289 bytes).
 PDF statistics:
  23 PDF objects out of 1000 (max. 8388607)
  16 compressed objects within 1 object stream
