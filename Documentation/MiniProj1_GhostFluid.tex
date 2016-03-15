@@ -138,18 +138,18 @@ exact solution did not arrive until Godunov proposed an iterative scheme a
 century later \cite{godunov1959difference}. Today, efficient approximate
 solvers such as HLLC (Harten-Lax-van Leer-Contact) \cite{toro1994restoration}
 and Rotated-hybrid Riemann solvers \cite{nishikawa2008very} are readily
-available. The development of numerical analysis methods for partial
-differential equations got its first real boost after the famous paper by
-Courant, Friedrichs and Lewis \cite{courant1928partiellen}, but local Riemann
-problems \cite{godunov1959difference}, conservative methods
-\cite{lax1960systems} and finite volume formulations \cite{leveque2002finite}
-were necessary before the first proper, three-dimensional simulations of the
-Euler equations could be performed in the 1980s \cite{jameson1981numerical}.
-After the Monotonic Upstream-centered Scheme for Conservation Laws (MUSCL)
-\cite{van1979towards} was introduced by van Leer as the first higher-order
-Total Variation Diminishing (TVD) scheme in 1979, several others have been
-developed, notably Toro's Weighted Average Flux (WAF) \cite{toro1989weighted} and
-Flux/Slope LImiter Centred (SLIC/FLIC) \cite{toro2000centred} schemes. 
+available. The development of numerical methods for partial differential
+equations first took off after the classical paper by Courant, Friedrichs and
+Lewis \cite{courant1928partiellen}, but local Riemann problems
+\cite{godunov1959difference}, conservative methods \cite{lax1960systems} and
+finite volume formulations \cite{leveque2002finite} were necessary before the
+first proper, three-dimensional simulations of the Euler equations could be
+performed in the 1980s \cite{jameson1981numerical}.  The Monotonic
+Upstream-centered Scheme for Conservation Laws (MUSCL) \cite{van1979towards}
+was introduced by van Leer as the first higher-order Total Variation
+Diminishing (TVD) scheme in 1979. Since then, several others have been
+developed, notably Toro's Weighted Average Flux (WAF) \cite{toro1989weighted}
+and Flux/Slope LImiter Centred (SLIC/FLIC) \cite{toro2000centred} schemes. 
 
 Considerations of multimaterial interactions and flow are among the more recent
 (less than twenty year old) developments within numerical solutions for the
@@ -159,9 +159,9 @@ interface between two materials. Examples of such cases are water/oil
 separation (liquid-liquid interaction), penguins swimming through water
 (solid-liquid interaction) and water splashing into the air as a result of a
 surface disruption (liquid-gas interaction). In reality, all these interfaces
-are continuous from one material to the other. Since the length scale of the
-interface is far smaller than even the discrete control volumes used for
-simulation, however, it is a good approximation to treat the interfaces as
+are continuous from one material to the other. Moreover, because the length
+scale of the interface is far smaller than even the discrete control volumes
+used for simulation, it is a good approximation to treat the interfaces as
 sharp discontinuities.  It is the goal of this report to demonstrate some
 techniques available for multimaterial simulations of the Euler equations in
 one dimension. Different fluids are characterized by their material properties,
@@ -182,18 +182,18 @@ interfaces must be modelled accurately. In order to do so, Fedkiw et al.\
 developed the Original Ghost Fluid Method (OGFM)
 \cite{fedkiw1999nonoscillatory}. In ghost fluid methods, each material has
 ghost cells on the side of the boundary where the other material exists. In the
-OGFM, the pressures and velocities at these ghost cells are similar to that of
-the other material, and the densities are calculated by enforcing constant
-entropy across the interface. This worked well for cases except when there were
-strong shock waves, since the entropy condition does not apply. As a response,
-the Modified Ghost Fluid Method (MGFM) was developed \cite{liu2003ghost,
-sambasivan2009ghost}. It is based on the realization that Riemann problems do
-not in general require the states on each side of the discontinuity to
-correspond to the same material. The cells in the ghost fluid are therefore
-updated by solving a local Riemann problem. A further development is the real
-Ghost Fluid Method (rGFM) \cite{wang2006real}, in which a more accurate
-interfacial boundary condition is applied. The implementation of the rGFM is
-outside the scope of this report. 
+OGFM, the pressures and velocities at these ghost cells are set equal to those
+of the other material, and the densities are calculated by enforcing constant
+entropy across the interface.  This worked well for many cases, but the method
+breaks down when strong shocks are present in the solution, because then the
+entropy condition does not apply.  As a response, the Modified Ghost Fluid
+Method (MGFM) was developed \cite{liu2003ghost, sambasivan2009ghost}. It is
+based on the realization that Riemann problems do not in general require the
+states on each side of the discontinuity to correspond to the same material.
+The cells in the ghost fluid are therefore updated by solving a local Riemann
+problem. A further development is the real Ghost Fluid Method (rGFM)
+\cite{wang2006real}, in which a more accurate interfacial boundary condition is
+applied. The implementation of the rGFM is outside the scope of this report. 
 
 The numerical methods which have been employed are explained in Section
 \ref{sec:numerical}, before several test cases and their results are discussed
@@ -280,8 +280,8 @@ Riemann solvers and their uses \cite{toro2013riemann}, but extended to take
 into consideration that different (stiffened) ideal gases may be present on
 each side of the discontinuity. 
 
-It can be proven that the pressure in the star states $p_{*}$ is given by
-the root of the nonlinear function
+It can be proven \cite{toro2013riemann} that the pressure in the star states
+$p_{*}$ is given by the root of the nonlinear function
 
 \begin{equation}
     f(p) = f_L(p)+f_R(p)- (u_L-u_R) \,.
@@ -309,11 +309,12 @@ sound and
 \end{equation*}
 % 
 In the exact solver, the pressure in the star region is found by applying an
-iterative scheme to Eq.~ \eqref{eq:pressureEquation}. Due to the nature of
-$f(p)$, it is well-suited for iterative schemes, but
-it is important to ensure that the pressure stays positive. For this project,
-Newton-Raphson iterations were implemented, taking the initial guess as
-$\frac{1}{2}(p_L+p_R)$. After finding $p_*$, the velocity in the star region is computed as
+iterative scheme to Eq.~ \eqref{eq:pressureEquation}. Computation of the roots
+of $f(p)$ is a problem well-suited for iterative schemes, but it is important
+to ensure that the pressure stays positive. For this project, Newton-Raphson
+iterations were implemented, taking the initial guess as
+$\frac{1}{2}(p_L+p_R)$. After finding $p_*$, the velocity in the star region is
+computed as
 
 \begin{equation}
     u_{*} = \frac{u_L+u_R-[f_L(p_*)-f_R(p_*)]}{2} \,.
@@ -375,13 +376,14 @@ properties}
 By far the most computationally expensive part of the exact solver is the
 iterative root finding procedure for finding $p_*$. Since most modern schemes
 require the solutions of local Riemann problems between all points in the
-computational domain, high gains in terms of computational efficiency can be
-achieved by employing approximate solvers instead. One such solver is the HLLC solver
-\cite{toro1994restoration}, which has been implemented for this project. 
+computational domain, substantial gains in terms of computational efficiency
+can be achieved by employing approximate solvers instead. One such solver is
+the HLLC solver \cite{toro1994restoration}, which has been implemented for this
+project. 
 
 When compared to the exact solver, the main simplifications in HLLC are that
 the pressure in the star region is approximated instead of found by iterative
-schemes; that states inside rarefactions are not taken into consideration, and 
+schemes; that states inside rarefactions are not taken into consideration, and
 that wave speeds are estimations, either direct or pressure-based. In this
 contribution, the pressure is estimated as 
 
@@ -431,15 +433,13 @@ From Eq.\ \eqref{eq:eulerIntegral}, it is straightforward to discretize the
 Euler equations to produce a conservative time-marching scheme through the
 Finite Volume Method (FVM). Let the spatial domain $x \in [0,1]$ be divided
 into $N$ equal cells of width $\Delta x = 1/N$.  We denote by $x_i$ the center
-of the $i$-th cell, i.e.\ $x_i = (i+1/2)\Delta x$. 
-%
-Temporal discretization is done with variable time step $\Delta t^n$, so that
-$t^n = \sum_{i=1}^n \Delta t^i$. 
+of the $i$-th cell, i.e.\ $x_i = (i+1/2)\Delta x$.  Temporal discretization is
+done with variable time step $\Delta t^n$, so that $t^n = \sum_{i=1}^n \Delta
+t^i$. 
 
-We write the discrete
-approximation of ${\bf U}(x_i, t^n)$ as ${\bf U}_i^n$, and let it be the
-weighted average of ${\bf U}(x,t^n)$ in the cell with boundaries at
-$x_{i-1/2}$ and $x_{i+1/2}$: 
+We write the discrete approximation of ${\bf U}(x_i, t^n)$ as ${\bf U}_i^n$,
+and let it be the weighted average of ${\bf U}(x,t^n)$ in the cell with
+boundaries at $x_{i-1/2}$ and $x_{i+1/2}$: 
 
 \begin{equation}
     {\bf U}_i^n \approx \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} {\bf
@@ -484,18 +484,18 @@ Transmissive boundary conditions are implemented on both boundaries, so that
 \end{equation}
 %
 for $i=1, \dots, N_{GC}$ where the number of ghost cells $N_{GC}$ equals the
-order of the scheme employed. 
+amount of neighbouring points needed in the employed update scheme. 
 
 All the most common schemes used for solving conservation laws are of the same
 form as Eq.\ \eqref{eq:conservativeScheme}, and the difference between them is
 in the evaluation of the fluxes ${\bf F}_{i\pm 1/2}$. For this project, we have
-implemented so-called total variation diminishing (TVD) high resolution methods
-for this purpose. High resolution methods are accurate to at least second
-order; they avoid spurious oscillations in the solution, capture
-discontinuities and shock waves well and satisfy a discrete form of the entropy
-condition. There are two main classes of higher-order flux evaluation schemes;
-the upwind schemes are based on the solution of local Riemann problems, while
-the centered schemes are extensions of the First ORder CEntered (FORCE) flux: 
+implemented so-called TVD high resolution methods for this purpose. High
+resolution methods are accurate to at least second order; they avoid spurious
+oscillations in the solution, capture discontinuities and shock waves well and
+satisfy a discrete form of the entropy condition. There are two main classes of
+higher-order flux evaluation schemes; the upwind schemes are based on the
+solution of local Riemann problems, while the centered schemes are extensions
+of the First ORder CEntered (FORCE) flux: 
 
 \begin{align} 
     \nonumber 
@@ -523,16 +523,14 @@ schemes, as mentioned in the Introduction, exemplify upwind and centred
 schemes, respectively. They are similar in many regards, and both consist of
 three main steps. 
 
-First, the data cell averages ${\bf U}_i^n$ are replaced
-locally by linear functions so that at the left and right cell interfaces, the
-boundary extrapolated values are 
-    ${\bf U}_i^L = {\bf U}_i^n-\frac{1}{2}\Delta_i$ and 
-    ${\bf U}_i^R = {\bf U}_i^n+\frac{1}{2}\Delta_i$.
-%
-Here, the slope vector $\Delta_i$ has been introduced, which in our case is
-chosen such that the schemes are TVD. For the MUSCL-Hancock scheme, we have
-implemented limited slopes \cite{anderson1986comparison}, while SLIC employs slope
-limiters \cite{toro2000centred}. 
+First, the data cell averages ${\bf U}_i^n$ are replaced locally by linear
+functions so that at the left and right cell interfaces, the boundary
+extrapolated values are ${\bf U}_i^L = {\bf U}_i^n-\frac{1}{2}\Delta_i$ and
+${\bf U}_i^R = {\bf U}_i^n+\frac{1}{2}\Delta_i$.  Here, the slope vector
+$\Delta_i$ has been introduced, which in our case is chosen such that the
+schemes are TVD. For the MUSCL-Hancock scheme, we have implemented limited
+slopes \cite{anderson1986comparison}, while SLIC employs slope limiters
+\cite{toro2000centred}. 
 
 After calculating the boundary extrapolated values for each cell, these are
 advanced to time $t^n+\frac{1}{2} \Delta t^n$ to obtain
@@ -569,7 +567,7 @@ function $\phi(x)$ whose sign is a boolean indicator of the material present.
 The interfaces between materials are thus located at the points where $\phi=0$.
 Figure \ref{fig:levelSet} shows the simple case of a single material interface
 separating materials A and B; several interfaces have been incoorporated by
-letting $\phi$ be piecewise linear throughout the domain in a zig-zag pattern. 
+letting $\phi$ be piecewise linear throughout the domain. 
 
 \begin{figure}[htb]
     \centering
@@ -591,8 +589,8 @@ letting $\phi$ be piecewise linear throughout the domain in a zig-zag pattern.
         \draw[->] (bottom) -- (top) node[above]{$\phi$};
         \draw[thick] (yleft) -- (yright) {};
 
-        \node[fill=blue!20!white] () at (0.5,0.2) {Material A};
-        \node[fill=green!20!white] () at (1.5,-0.3) {Material B};
+        \node[fill=blue!20!white] () at (0.5,0.0) {Material A};
+        \node[fill=green!20!white] () at (1.5,0.0) {Material B};
     \end{tikzpicture}
     \caption{Level-set function for a single material interface.
     In the left region, where $\phi(x)<0$, material A is present.}
@@ -617,7 +615,7 @@ Due to frequent discontinuities in density at material interfaces, conservative
 schemes lead to smearing of the locations of the zeros. Since the only
 interesting information contained in $\phi$ are these locations, however,
 non-conservative methods can be safely implemented as long as $\phi$ remains
-smooth and not too sharp. In our implementation, we have used the
+smooth and not too steep near zeros. In our implementation, we have used the
 first-order upwind scheme 
 
 \begin{equation}
@@ -660,11 +658,11 @@ ghost cells in a thermodynamically consistent manner.
 The first successful attempt at implementing a ghost fluid method was performed
 by Fedkiw et al.\ in 1998 \cite{fedkiw1999nonoscillatory}. In this approach,
 which we refer to as OGFM, the entropy $S$ is held constant across the ghost
-fluid interface, in order to give conditions for thermodynamic consistensy. The
+fluid interface, in order to give conditions for thermodynamic consistency. The
 assumption of constant entropy is not entirely true in the case of shocks, so
 one does not expect excellent capturing of large shock waves. The pressure and
 velocity in the ghost cells are set equal to the pressure and velocity in the
-same cells of the other material domain. It is the density which is
+corresponding cells in the other material domain. It is the density which is
 extrapolated by enforcing constant entropy. To derive how, we note that the
 entropy of an ideal gas is given by 
 
@@ -766,19 +764,19 @@ In order to be able to solve a wider range of problems, including those with
 strong shock waves or large density gradients, the MGFM was developed
 \cite{liu2003ghost, sambasivan2009ghost}. In this approach, the intermaterial
 boundary conditions are enforced in a way which is based on solving a local
-Riemann problem across the interface. As explained in Subsection
-\ref{subsec:riemann}, it is unproblematic so solve a Riemann problem with
-different material properties on each side of the initial discontinuity. Given
-the two states immediately adjacent to the material interface, ${\bf W}_L$ and
-${\bf W}_R$, and the corresponding material properties, we calculate the star
-states ${\bf W}_{*L}$ and ${\bf W}_{*R}$, and set the ghost fluid cells equal
-to them. Thus every extrapolated value in the ghost fluid corresponds to a
-physical state of the system, and we have thermodynamical consistensy. By
-looking at Figure \ref{fig:riemann}, it is easy to convince oneself that the
-chosen star states are valid choices for the boundary cells.  In order to
-compute the star states, the exact solver is employed. 
+Riemann problem across the interface. It is unproblematic to solve a Riemann
+problem with different material properties on each side of the initial
+discontinuity. Given the two states immediately adjacent to the material
+interface, ${\bf W}_L$ and ${\bf W}_R$, and the corresponding material
+properties, we calculate the star states ${\bf W}_{*L}$ and ${\bf W}_{*R}$, and
+set the ghost fluid cells equal to them. Thus every extrapolated value in the
+ghost fluid corresponds to a physical state of the system, and we have
+thermodynamical consistency. By looking at Figure \ref{fig:riemann}, it is easy
+to convince oneself that the chosen star states are valid choices for the
+boundary cells.  In order to compute the star states, the exact solver is
+employed. 
 
-\subsection{Final notes}
+\subsection{Final notes on implementation}
 \label{subsec:final}
 
 With all separate parts of the computational procedure explained, it is helpful
@@ -827,14 +825,15 @@ user interface using Qt, a cross-platform application framework.
 \label{sec:results}
 
 The different tests described in this section aim to show how the implemented
-methods cope under a range of circumstances. Since there are quite many
-different choices one can make for each method, we inform that unless otherwise
-specified, fluxes are computed using the MUSCL-Hancock scheme; slope limiters
-are of minbee type; OGFM is implemented with the isobaric fix. The reference
-solutions, where available, are obtained using the exact solver with 5000
-points. Although the amount of grid points varies throughout the results, only
-50 points in the solutions are included in all plots, so as to avoid the
-high-accuracy tests overshadowing the information from the lower accuracy ones.
+methods cope under a range of circumstances. Several methods have been
+described, and several variations exist within each method.  We therefore
+inform that unless otherwise specified, fluxes are computed using the
+MUSCL-Hancock scheme; slope limiters are of minbee type; OGFM is implemented
+with the isobaric fix.  The reference solutions, where available, are obtained
+using the exact solver with 5000 points. Although the amount of grid points
+varies throughout the results, only 50 points in the solutions are included in
+all plots, so as to avoid the high-accuracy tests overshadowing the information
+from the lower accuracy ones.
 
 \subsection{Moving contact discontinuity}
 \label{subsec:moving}
@@ -862,7 +861,7 @@ employed.
     \label{tab:testA}
 \end{table}
 
-Results for test A are shown in Figure \ref{fig:testA}. Please note that only
+Results for test A are shown in Figure \ref{fig:testA}. Note that only
 half of the spatial domain is included, since the discontinuity is located
 here. As is evident, both ghost fluid methods capture the discontinuity far
 better than the single-material solvers, in fact no error at all is apparent.
@@ -983,9 +982,8 @@ it was introduced by G.A.~ Sod in 1978 \cite{sod1978survey}, it has gradually
 become the go-to test case for investigating the behaviour of simple Euler
 schemes, hence its alias ``the Sod test tube''. Figure \ref{fig:toro1density}
 exhibits the results for density for both ghost fluid methods. In Figure
-\ref{fig:toro1} in \ref{app:toro}, results for all variables with several
-different resolutions are displayed.  All features are captured very well by
-both models. 
+\ref{fig:toro1}, results for all variables with several different resolutions
+are displayed.  All features are captured very well by both models. 
 
 \pgfplotstableread{../Results/Toro1_OGFM_FORCE_N5000.out}{\exact}
 \pgfplotstableread{../Results/Toro1_MGFM_MUSCL_minbee_N100.out}{\mgfm}
@@ -1131,7 +1129,7 @@ solution.
 The right part of Woodward and Colella's blast wave problem also has a large
 pressure difference, but here the shock and rarefaction waves are travelling in
 opposite directions compared to test 3. Figure \ref{fig:toro4} confirms the behaviour of our
-solvers when applied to these types of tests. 
+solvers when applied to tests containing large shock waves. 
 
 \subsubsection{Test 5}
 
@@ -1273,14 +1271,14 @@ correspond to physically realistic scales, measured in SI units.
 This test case was introduced by Smadar Karni in 1996 \cite{karni1996hybrid},
 and is also one of the test cases used to verify OGFM in 1999
 \cite{fedkiw1999nonoscillatory}. In it, a weak shock wave in air travels
-towards the right and refracts at a interface with helium gas. The result of
-the interfacial interaction is a narrow, reflected rarefaction wave and weak,
-transmitted shock wave. Since $\gamma$ (and thus the speed of sound $a$) is
-higher for helium than for air, the transmitted shock wave travels faster than
-the incident shock wave in air.  Initial parameters for the left (air
-postshock), middle (air preshock) and right (heliúm preshock) parts of the
-domain are tabulated in Table \ref{tab:testC}, and the simulation is run to a
-final time $t_{\rm end}=0.0012$. 
+towards the right and refracts at an interface with helium gas. The result of
+the interfacial interaction is a narrow, reflected rarefaction wave and a weak,
+transmitted shock wave. The ratio of specific heats $\gamma$ (and thus the
+speed of sound $a$) is higher for helium than for air, so the transmitted shock
+wave travels faster than the incident shock wave in air. Initial parameters
+for the left (air postshock), middle (air preshock) and right (heliúm preshock)
+parts of the domain are tabulated in Table \ref{tab:testC}, and the simulation
+is run to a final time $t_{\rm end}=0.0012$. 
 
 \begin{table}[htb]
     \centering
@@ -1306,7 +1304,7 @@ reflected rarefaction, transmitted shock and contact are captured very well.
 
 \subsubsection{Test D}
 
-A fascinating test case developed by Quirk and Karni \cite{quirk1996dynamics}
+An interesting test case developed by Quirk and Karni \cite{quirk1996dynamics}
 simulates a rightward propagating shock wave in air hitting a slab of helium
 (between $x=0.4$ and $x=0.6$), on the right side of which is air. It is the
 one-dimensional equivalent of a shock wave hitting a bubble of helium in air.
@@ -1501,7 +1499,7 @@ to their results.
 So far, all test cases have only included materials assumed to behave as ideal
 gases, i.e.\ which have $p_{\infty}=0$ in  Eq.\ \eqref{eq:stiffEoS}. An
 example of a fluid which is approximated quite well by the stiffened gas
-equation of state, is water. As a final validation test case, we therefore
+equation of state is water. As a final validation test case, we therefore
 verify the applicability of our model to water. 
 
 \subsubsection{Test E}
@@ -1530,9 +1528,8 @@ final time $t_{\rm end}=237.44\cdot 10^{-6}$.
     \label{tab:testE}
 \end{table}
 
-The results for test E are shown in Figure \ref{fig:testE}. Although advised
-that OGFM was not expected to deal well with this case, we decided to run the
-tests with OGFM as well, out of curiosity. To our (pleasant) surprise, OGFM
+The results for test E are shown in Figure \ref{fig:testE}. We did not expect
+OGFM to deal well with the large differences in equation of state, but it
 captures all aspects of the solution, albeit not as well as MGFM. In any event,
 the results show that even air/water interfaces are solved in a satisfactory
 manner by GFMs. 
@@ -1653,7 +1650,7 @@ manner by GFMs.
 \label{fig:testE}
 \end{figure*}
 
-\subsection{More interfaces!}
+\subsection{More interfaces}
 \label{subsec:more}
 
 The results from test D show that our level set function can track two
@@ -2040,7 +2037,7 @@ The results for all five of Toro's tests are shown in Figures
             ylabel style={rotate=-90},
             scaled y ticks=false
         ]
-            \nextgroupplot[ylabel=$\rho$]
+            \nextgroupplot[ylabel=$\rho$, ymax=9.5]
             \addplot+[mark=none, color=black]
             table[x={x}, y={rhoEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
@@ -2050,7 +2047,7 @@ The results for all five of Toro's tests are shown in Figures
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={rho}]{\OGFMfour};
 
-            \nextgroupplot
+            \nextgroupplot[ymax=9.5]
             \addplot+[mark=none, color=black, ytick pos=right]
             table[x={x}, y={rhoEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
@@ -2156,7 +2153,7 @@ The results for all five of Toro's tests are shown in Figures
             ylabel style={rotate=-90},
             scaled y ticks=false
         ]
-            \nextgroupplot[ylabel=$\rho$]
+            \nextgroupplot[ylabel=$\rho$, ymax=8.5]
             \addplot+[mark=none, color=black]
             table[x={x}, y={rhoEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]
@@ -2166,7 +2163,7 @@ The results for all five of Toro's tests are shown in Figures
             \addplot+[only marks, mark=x, color=teal,  each nth point=8]
             table[x={x}, y={rho}]{\OGFMfour};
 
-            \nextgroupplot
+            \nextgroupplot[ymax=8.5]
             \addplot+[mark=none, color=black, ytick pos=right]
             table[x={x}, y={rhoEx}]{\exact};
             \addplot+[only marks, mark=triangle, color=red, each nth point=2]

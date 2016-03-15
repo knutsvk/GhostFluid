@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  9 MAR 2016 15:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.18)  15 MAR 2016 16:36
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -74,7 +74,8 @@ File: upsy.fd 2001/06/04 font definitions for U/psy.
 \@enLab=\toks16
 \@sep=\skip43
 \@@sep=\skip44
-(/opt/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
+(./MiniProj1_GhostFluid-figure15.spl) (/opt/texlive/2015/texmf-dist/tex/latex/n
+atbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip45
 \bibsep=\skip46
@@ -762,13 +763,13 @@ isable this.
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (5.30852pt too wide) detected at line 297
+Overfull \hbox (5.30852pt too wide) detected at line 301
 \OML/cmm/m/it/10 f[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 ) = []  
 \OML/cmm/m/it/10 ;
  []
 
 
-Overfull \hbox (6.78558pt too wide) detected at line 305
+Overfull \hbox (6.78558pt too wide) detected at line 309
 \OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ;  B[] \OT1/cmr/m/n/
 10 = [] \OML/cmm/m/it/10 :
  []
@@ -776,7 +777,7 @@ Overfull \hbox (6.78558pt too wide) detected at line 305
 Missing character: There is no Â in font cmr10!
 Missing character: There is no   in font cmr10!
 
-Overfull \hbox (11.64706pt too wide) detected at line 399
+Overfull \hbox (11.64706pt too wide) detected at line 405
 \OML/cmm/m/it/10 S[] \OMS/cmsy/m/n/10 ^^Y [] \OML/cmm/m/it/10 :
  []
 
@@ -808,9 +809,6 @@ PGFPlots: reading {../Results/Toro1_OGFMIF_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro1_OGFM_MUSCL_minbee_N100.out}
 A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
 isable this.
-
-Underfull \vbox (badness 2027) has occurred while \output is active []
-
 PGFPlots: reading {../Results/Toro3_OGFM_FORCE_N5000.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_minbee_N100.out}
 PGFPlots: reading {../Results/Toro3_MGFM_MUSCL_superbee_N100.out}
@@ -830,12 +828,12 @@ isable this.
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no º in font cmr10!
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1281--1290
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1285--1294
  [][] 
  []
 
 
-Overfull \hbox (10.30592pt too wide) in paragraph at lines 1317--1327
+Overfull \hbox (10.30592pt too wide) in paragraph at lines 1321--1331
  [][] 
  []
 
@@ -9694,7 +9692,7 @@ NOTE: coordinate (0.99625,0.025) has been dropped because of a coordinate filte
 r. (see also unbounded coords=jump). 
 NOTE: coordinate (0.99875,0.025) has been dropped because of a coordinate filte
 r. (see also unbounded coords=jump). 
-[10
+[11
 
 {/opt/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 PGFPlots: reading {../Results/Toro4_OGFM_FORCE_N5000.out}
@@ -9721,17 +9719,17 @@ isable this.
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 25127 strings out of 494105
- 618664 string characters out of 6144722
- 3767946 words of memory out of 5000000
- 27902 multiletter control sequences out of 15000+600000
+ 25131 strings out of 494105
+ 618784 string characters out of 6144722
+ 3764527 words of memory out of 5000000
+ 27904 multiletter control sequences out of 15000+600000
  11974 words of font info for 45 fonts, out of 8000000 for 9000
  465 hyphenation exceptions out of 8191
- 59i,21n,103p,790b,4816s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 59i,21n,103p,790b,4810s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 mi10.pfb></opt/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 >
-Output written on MiniProj1_GhostFluid-figure15.pdf (1 page, 299038 bytes).
+Output written on MiniProj1_GhostFluid-figure15.pdf (1 page, 298880 bytes).
 PDF statistics:
  19 PDF objects out of 1000 (max. 8388607)
  13 compressed objects within 1 object stream
